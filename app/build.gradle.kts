@@ -12,8 +12,8 @@ android {
         applicationId = "com.neuroassistant.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 6
-        versionName = "0.6.0-beta"
+        versionCode = 7
+        versionName = "0.7.0-local-beta"
     }
 
     buildFeatures { compose = true }
@@ -35,6 +35,7 @@ kotlin {
 }
 
 dependencies {
+    implementation("androidx.webkit:webkit:1.14.0")
     implementation("androidx.core:core-ktx:1.17.0")
     implementation("androidx.activity:activity-compose:1.12.1")
     implementation("androidx.compose.ui:ui:1.11.4")

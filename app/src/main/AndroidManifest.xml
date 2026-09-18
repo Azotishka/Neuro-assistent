@@ -23,6 +23,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.NeuroAssistant">
 
+        <activity android:name=".LocalModelsActivity" android:exported="false" android:hardwareAccelerated="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

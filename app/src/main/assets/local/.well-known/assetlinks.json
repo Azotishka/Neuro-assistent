@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "ru.neurogazette.qwenlocal",
+      "sha256_cert_fingerprints": [
+        "F4:C9:D8:49:D3:98:BB:A4:F9:12:97:3D:65:47:82:57:CE:06:E4:55:FB:C1:12:CC:47:C7:F6:F9:AF:97:4F:35"
+      ]
+    }
+  }
+]

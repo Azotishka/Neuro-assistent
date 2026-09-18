@@ -266,6 +266,7 @@ private fun NeuroAssistantApp(
                     }
                 },
                 actions = {
+                    TextButton(onClick = { context.startActivity(Intent(context, LocalModelsActivity::class.java)) }) { Text("Локальный ИИ") }
                     TextButton(onClick = { showHistory = true }) { Text("Чаты") }
                     TextButton(onClick = { showSettings = true }) { Text("⚙") }
                 }

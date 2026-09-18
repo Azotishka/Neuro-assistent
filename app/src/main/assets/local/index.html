@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta id="themeColor" name="theme-color" content="#f3f0e9" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Qwen Local" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="manifest" href="./manifest.webmanifest?v=3.9.4" />
+  <link rel="icon" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon-180.png" />
+  <title>Qwen Local 3.9.4</title>
+  <script>
+    (() => {
+      const mode = localStorage.getItem("qwen:themeMode") || "system";
+      const dark = mode === "dark" || (mode === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+    })();
+  </script>
+  <link rel="stylesheet" href="./styles.css?v=3.9.4" />
+  <link rel="stylesheet" href="./features.css?v=3.9.4" />
+  <link rel="stylesheet" href="./mobile-shell.css?v=3.9.4" />
+</head>
+<body data-page="home">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-badge" aria-hidden="true">Q</div>
+        <div>
+          <div class="eyebrow">ЛОКАЛЬНЫЙ ИИ / IPHONE</div>
+          <h1>Qwen Local</h1>
+          <div id="currentChatTitle" class="current-chat-title">Новый чат</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="newChatBtn" class="round-btn" type="button" aria-label="Новый чат" title="Новый чат">＋</button>
+        <button id="hubBtn" class="round-btn" type="button" aria-label="Открыть центр" title="Чаты, память и файлы">▦</button>
+        <button id="installBtn" class="round-btn install-btn" type="button" aria-label="Установить приложение" title="Установить на экран Домой">↓</button>
+        <button id="themeBtn" class="round-btn theme-btn" type="button" aria-label="Переключить тему" title="Тема"><span id="themeIcon" aria-hidden="true">◐</span></button>
+        <button id="statsBtn" class="round-btn" type="button" aria-label="Статистика и настройки" title="Статистика и настройки">↗</button>
+      </div>
+    </header>
+
+    <div id="compatBanner" class="compat-banner hidden" role="status"></div>
+
+    <nav id="desktopNav" class="desktop-nav" aria-label="Разделы Qwen Local">
+      <button type="button" data-route="home"><span>⌂</span>Главная</button>
+      <button type="button" data-route="chats"><span>◫</span>Чаты</button>
+      <button type="button" data-route="chat"><span>◌</span>Чат</button>
+      <button type="button" data-route="models"><span>◇</span>Модели</button>
+      <button type="button" data-route="data"><span>▦</span>Данные</button>
+      <button type="button" data-route="tools"><span>⌘</span>Инструменты</button>
+      <button type="button" data-route="settings"><span>⚙</span>Настройки</button>
+    </nav>
+
+    <aside id="desktopChatRail" class="desktop-chat-rail" aria-label="Быстрые чаты">
+      <div class="chat-rail-head"><strong>Чаты</strong><button type="button" id="railNewChat" aria-label="Новый чат">＋</button></div>
+      <input id="railChatSearch" type="search" placeholder="Найти чат…" autocomplete="off" />
+      <div id="railChatList" class="chat-rail-list"></div>
+      <button type="button" class="rail-all-btn" data-route="chats">Все чаты →</button>
+    </aside>
+
+    <section class="intro compact-intro">
+      <div class="intro-number">02</div>
+      <div class="intro-main">
+        <div class="intro-label">ЛОКАЛЬНАЯ ИИ-СИСТЕМА / 3.9.4</div>
+        <h2>Локальный ИИ.<br>На твоём<br>POCO.</h2>
+        <p>Локальный ассистент без обязательного облака. Начни с безопасной модели «Мини 135M», а более тяжёлые Qwen3 запускай только при необходимости. Чаты, память и файлы остаются на устройстве.</p>
+      </div>
+      <div class="intro-stamp">
+        <span>ПРИВАТНО</span>
+        <strong>3.9.4</strong>
+        <small>локально</small>
+      </div>
+    </section>
+
+    <section id="mobileHomeDashboard" class="mobile-home-dashboard route-home">
+      <div class="home-welcome-grid">
+        <article class="quick-start-card home-primary-card">
+          <div><span>БЫСТРЫЙ СТАРТ</span><h3>Локальный ИИ без лишних шагов.</h3><p>Для iPhone 14 Pro приложение автоматически выбирает безопасные параметры. Начни с Мини 135M, а мощные модели включай только вручную.</p></div>
+          <div class="home-primary-actions"><button type="button" data-route="chat">Открыть чат</button><button type="button" data-route="models" class="secondary-home-action">Модели</button></div>
+        </article>
+        <article class="home-resume-card">
+          <span>ПРОДОЛЖИТЬ</span><strong id="homeCurrentChatTitle">Новый чат</strong><p id="homeCurrentChatPreview">История текущего разговора появится здесь.</p>
+          <button type="button" data-route="chat">Продолжить →</button>
+        </article>
+      </div>
+      <div class="home-status-row">
+        <button type="button" data-route="models"><small>МОДЕЛЬ</small><strong id="homeModelState">Мини 135M</strong><span id="homeModelNote">не загружена</span></button>
+        <button type="button" data-route="chats"><small>ЧАТЫ</small><strong id="homeChatCount">0</strong><span>локально</span></button>
+        <button type="button" data-route="data"><small>ДАННЫЕ</small><strong id="homeDataCount">0</strong><span>память + файлы</span></button>
+      </div>
+      <div class="home-mini-grid">
+        <button type="button" data-route="chats"><b>◫</b><span>Все чаты</span></button>
+        <button type="button" data-route="data"><b>▦</b><span>Память и файлы</span></button>
+        <button type="button" data-route="tools"><b>⌘</b><span>Инструменты</span></button>
+        <button type="button" data-route="settings"><b>⚙</b><span>Настройки</span></button>
+      </div>
+    </section>
+
+    <section class="models-section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">ВЫБОР МОДЕЛИ</div>
+          <h3>Выбери модель</h3>
+        </div>
+        <div class="section-index">01</div>
+      </div>
+
+      <div id="modelQuickBar" class="model-quick-bar">
+        <div class="model-quick-info"><small>ВЫБРАНА</small><strong id="quickModelName">Мини 135M</strong><span id="quickModelState">не запущена</span></div>
+        <div class="model-quick-actions">
+          <button id="quickAdvancedBtn" type="button" class="ghost-btn">⚙ Настроить</button>
+          <button id="quickReleaseModelBtn" type="button" class="ghost-btn hidden">Выгрузить</button>
+          <button id="quickLoadModelBtn" type="button" class="load-btn">Запустить</button>
+        </div>
+      </div>
+
+      <div class="stable-core-note" role="note">
+        <span>STABLE CORE</span>
+        <strong>Qwen3 1.7B + Lite 360M</strong>
+        <p>Основная и резервная локальные модели для iPhone. В GPU одновременно держится только одна; при проблеме запуска Qwen3 приложение переключается на Lite.</p>
+      </div>
+
+      <button id="heavyModelsToggle" class="heavy-model-toggle" type="button" aria-expanded="false">Показать мощные модели</button>
+      <div class="model-switcher" aria-label="Выбор модели">
+        <button class="model-card model-card-safe active" data-model="mini" type="button" aria-pressed="true">
+          <div class="model-card-row">
+            <span class="model-tag">САМЫЙ БЕЗОПАСНЫЙ</span>
+            <span id="miniCache" class="cache-badge">НЕ СКАЧАНА</span>
+          </div>
+          <span class="model-name">Мини<br>135M</span>
+          <div class="model-divider"></div>
+          <span id="miniModelMeta" class="model-meta">~0.35 ГБ GPU • ≈ 273 МБ загрузка</span>
+          <span class="model-note">Аварийный минимум для Safari/iPhone. Если Worker не запускается, приложение автоматически попробует совместимый запуск без Worker.</span>
+          <span class="model-choice">ВЫБРАТЬ →</span>
+        </button>
+
+        <button class="model-card model-card-safe" data-model="lite" type="button" aria-pressed="false">
+          <div class="model-card-row">
+            <span class="model-tag">ЛЁГКАЯ</span>
+            <span id="liteCache" class="cache-badge">НЕ СКАЧАНА</span>
+          </div>
+          <span class="model-name">Лайт<br>360M</span>
+          <div class="model-divider"></div>
+          <span id="liteModelMeta" class="model-meta">~0.37 ГБ GPU • ≈ 207 МБ загрузка</span>
+          <span class="model-note">Лёгкая модель с более сильными ответами. Если Мини 135M работает стабильно, можно перейти к ней.</span>
+          <span class="model-choice">ВЫБРАТЬ →</span>
+        </button>
+
+        <button class="model-card model-card-safe" data-model="stable" type="button" aria-pressed="false">
+          <div class="model-card-row">
+            <span class="model-tag">РЕКОМЕНДУЕТСЯ</span>
+            <span id="stableCache" class="cache-badge">НЕ СКАЧАНА</span>
+          </div>
+          <span class="model-name">Qwen2.5<br>0.5B</span>
+          <div class="model-divider"></div>
+          <span id="stableModelMeta" class="model-meta">~0.92 ГБ GPU • стабильный чат</span>
+          <span class="model-note">Компромисс для iPhone: заметно умнее 135M/360M и гораздо легче Qwen3 1.7B. Хороший первый выбор для русского языка.</span>
+          <span class="model-choice">ВЫБРАТЬ →</span>
+        </button>
+
+        <button class="model-card" data-model="fast" type="button" aria-pressed="false">
+          <div class="model-card-row">
+            <span class="model-tag">БЫСТРАЯ</span>
+            <span id="fastCache" class="cache-badge">НЕ СКАЧАНА</span>
+          </div>
+          <span class="model-name">Qwen3<br>1.7B</span>
+          <div class="model-divider"></div>
+          <span class="model-meta">~2.04 ГБ GPU • ≈ 1 ГБ загрузка</span>
+          <span class="model-note">Для повседневных запросов, быстрых черновиков и первого этапа Турбо → Макс.</span>
+          <span class="model-choice">ВЫБРАТЬ →</span>
+        </button>
+
+        <button class="model-card model-card-dark" data-model="max" type="button" aria-pressed="false">
+          <div class="model-card-row">
+            <span class="model-tag dark-tag">ЭКСПЕРИМЕНТ</span>
+            <span id="maxCache" class="cache-badge cache-badge-dark">НЕ СКАЧАНА</span>
+          </div>
+          <span class="model-name">Qwen3<br>4B</span>
+          <div class="model-divider"></div>
+          <span class="model-meta">~3.43 ГБ GPU • ≈ 2.2 ГБ загрузка</span>
+          <span class="model-note">Мощнее, но на iPhone 14 Pro остаётся экспериментальным режимом с повышенной нагрузкой.</span>
+          <span class="model-choice">ВЫБРАТЬ →</span>
+        </button>
+
+        <button class="model-card model-card-dark" data-model="deepseek" type="button" aria-pressed="false">
+          <div class="model-card-row">
+            <span class="model-tag dark-tag">DEEPSEEK · R1</span>
+            <span id="deepseekCache" class="cache-badge cache-badge-dark">НЕ СКАЧАНА</span>
+          </div>
+          <span class="model-name">DeepSeek R1<br>7B</span>
+          <div class="model-divider"></div>
+          <span class="model-meta">~4.99 ГБ GPU • ≈ 4.29 ГБ загрузка</span>
+          <span class="model-note">Рассуждающая DeepSeek-R1-Distill-Qwen-7B. Очень тяжёлая для iPhone/Koder: свободный режим разрешает ручной запуск, но iOS может перезагрузить страницу.</span>
+          <span class="model-choice">ВЫБРАТЬ →</span>
+        </button>
+      </div>
+
+      <section class="model-freedom-panel" aria-label="Свободный выбор локальной модели">
+        <div class="model-freedom-head">
+          <div><span class="eyebrow">СВОБОДНЫЙ ВЫБОР</span><h4>Любая локальная модель WebLLM</h4><p>Приложение больше не ограничивает мощность вручную выбранной модели. Безопасный режим остаётся рекомендацией, а не запретом.</p></div>
+          <label class="free-model-toggle"><span>Свободный режим</span><input id="freeModelChoiceToggle" type="checkbox" checked><span class="switch"></span></label>
+        </div>
+        <div class="model-freedom-current"><small>СЕЙЧАС ВЫБРАНА</small><strong id="freedomCurrentModel">Мини 135M</strong><span id="freedomCurrentMeta">безопасный профиль</span></div>
+        <div class="catalog-toolbar">
+          <input id="catalogSearchInput" type="search" placeholder="Поиск: Qwen, Llama, Phi, Gemma, 8B…" autocomplete="off">
+          <button id="catalogRefreshBtn" class="secondary-btn" type="button">Обновить каталог</button>
+        </div>
+        <div class="catalog-pick-row">
+          <select id="catalogModelSelect" aria-label="Каталог моделей"><option value="">Нажми «Обновить каталог»</option></select>
+          <button id="catalogUseBtn" class="load-btn" type="button">Выбрать</button>
+        </div>
+        <p id="catalogInfo" class="model-freedom-note">Каталог берётся непосредственно из WebLLM 0.2.82. Чем больше VRAM, тем выше риск перезапуска Safari на iPhone.</p>
+        <details class="custom-model-details">
+          <summary>Добавить свою MLC-модель вручную</summary>
+          <p>Для модели вне встроенного каталога вставь ModelRecord WebLLM: <code>model_id</code>, HTTPS <code>model</code> и HTTPS <code>model_lib</code>. Можно указать VRAM, контекст и required_features.</p>
+          <textarea id="customModelJson" rows="7" spellcheck="false" placeholder='{"model_id":"My-Model-MLC","model":"https://huggingface.co/...","model_lib":"https://.../model-webgpu.wasm","vram_required_MB":4096,"overrides":{"context_window_size":4096}}'></textarea>
+          <button id="customModelAddBtn" class="secondary-btn" type="button">Добавить и выбрать</button>
+        </details>
+      </section>
+
+      <details id="advancedModelDetails" class="advanced-model-panel" open>
+        <summary>
+          <span><small>ТОЧНАЯ НАСТРОЙКА</small><strong>Продвинутые параметры модели</strong></span>
+          <span class="advanced-summary-state" id="advancedSummaryState">АВТО</span>
+        </summary>
+        <div class="advanced-model-body">
+          <div class="advanced-presets" role="group" aria-label="Профиль декодирования">
+            <button type="button" class="tuning-preset active" data-tuning-preset="auto">Авто</button>
+            <button type="button" class="tuning-preset" data-tuning-preset="speed">Скорость</button>
+            <button type="button" class="tuning-preset" data-tuning-preset="balanced">Баланс</button>
+            <button type="button" class="tuning-preset" data-tuning-preset="quality">Качество</button>
+            <button type="button" class="tuning-preset" data-tuning-preset="custom">Свои</button>
+          </div>
+
+          <div class="advanced-live-grid" aria-live="polite">
+            <div><small>СЕМЕЙСТВО</small><strong id="advancedFamily">—</strong></div>
+            <div><small>RUNTIME</small><strong id="advancedRuntimeLabel">Авто</strong></div>
+            <div><small>КОНТЕКСТ</small><strong id="advancedContextLabel">Авто</strong></div>
+            <div><small>ВЫХОД</small><strong id="advancedMaxTokensLabel">Авто</strong></div>
+          </div>
+
+          <div class="advanced-sliders">
+            <label class="advanced-field">
+              <span><b>Температура</b><output id="temperatureValue">0.70</output></span>
+              <input id="temperatureRange" type="range" min="0.05" max="1.50" step="0.05" value="0.70">
+              <small>Ниже — точнее и стабильнее. Выше — разнообразнее.</small>
+            </label>
+            <label class="advanced-field">
+              <span><b>Top P</b><output id="topPValue">0.90</output></span>
+              <input id="topPRange" type="range" min="0.10" max="1.00" step="0.05" value="0.90">
+              <small>Ограничивает выбор токенов по суммарной вероятности.</small>
+            </label>
+            <label class="advanced-field">
+              <span><b>Защита от повторов</b><output id="repetitionPenaltyValue">1.08</output></span>
+              <input id="repetitionPenaltyRange" type="range" min="1.00" max="1.30" step="0.01" value="1.08">
+              <small>Полезно для маленьких моделей, которые начинают зацикливаться.</small>
+            </label>
+            <label class="advanced-field">
+              <span><b>Frequency penalty</b><output id="frequencyPenaltyValue">0.10</output></span>
+              <input id="frequencyPenaltyRange" type="range" min="0" max="1.20" step="0.05" value="0.10">
+            </label>
+            <label class="advanced-field">
+              <span><b>Presence penalty</b><output id="presencePenaltyValue">0.00</output></span>
+              <input id="presencePenaltyRange" type="range" min="0" max="1.00" step="0.05" value="0">
+            </label>
+            <label class="advanced-field">
+              <span><b>Макс. токенов ответа</b><output id="maxTokensValue">620</output></span>
+              <input id="maxTokensRange" type="range" min="64" max="1536" step="32" value="620">
+              <small>Меньше = быстрее и экономнее по памяти.</small>
+            </label>
+          </div>
+
+          <div class="advanced-select-grid">
+            <label><span>Контекст модели</span><select id="advancedContextSelect">
+              <option value="inherit">Как в чате</option>
+              <option value="512">512</option><option value="1024">1K</option><option value="1536">1.5K</option>
+              <option value="2048">2K</option><option value="3072">3K</option><option value="4096">4K</option><option value="8192">8K</option>
+            </select></label>
+            <label><span>Способ запуска</span><select id="runtimePreferenceSelect">
+              <option value="auto">Авто</option><option value="worker">Web Worker</option><option value="main-thread">Main thread</option>
+            </select></label>
+          </div>
+
+          <div class="advanced-switches">
+            <label><span><b>Анти-зацикливание</b><small>Останавливать и повторять генерацию при повторах.</small></span><input id="antiLoopToggle" type="checkbox" checked><span class="switch"></span></label>
+            <label><span><b>Автовыгрузка тяжёлой модели</b><small>После ответа освобождать GPU-память на iPhone.</small></span><input id="autoReleaseToggle" type="checkbox" checked><span class="switch"></span></label>
+          </div>
+
+          <div class="advanced-actions">
+            <button id="advancedResetBtn" type="button" class="secondary-btn">Сбросить для этой модели</button>
+            <span id="advancedSaveHint">Параметры сохраняются отдельно для каждой модели.</span>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="statusPanel" class="status-panel">
+      <div class="status-top">
+        <div>
+          <div class="eyebrow">СОСТОЯНИЕ МОДЕЛИ</div>
+          <h3>Система</h3>
+        </div>
+        <div class="status-actions">
+          <button id="releaseBtn" class="ghost-btn hidden" type="button">Освободить память</button>
+          <button id="loadBtn" class="load-btn" type="button">Загрузить модель</button>
+        </div>
+      </div>
+
+      <div class="status-strip">
+        <div class="status-item status-main">
+          <span class="status-dot" id="statusDot"></span>
+          <div><small>СТАТУС</small><strong id="statusText">Модель не загружена</strong></div>
+        </div>
+        <div class="status-item">
+          <small>СЕТЬ</small>
+          <strong id="networkState">В СЕТИ</strong>
+        </div>
+        <div class="status-item">
+          <small>КОНТЕКСТ</small>
+          <strong id="contextLabel">АВТО / 2K</strong>
+        </div>
+      </div>
+
+      <div class="progress-wrap hidden" id="progressWrap">
+        <div class="progress-head"><span id="progressText">Подготовка…</span><span id="progressPct">0%</span></div>
+        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      </div>
+
+      <div id="perfHud" class="perf-hud hidden" aria-live="polite">
+        <div><small>СКОРОСТЬ</small><strong id="speedMetric">—</strong></div>
+        <div><small>1-Й ТОКЕН</small><strong id="ttftMetric">—</strong></div>
+        <div><small>ТОКЕНЫ</small><strong id="tokenMetric">0</strong></div>
+        <div><small>ВРЕМЯ</small><strong id="elapsedMetric">0.0с</strong></div>
+      </div>
+    </section>
+
+    <section class="control-deck" aria-label="Настройки ответа">
+      <div class="control-head">
+        <div><div class="eyebrow">ПРОФИЛЬ ОТВЕТА</div><strong>Стиль ответа</strong></div>
+        <label class="think-control"><span>Рассуждать</span><input id="thinkingToggle" type="checkbox" /><span class="switch"></span></label>
+      </div>
+      <div class="mode-tabs" role="group" aria-label="Профиль ответа">
+        <button class="mode-tab active" data-mode="balanced" type="button">Баланс</button>
+        <button class="mode-tab" data-mode="brief" type="button">Кратко</button>
+        <button class="mode-tab" data-mode="code" type="button">Код</button>
+        <button class="mode-tab" data-mode="creative" type="button">Креатив</button>
+      </div>
+      <div class="context-control">
+        <label for="contextSelect">Контекст</label>
+        <select id="contextSelect">
+          <option value="auto">Авто — безопасно</option>
+          <option value="1024">1K — минимум памяти</option>
+          <option value="1536">1.5K — оптимально для iPhone</option>
+          <option value="2048">2K — повышенная нагрузка</option>
+          <option value="4096">4K — максимум</option>
+        </select>
+      </div>
+      <div class="context-badges">
+        <button id="memoryBadge" class="context-badge" type="button">🧠 Память: 0</button>
+        <button id="filesBadge" class="context-badge" type="button">📎 Файлы: 0</button>
+        <span id="ragBadge" class="context-badge muted-badge">ИСТОЧНИКИ: ждут запрос</span>
+      </div>
+    </section>
+
+    <main id="chat" class="chat" aria-live="polite"></main>
+
+    <template id="heroTemplate">
+      <div class="hero" id="hero">
+        <div class="hero-index">ЧАТ / ПРОСТРАНСТВО</div>
+        <div class="hero-symbol">Q</div>
+        <h2>Спроси что угодно.</h2>
+        <p>Выбери модель на странице «Модели», затем пиши здесь. На POCO X6 Pro основной режим — Qwen3 1.7B. Тяжёлые режимы вынесены отдельно и больше не мешают обычному чату.</p>
+        <div class="chips">
+          <button class="chip" type="button" data-prompt="Объясни простыми словами, что такое нейросеть.">Что такое нейросеть?</button>
+          <button class="chip" type="button" data-prompt="Проанализируй мои локальные файлы и кратко перечисли самое важное.">Разобрать файлы</button>
+          <button class="chip" type="button" data-prompt="Придумай 5 необычных идей для Android-приложения.">5 идей приложения</button>
+        </div>
+      </div>
+    </template>
+
+    <div id="chatActions" class="chat-actions hidden">
+      <button id="regenerateBtn" class="ghost-btn" type="button">↻ Повторить ответ</button>
+      <button id="exportQuickBtn" class="ghost-btn" type="button">Экспорт чата</button>
+    </div>
+
+
+    <section id="chatsPage" class="mobile-page-section route-page chats-page" aria-label="Чаты">
+      <div class="mobile-page-head chats-page-head"><span>ИСТОРИЯ</span><h2>Чаты</h2><p>Быстро находи, закрепляй, копируй, переименовывай и удаляй разговоры. Всё хранится локально.</p></div>
+      <div class="chat-manager-toolbar">
+        <label class="chat-manager-search"><span>⌕</span><input id="pageChatSearch" type="search" placeholder="Поиск по названию и сообщениям…" autocomplete="off" /></label>
+        <button id="pageNewChat" type="button" class="primary-page-btn">＋ Новый чат</button>
+      </div>
+      <div class="chat-manager-filters" role="group" aria-label="Фильтр чатов">
+        <button type="button" data-chat-filter="all" class="active">Все</button>
+        <button type="button" data-chat-filter="pinned">★ Закреплённые</button>
+        <button type="button" data-chat-filter="recent">Недавние</button>
+      </div>
+      <div class="chat-manager-summary"><span id="chatManagerCount">0 чатов</span><span id="chatManagerMessages">0 сообщений</span></div>
+      <div id="pageChatList" class="page-chat-list"></div>
+    </section>
+
+    <section id="mobileLibraryPage" class="mobile-page-section route-page" aria-label="Данные">
+      <div class="mobile-page-head"><span>ЛОКАЛЬНЫЕ ДАННЫЕ</span><h2>Память и файлы</h2><p>Управляй контекстом, который доступен ИИ. Данные остаются на этом устройстве.</p></div><div id="dataPageSummary" class="data-page-summary"></div>
+      <div class="mobile-action-grid">
+        <button type="button" data-open-hub="chats"><b>💬</b><strong>Чаты</strong><span>История и поиск</span></button>
+        <button type="button" data-open-hub="memory"><b>🧠</b><strong>Память</strong><span>Что ИИ должен помнить</span></button>
+        <button type="button" data-open-hub="files"><b>📁</b><strong>Файлы</strong><span>Документы для RAG</span></button>
+        <button type="button" id="libraryNewChat"><b>＋</b><strong>Новый чат</strong><span>Начать с чистого листа</span></button>
+      </div>
+    </section>
+
+    <section id="mobileToolsPage" class="mobile-page-section route-page tools-page" aria-label="Инструменты">
+      <div class="mobile-page-head"><span>ИНСТРУМЕНТЫ</span><h2>Локальная мастерская</h2><p>Быстрые утилиты работают без нейросети. Тяжёлые модули и ИИ запускаются только по запросу.</p></div>
+      <label class="tool-search"><span>⌕</span><input id="toolSearch" type="search" placeholder="Найти инструмент…" autocomplete="off" /></label>
+      <div id="toolCategoryChips" class="tool-category-chips"></div>
+      <section class="quick-tool-card" id="quickCalcCard">
+        <div><small>БЫСТРЫЙ КАЛЬКУЛЯТОР</small><strong>Посчитать без загрузки модели</strong></div>
+        <div class="quick-calc-row"><input id="quickCalcInput" inputmode="decimal" placeholder="Например: 17% от 84520" /><button id="quickCalcRun" type="button">=</button></div>
+        <output id="quickCalcOutput">Результат появится здесь</output>
+      </section>
+      <div class="tool-section-title"><strong>Избранное и недавние</strong><span>на устройстве</span></div>
+      <div id="favoriteToolGrid" class="tool-directory-grid compact"></div>
+      <div class="tool-section-title"><strong>Все инструменты</strong><span id="toolCountLabel"></span></div>
+      <div id="toolDirectory" class="tool-directory-grid"></div>
+    </section>
+
+    <section id="mobileSettingsPage" class="mobile-page-section route-page settings-page" aria-label="Настройки">
+      <div class="mobile-page-head"><span>НАСТРОЙКИ</span><h2>Система и производительность</h2><p>Профиль iPhone защищает Safari от лишних пиков памяти. Все продвинутые функции остаются доступны.</p></div><div id="settingsDeviceSummary" class="settings-device-summary"></div>
+      <div class="safe-mode-card">
+        <div><small>МОБИЛЬНЫЙ SAFE MODE</small><strong id="safeModeSummary">Мини 135M · 1K · экономный режим</strong></div>
+        <button id="enableSafeModeBtn" type="button">Включить безопасный режим</button>
+      </div>
+      <div class="mobile-action-list">
+        <button type="button" id="settingsStatsBtn"><span>Статистика и хранилище</span><b>›</b></button>
+        <button type="button" id="settingsThemeBtn"><span>Сменить тему</span><b>›</b></button>
+        <button type="button" id="settingsReleaseBtn"><span>Освободить GPU-память</span><b>›</b></button>
+        <button type="button" data-feature-open="system:readinessBtn"><span>Готовность офлайн</span><b>›</b></button><button type="button" data-feature-open="system:modelManager"><span>Модели и хранилище</span><b>›</b></button><button type="button" data-feature-open="search:globalSearchInput"><span>Глобальный поиск</span><b>›</b></button><button type="button" data-feature-open="system:runtimeDiagnostic"><span>Диагностика</span><b>›</b></button>
+      </div>
+    </section>
+
+    <footer class="composer-wrap">
+      <div class="composer-label">СООБЩЕНИЕ / <span id="activeModelLabel">Qwen3 1.7B</span></div>
+      <div class="composer-tools">
+        <button id="attachBtn" class="tool-btn" type="button">＋ ФАЙЛ</button>
+        <button id="battleBtn" class="tool-btn battle-tool" type="button">⚔ СРАВНИТЬ</button>
+        <button id="turboBtn" class="tool-btn turbo-tool" type="button">↯ ТУРБО → МАКС</button>
+      </div>
+      <div class="composer">
+        <textarea id="prompt" rows="1" maxlength="9000" placeholder="Напиши сообщение…" enterkeyhint="send"></textarea>
+        <button id="sendBtn" class="send-btn" type="button" aria-label="Отправить"><span id="sendLabel">ОТПРАВИТЬ</span></button>
+      </div>
+      <div class="footer-note"><span id="footerRuntime">WebGPU • локально</span> • чаты/память/файлы хранятся на устройстве</div>
+    </footer>
+  </div>
+
+  <nav id="mobileNav" class="mobile-nav" aria-label="Основная навигация">
+    <button type="button" data-route="home"><span>⌂</span><b>Главная</b></button>
+    <button type="button" data-route="chats"><span>◫</span><b>Чаты</b></button>
+    <button type="button" data-route="chat" class="mobile-nav-chat"><span>◉</span><b>Чат</b></button>
+    <button type="button" data-route="tools"><span>⌘</span><b>Инструменты</b></button>
+    <button type="button" data-route="settings"><span>⚙</span><b>Ещё</b></button>
+  </nav>
+
+  <input id="fileInput" class="hidden" type="file" multiple accept=".txt,.md,.json,.js,.ts,.tsx,.jsx,.py,.html,.css,.csv,.xml,.yaml,.yml,.log,text/*,application/json" />
+
+  <dialog id="hubDialog" class="workspace-dialog">
+    <div class="dialog-head">
+      <div><div class="eyebrow">ЛОКАЛЬНОЕ ПРОСТРАНСТВО</div><h3>Центр</h3></div>
+      <button id="closeHub" class="round-btn" type="button" aria-label="Закрыть">×</button>
+    </div>
+    <div class="hub-tabs" role="tablist">
+      <button class="hub-tab active" data-hub="chats" type="button">Чаты</button>
+      <button class="hub-tab" data-hub="memory" type="button">Память</button>
+      <button class="hub-tab" data-hub="files" type="button">Файлы</button>
+    </div>
+
+    <section id="hubChats" class="hub-panel">
+      <div class="hub-toolbar">
+        <input id="chatSearch" class="hub-input" type="search" placeholder="Поиск по чатам…" />
+        <button id="newChatHubBtn" class="secondary-btn" type="button">＋ Новый чат</button>
+      </div>
+      <div id="chatList" class="hub-list"></div>
+    </section>
+
+    <section id="hubMemory" class="hub-panel hidden">
+      <div class="memory-compose">
+        <textarea id="memoryInput" class="hub-textarea" rows="3" maxlength="1200" placeholder="Например: Отвечай мне кратко и по-русски."></textarea>
+        <button id="addMemoryBtn" class="secondary-btn" type="button">＋ Запомнить</button>
+      </div>
+      <p class="hub-note">Эти пункты автоматически добавляются к системному промпту. Ничего не отправляется в облако.</p>
+      <div id="memoryList" class="hub-list"></div>
+    </section>
+
+    <section id="hubFiles" class="hub-panel hidden">
+      <div class="hub-toolbar">
+        <div>
+          <strong>Локальные документы</strong>
+          <p class="hub-note">Поддерживаются текст, Markdown, код, JSON и CSV. Для запроса выбираются только релевантные фрагменты.</p>
+        </div>
+        <button id="addFileHubBtn" class="secondary-btn" type="button">＋ Добавить</button>
+      </div>
+      <div id="fileList" class="hub-list"></div>
+    </section>
+  </dialog>
+
+  <dialog id="battleDialog" class="workspace-dialog battle-dialog">
+    <div class="dialog-head">
+      <div><div class="eyebrow">ПОСЛЕДОВАТЕЛЬНОЕ СРАВНЕНИЕ</div><h3>Сравнение Qwen</h3></div>
+      <button id="closeBattle" class="round-btn" type="button" aria-label="Закрыть">×</button>
+    </div>
+    <p id="battleQuestion" class="battle-question"></p>
+    <div id="battleProgress" class="battle-progress">Готово к сравнению.</div>
+    <div class="battle-grid">
+      <article class="battle-card">
+        <div class="battle-card-head"><span>БЫСТРАЯ</span><strong id="battleFastTitle">Qwen3 1.7B</strong></div>
+        <div id="battleFast" class="battle-answer">—</div>
+        <button id="useFastBattle" class="secondary-btn" type="button" disabled>Добавить в чат</button>
+      </article>
+      <article class="battle-card battle-card-max">
+        <div class="battle-card-head"><span>МАКС</span><strong id="battleMaxTitle">Qwen3 4B</strong></div>
+        <div id="battleMax" class="battle-answer">—</div>
+        <button id="useMaxBattle" class="secondary-btn" type="button" disabled>Добавить в чат</button>
+      </article>
+    </div>
+  </dialog>
+
+  <dialog id="statsDialog" class="stats-dialog">
+    <div class="dialog-head">
+      <div><div class="eyebrow">СИСТЕМНЫЙ ОТЧЁТ</div><h3>Ресурсы и настройки</h3></div>
+      <button id="closeStats" class="round-btn" type="button" aria-label="Закрыть">×</button>
+    </div>
+
+    <div class="metric-grid">
+      <div class="metric metric-accent"><span>ТРАФИК СЕССИИ</span><strong id="trafficSession">0 Б</strong><small id="trafficNote">Сайт + оценка загрузки модели</small></div>
+      <div class="metric"><span>КЭШ И ДАННЫЕ</span><strong id="storageUsed">—</strong><small id="storageQuota">доступно: —</small></div>
+      <div class="metric metric-dark"><span>GPU-ПАМЯТЬ</span><strong id="gpuMemory">~2.04 ГБ</strong><small id="gpuNote">оценка выбранной модели</small></div>
+      <div class="metric"><span>СООБЩЕНИЙ</span><strong id="messageCount">0</strong><small>в текущем чате</small></div>
+      <div class="metric"><span>ПОСЛЕДНЯЯ СКОРОСТЬ</span><strong id="lastSpeed">—</strong><small id="lastPerfNote">ещё нет замера</small></div>
+      <div class="metric"><span>ВЕРСИЯ</span><strong id="appVersion">—</strong><small>WebLLM закреплён на стабильной версии</small></div>
+    </div>
+
+    <div class="stats-actions">
+      <button id="releaseStatsBtn" class="secondary-btn" type="button">Освободить GPU</button>
+      <button id="exportChat" class="secondary-btn" type="button">Экспорт .txt</button>
+      <button id="clearChat" class="secondary-btn danger-btn" type="button">Очистить чат</button>
+      <button id="resetTraffic" class="secondary-btn" type="button">Сбросить трафик</button>
+    </div>
+    <p class="fineprint">Safari не показывает сайту точное потребление оперативной памяти. Память GPU здесь расчётная, объём хранилища берётся из API браузера, а трафик загрузки весов модели в некоторых случаях является оценкой.</p>
+  </dialog>
+
+  <dialog id="appPromptDialog" class="app-prompt-dialog">
+    <div class="app-prompt-head"><div><div class="eyebrow">QWEN LOCAL</div><h3 id="appPromptTitle">Подтверждение</h3></div></div>
+    <p id="appPromptText"></p>
+    <label id="appPromptFieldWrap" class="app-prompt-field-wrap hidden"><textarea id="appPromptField" rows="1"></textarea></label>
+    <div class="app-prompt-actions"><button id="appPromptCancel" type="button" class="secondary-btn">Отмена</button><button id="appPromptOk" type="button" class="secondary-btn">Готово</button></div>
+  </dialog>
+
+  <script src="./native-bridge.js?v=android1"></script>
+  <script>
+    (() => {
+      window.__QWEN_BOOT_STARTED__ = Date.now();
+      window.__QWEN_LOCAL_PREVIEW__ = location.protocol === "file:" || ["localhost","127.0.0.1","::1"].includes(location.hostname);
+      // Emergency UI fallback: if the main bundle cannot start, basic page navigation and theme still remain clickable.
+      document.addEventListener("click", (event) => {
+        if (window.QwenNavigation) return;
+        const routeButton = event.target.closest?.("[data-route]");
+        if (routeButton) {
+          event.preventDefault();
+          const route = routeButton.dataset.route || "home";
+          document.body.dataset.page = route;
+          try { history.replaceState({}, "", `${location.pathname}${location.search}#${route}`); } catch {}
+          window.scrollTo(0, 0);
+          return;
+        }
+        const themeButton = event.target.closest?.("#themeBtn, #settingsThemeBtn");
+        if (themeButton && !window.QwenAppBridge) {
+          const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+          document.documentElement.dataset.theme = next;
+          try { localStorage.setItem("qwen:themeMode", next); } catch {}
+        }
+      });
+      const reportBootFailure = (detail) => {
+        const banner = document.getElementById("compatBanner");
+        if (!banner || window.QwenAppBridge) return;
+        banner.textContent = `Локальный Preview не запустил JavaScript: ${String(detail || "неизвестная ошибка").slice(0,180)}. Открой Диагностику или используй Safari.`;
+        banner.classList.remove("hidden");
+      };
+      window.addEventListener("error", (e) => { if (!window.QwenAppBridge) reportBootFailure(e.message || e.error); });
+      window.addEventListener("unhandledrejection", (e) => { if (!window.QwenAppBridge) reportBootFailure(e.reason?.message || e.reason); });
+      setTimeout(() => { if (!window.QwenAppBridge) reportBootFailure("основной JS-бандл не сообщил о готовности"); }, 2500);
+    })();
+  </script>
+  <script src="./app-compat.js?v=3.9.4"></script>
+</body>
+</html>
