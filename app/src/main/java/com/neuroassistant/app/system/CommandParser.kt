@@ -8,7 +8,7 @@ enum class AndroidCommand {
 
 object CommandParser {
     fun parse(rawText: String): AndroidCommand {
-        val text = rawText.lowercase(Locale.getDefault()).trim()
+        val text = rawText.lowercase(Locale.ROOT).trim().replace(Regex("\\s+"), " ").trimEnd('.', '!', '?').trim().removeSuffix(" пожалуйста").trim()
         return when {
             has(text, "открой настройки приложения", "информация о приложении", "настройки приложения") -> AndroidCommand.APP_INFO
             has(text, "открой настройки", "открыть настройки") -> AndroidCommand.SETTINGS
@@ -23,5 +23,5 @@ object CommandParser {
         }
     }
 
-    private fun has(text: String, vararg variants: String) = variants.any { it in text }
+    private fun has(text: String, vararg variants: String) = variants.any { it == text }
 }

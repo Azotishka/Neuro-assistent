@@ -13,6 +13,10 @@ class CommandParserTest {
         assertEquals(AndroidCommand.APP_INFO, CommandParser.parse("открой настройки приложения"))
     }
 
+    @Test fun embeddedAndNegatedCommandsDoNotRun() {
+        assertEquals(AndroidCommand.NONE, CommandParser.parse("не открой камеру"))
+        assertEquals(AndroidCommand.NONE, CommandParser.parse("почему открой настройки не работает"))
+    }
     @Test fun unknownTextIsNotSystemCommand() {
         assertEquals(AndroidCommand.NONE, CommandParser.parse("объясни квантовую физику"))
     }

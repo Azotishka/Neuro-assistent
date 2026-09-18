@@ -41,6 +41,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!intent.getBooleanExtra("native_settings", false)) {
+            startActivity(Intent(this, LocalModelsActivity::class.java)
+                .putExtra(EXTRA_START_VOICE, shouldStartVoice(intent)))
+            finish()
+            return
+        }
         enableEdgeToEdge()
         assistantVoiceLaunch.value = shouldStartVoice(intent)
         setContent {

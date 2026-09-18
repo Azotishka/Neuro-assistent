@@ -3967,6 +3967,10 @@ async function sendMessage() {
   if (isGenerating) { await stopGeneration(); return; }
   const content = els.prompt.value.trim();
   if (!content || isLoading) return;
+  if (window.NeuroShell) {
+    const native = await window.NeuroShell.command(content);
+    if (native?.handled) { await appendDirectAnswer(content, native.reply, "Android · NeuroAssistant"); return; }
+  }
   let route = null;
   try { route = await window.QwenFeatureContext?.route?.(content); } catch (err) { console.warn("router", err); }
   if (route?.modelKey && MODELS[route.modelKey]) { selectedKey = route.modelKey; updateModelUI(); }
