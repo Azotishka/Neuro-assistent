@@ -1,12 +1,20 @@
 package com.neuroassistant.app
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.view.WindowManager
+import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -62,8 +70,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.webkit.WebViewAssetLoader
 import androidx.lifecycle.lifecycleScope
 import com.neuroassistant.app.ai.LocalDemoAiProvider
 import com.neuroassistant.app.ai.OpenAiCompatibleProvider
@@ -74,9 +85,16 @@ import com.neuroassistant.app.system.AndroidActionHandler
 import com.neuroassistant.app.ui.theme.NeuroAssistantTheme
 import com.neuroassistant.app.voice.TtsController
 import com.neuroassistant.app.voice.VoiceInputController
+import java.util.concurrent.ConcurrentHashMap
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
+import org.json.JSONArray
+import org.json.JSONObject
 
 private data class QuickUiMessage(val role: MessageRole, val text: String)
+private data class LocalOverlayReply(val text: String?, val error: String?)
 
 class AssistantOverlayActivity : ComponentActivity() {
     private val settings by lazy { SettingsRepository(this) }
@@ -94,6 +112,11 @@ class AssistantOverlayActivity : ComponentActivity() {
     private var autoSpeak by mutableStateOf(false)
     private var speechVolume by mutableStateOf(1f)
     private var speechRate by mutableStateOf(1f)
+    private lateinit var localWeb: WebView
+    private var localCoreReady = false
+    private var localRequestSequence = 0L
+    private var localError: String? = null
+    private val localRequests = ConcurrentHashMap<String, CompletableDeferred<LocalOverlayReply>>()
 
     private val micPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { allowed ->
         if (allowed) voiceInput.start() else addAssistant("Разреши доступ к микрофону в настройках приложения, чтобы говорить голосом.")
@@ -106,6 +129,7 @@ class AssistantOverlayActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
@@ -130,14 +154,15 @@ class AssistantOverlayActivity : ComponentActivity() {
             messages += QuickUiMessage(MessageRole.ASSISTANT, "Я здесь. Можешь сказать вопрос голосом или написать его, не открывая полный чат.")
         }
 
-        setContent {
+        setupLocalRuntime()
+        val composeView = ComposeView(this).apply {
+            setContent {
             NeuroAssistantTheme {
                 QuickAssistantOverlay(
                     messages = messages,
                     prompt = prompt,
                     onPromptChange = { prompt = it },
                     status = when {
-                        busy -> "Думаю…"
                         listening -> "Слушаю…"
                         else -> status
                     },
@@ -164,6 +189,12 @@ class AssistantOverlayActivity : ComponentActivity() {
                 )
             }
         }
+        }
+        setContentView(FrameLayout(this).apply {
+            addView(localWeb, FrameLayout.LayoutParams(1, 1))
+            addView(composeView, FrameLayout.LayoutParams(-1, -1))
+        })
+        localWeb.loadUrl("https://appassets.androidplatform.net/assets/local/index.html?profile=poco-x6-pro&app=overlay#chat")
 
         if (intent.getBooleanExtra(MainActivity.EXTRA_START_VOICE, false)) {
             window.decorView.postDelayed({ startListeningWithPermission() }, 350)
@@ -195,7 +226,7 @@ class AssistantOverlayActivity : ComponentActivity() {
         prompt = ""
         messages += QuickUiMessage(MessageRole.USER, clean)
         busy = true
-        status = "Думаю…"
+        status = "Локально • запускаю модель…"
         lifecycleScope.launch {
             val reply = runCatching { answer(clean) }
                 .getOrElse { it.message?.take(320) ?: "Не удалось получить ответ." }
@@ -214,15 +245,173 @@ class AssistantOverlayActivity : ComponentActivity() {
         val command = AndroidActionHandler(this).tryHandle(text)
         if (command.handled) return command.reply
 
+        answerWithLocal(text)?.let {
+            status = "Локально • готово"
+            return it
+        }
         val currentSettings = settings.load()
         val provider = if (currentSettings.apiKey.isNotBlank()) {
+            status = "API • получаю ответ…"
             OpenAiCompatibleProvider(currentSettings)
         } else {
+            status = "Локальная модель недоступна"
             LocalDemoAiProvider()
         }
         return provider.reply(
             messages.takeLast(16).map { ChatMessage(role = it.role, text = it.text.take(9000)) }
         )
+    }
+
+    /**
+     * Runs the same WebLLM runtime as the full local chat in a tiny hidden WebView.
+     * The overlay never implements a second model client, so model selection,
+     * cache and POCO tuning remain identical in both entry points.
+     */
+    private fun setupLocalRuntime() {
+        val loader = WebViewAssetLoader.Builder()
+            .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))
+            .build()
+        localWeb = WebView(this).apply {
+            setBackgroundColor(android.graphics.Color.TRANSPARENT)
+            alpha = 0f
+            importantForAccessibility = android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+            settings.apply {
+                javaScriptEnabled = true
+                domStorageEnabled = true
+                databaseEnabled = true
+                cacheMode = WebSettings.LOAD_DEFAULT
+                allowFileAccess = false
+                allowContentAccess = false
+                mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+                userAgentString += " QwenLocalAndroid PocoX6Pro Overlay"
+            }
+            addJavascriptInterface(LocalOverlayBridge(this@AssistantOverlayActivity), "NeuroOverlay")
+            webViewClient = object : WebViewClient() {
+                override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
+                    loader.shouldInterceptRequest(request.url)
+
+                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean =
+                    request.url.scheme != "https" || request.url.host != "appassets.androidplatform.net"
+
+                override fun onPageFinished(view: WebView, url: String) {
+                    localCoreReady = false
+                    if (url.startsWith("https://appassets.androidplatform.net/assets/local/")) {
+                        probeLocalCore()
+                    }
+                }
+            }
+            webChromeClient = object : WebChromeClient() {
+                override fun onPermissionRequest(request: android.webkit.PermissionRequest) = request.deny()
+            }
+        }
+    }
+
+    private fun probeLocalCore(attempt: Int = 0) {
+        if (!::localWeb.isInitialized || isFinishing || isDestroyed) return
+        localWeb.evaluateJavascript(
+            "typeof window.NeuroQwenCore === 'object' && typeof window.NeuroQwenCore.runCompletion === 'function'"
+        ) { ready ->
+            if (ready == "true") {
+                localCoreReady = true
+                localError = null
+            } else if (attempt < 80 && !isFinishing && !isDestroyed) {
+                localWeb.postDelayed({ probeLocalCore(attempt + 1) }, 250L)
+            }
+        }
+    }
+
+    private suspend fun waitForLocalCore(): Boolean {
+        repeat(48) {
+            if (localCoreReady) return true
+            delay(250L)
+        }
+        return localCoreReady
+    }
+
+    private suspend fun answerWithLocal(text: String): String? {
+        localError = null
+        if (!waitForLocalCore()) {
+            localError = "локальный runtime не загрузился"
+            return null
+        }
+        val id = "overlay-${++localRequestSequence}"
+        val deferred = CompletableDeferred<LocalOverlayReply>()
+        localRequests[id] = deferred
+        val requestMessages = JSONArray().apply {
+            put(JSONObject().put("role", "system").put("content", "Ты NeuroAssistant — короткий, полезный голосовой помощник. Отвечай по-русски, без лишних вступлений."))
+            messages.takeLast(12).forEach { message ->
+                put(JSONObject().put("role", if (message.role == MessageRole.USER) "user" else "assistant").put("content", message.text.take(9000)))
+            }
+        }
+        val js = """
+            (async function() {
+              const id = ${JSONObject.quote(id)};
+              let core = null;
+              let workflowStarted = false;
+              try {
+                core = window.NeuroQwenCore;
+                if (!core) throw new Error('Локальное ядро ещё не готово');
+                workflowStarted = core.beginExternalWorkflow ? core.beginExternalWorkflow('overlay') : true;
+                if (!workflowStarted) throw new Error('Локальная модель занята другой операцией');
+                const key = core.getSelectedKey?.() || 'fast';
+                const result = await core.runCompletion({
+                  key,
+                  requestMessages: ${requestMessages},
+                  maxTokens: 560,
+                  temperature: 0.4,
+                  topP: 0.9,
+                  thinking: false,
+                  statusText: 'Live • локально на устройстве'
+                });
+                window.NeuroOverlay.result(JSON.stringify({id, reply: String(result?.text || ''), model: key}));
+              } catch (error) {
+                window.NeuroOverlay.result(JSON.stringify({id, error: String(error?.message || error)}));
+              } finally {
+                if (workflowStarted) {
+                  try { await core?.endExternalWorkflow?.({release: false}); } catch (_) {}
+                }
+              }
+            })();
+        """.trimIndent()
+        runCatching { localWeb.evaluateJavascript(js, null) }
+            .onFailure { error ->
+                localRequests.remove(id)
+                deferred.complete(LocalOverlayReply(null, error.message ?: "Не удалось запустить локальное ядро"))
+            }
+        val result = withTimeoutOrNull(120_000L) { deferred.await() }
+        localRequests.remove(id)
+        if (result == null) {
+            localError = "локальная модель не ответила за 120 секунд"
+            runCatching {
+                localWeb.evaluateJavascript(
+                    "window.NeuroQwenCore?.endExternalWorkflow?.({release:true})",
+                    null
+                )
+            }
+            return null
+        }
+        if (!result.error.isNullOrBlank()) {
+            localError = result.error
+            return null
+        }
+        return result.text?.trim()?.takeIf { it.isNotBlank() }
+    }
+
+    private fun onLocalResult(payload: String) {
+        val data = runCatching { JSONObject(payload) }.getOrNull() ?: return
+        val id = data.optString("id")
+        if (id.isBlank()) return
+        localRequests[id]?.complete(
+            LocalOverlayReply(
+                text = data.optString("reply").takeIf { it.isNotBlank() },
+                error = data.optString("error").takeIf { it.isNotBlank() }
+            )
+        )
+    }
+
+    private class LocalOverlayBridge(private val owner: AssistantOverlayActivity) {
+        @JavascriptInterface
+        fun result(payload: String) = owner.onLocalResult(payload)
     }
 
     private fun addAssistant(text: String) {
@@ -265,6 +454,14 @@ class AssistantOverlayActivity : ComponentActivity() {
     override fun onDestroy() {
         runCatching { voiceInput.destroy() }
         runCatching { tts?.shutdown() }
+        localRequests.values.forEach { it.cancel() }
+        localRequests.clear()
+        if (::localWeb.isInitialized) {
+            runCatching { localWeb.removeJavascriptInterface("NeuroOverlay") }
+            runCatching { localWeb.stopLoading() }
+            runCatching { (localWeb.parent as? android.view.ViewGroup)?.removeView(localWeb) }
+            runCatching { localWeb.destroy() }
+        }
         super.onDestroy()
     }
 }
@@ -299,7 +496,7 @@ private fun QuickAssistantOverlay(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.22f)),
+            .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.18f)),
         contentAlignment = Alignment.BottomCenter
     ) {
         Surface(
@@ -309,10 +506,10 @@ private fun QuickAssistantOverlay(
                 .imePadding()
                 .padding(horizontal = 14.dp, vertical = 16.dp)
                 .heightIn(max = 700.dp),
-            shape = RoundedCornerShape(30.dp),
-            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
-            tonalElevation = 8.dp,
-            shadowElevation = 16.dp
+            shape = RoundedCornerShape(18.dp),
+            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.98f),
+            tonalElevation = 3.dp,
+            shadowElevation = 12.dp
         ) {
             Column(
                 modifier = Modifier.padding(18.dp),
@@ -415,7 +612,7 @@ private fun QuickAssistantOverlay(
 private fun BackgroundLiveCard(enabled: Boolean, starting: Boolean, onStop: () -> Unit) {
     Surface(
         color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = .94f),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -459,7 +656,7 @@ private fun AudioControls(
 ) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .66f),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
@@ -503,14 +700,14 @@ private fun LivePulse(active: Boolean, compact: Boolean = false) {
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer { scaleX = scale; scaleY = scale; this.alpha = alpha }
-                    .background(MaterialTheme.colorScheme.primary, CircleShape)
+                    .background(MaterialTheme.colorScheme.tertiary, CircleShape)
             )
         }
         Box(
             modifier = Modifier
                 .size(if (compact) 10.dp else 42.dp)
                 .clip(CircleShape)
-                .background(if (active) Color(0xFF67F6A3) else MaterialTheme.colorScheme.primary)
+                .background(if (active) Color(0xFF278D58) else MaterialTheme.colorScheme.primary)
         )
         if (!compact && active) Text("LIVE", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = Color(0xFF052317))
     }
@@ -526,10 +723,10 @@ private fun QuickBubble(message: QuickUiMessage) {
         Surface(
             color = if (user) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
             shape = RoundedCornerShape(
-                topStart = 20.dp,
-                topEnd = 20.dp,
+                topStart = 14.dp,
+                topEnd = 14.dp,
                 bottomStart = if (user) 20.dp else 6.dp,
-                bottomEnd = if (user) 6.dp else 20.dp
+                bottomEnd = if (user) 6.dp else 14.dp
             ),
             modifier = Modifier.fillMaxWidth(if (user) 0.82f else 0.9f)
         ) {
