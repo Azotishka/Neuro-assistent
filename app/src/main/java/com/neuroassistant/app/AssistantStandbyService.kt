@@ -23,7 +23,7 @@ class AssistantStandbyService : Service() {
         val launch = PendingIntent.getActivity(this, 0, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val stop = PendingIntent.getService(this, 1, Intent(this, AssistantStandbyService::class.java).setAction("STOP"), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val notification = Notification.Builder(this, "standby").setSmallIcon(android.R.drawable.ic_btn_speak_now)
-            .setCategory(Notification.CATEGORY_SERVICE).setOnlyAlertOnce(true).setSilent(true)
+            .setCategory(Notification.CATEGORY_SERVICE).setOnlyAlertOnce(true)
             .setContentTitle("NeuroAssistant Live включён").setContentText("Нажми для голосового запроса. Микрофон не прослушивается.")
             .setContentIntent(launch).setOngoing(true).addAction(Notification.Action.Builder(null, "Выключить", stop).build()).build()
         startForeground(8, notification)
