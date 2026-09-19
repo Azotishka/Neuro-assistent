@@ -37,7 +37,12 @@ class LocalModelsActivity : ComponentActivity() {
         }
     }
     private val notifications = registerForActivityResult(ActivityResultContracts.RequestPermission()) { allowed ->
-        if(allowed) startKeepAlive()
+        if(allowed) {
+            startKeepAlive()
+            if(::web.isInitialized) web.evaluateJavascript("window.NeuroShell?.setBackgroundState(true)", null)
+        } else if(::web.isInitialized) {
+            web.evaluateJavascript("window.NeuroShell?.setBackgroundState(false, 'Разрешение на уведомления отклонено')", null)
+        }
     }
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,7 +98,15 @@ class LocalModelsActivity : ComponentActivity() {
                             "command" -> AndroidActionHandler(this).tryHandle(data.optString("text").take(8000)).let {
                                 JSONObject().put("handled", it.handled).put("reply", it.reply)
                             }
-                            "getSettings" -> settings.load().let { s -> JSONObject().put("baseUrl", s.baseUrl).put("model", s.model).put("hasKey", s.apiKey.isNotBlank()) }
+                            "getSettings" -> settings.load().let { s -> JSONObject().put("baseUrl", s.baseUrl).put("model", s.model).put("hasKey", s.apiKey.isNotBlank()).put("autoSpeak", s.autoSpeak).put("speechVolume", s.speechVolume).put("speechRate", s.speechRate) }
+                            "saveAudioSettings" -> {
+                                settings.saveAudioPreferences(
+                                    data.optBoolean("autoSpeak", false),
+                                    data.optDouble("speechVolume", 1.0).toFloat(),
+                                    data.optDouble("speechRate", 1.0).toFloat()
+                                )
+                                JSONObject().put("ok", true)
+                            }
                             "saveSettings" -> {
                                 val current = settings.load()
                                 val base = data.optString("baseUrl").trim().trimEnd('/')
@@ -115,7 +128,7 @@ class LocalModelsActivity : ComponentActivity() {
                             })
                             "voice" -> { startVoice(); JSONObject().put("ok", true) }
                             "role" -> { startActivity(AssistantRoleHelper.requestIntent(this)); JSONObject().put("ok", true) }
-                            "background" -> { requestKeepAlive(); JSONObject().put("reply", "Режим ожидания включается через уведомление. Android может ограничивать вычисления; локальная генерация при сворачивании не гарантируется.") }
+                            "background" -> if (requestKeepAlive()) JSONObject().put("enabled", true).put("reply", "Фоновый режим включён. Микрофон не прослушивается.") else JSONObject().put("pending", true).put("reply", "Разреши уведомления — после этого фоновый режим включится.")
                             "stopBackground" -> { stopService(Intent(this, AssistantStandbyService::class.java)); JSONObject().put("reply", "Режим ожидания выключен.") }
                             else -> JSONObject().put("error", "Неизвестная операция")
                         }
@@ -150,10 +163,13 @@ class LocalModelsActivity : ComponentActivity() {
             web.evaluateJavascript("window.NeuroShell?.notice('Голосовой ввод недоступен. Проверь службу речи Android.')", null)
         }
     }
-    private fun requestKeepAlive() {
-        if(android.os.Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
+    private fun requestKeepAlive(): Boolean {
+        if(android.os.Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             notifications.launch(Manifest.permission.POST_NOTIFICATIONS)
-        else startKeepAlive()
+            return false
+        }
+        startKeepAlive()
+        return true
     }
     private fun startKeepAlive() { ContextCompat.startForegroundService(this, Intent(this, AssistantStandbyService::class.java)) }
     override fun onDestroy() {

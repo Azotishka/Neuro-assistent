@@ -16,7 +16,9 @@ data class AssistantSettings(
     val baseUrl: String = "https://api.openai.com/v1",
     val model: String = "gpt-5-mini",
     val apiKey: String = "",
-    val autoSpeak: Boolean = false
+    val autoSpeak: Boolean = false,
+    val speechVolume: Float = 1f,
+    val speechRate: Float = 1f
 )
 
 class SettingsRepository(context: Context) {
@@ -60,7 +62,9 @@ class SettingsRepository(context: Context) {
         baseUrl = prefs.getString("baseUrl", "https://api.openai.com/v1") ?: "https://api.openai.com/v1",
         model = prefs.getString("model", "gpt-5-mini") ?: "gpt-5-mini",
         apiKey = decrypt(prefs.getString("encryptedApiKey", "").orEmpty()),
-        autoSpeak = prefs.getBoolean("autoSpeak", false)
+        autoSpeak = prefs.getBoolean("autoSpeak", false),
+        speechVolume = prefs.getFloat("speechVolume", 1f).coerceIn(0f, 1f),
+        speechRate = prefs.getFloat("speechRate", 1f).coerceIn(.65f, 1.35f)
     )
     }
 
@@ -72,6 +76,16 @@ class SettingsRepository(context: Context) {
             .putString("encryptedApiKey", encrypt(settings.apiKey.trim()))
             .remove("apiKey")
             .putBoolean("autoSpeak", settings.autoSpeak)
+            .putFloat("speechVolume", settings.speechVolume.coerceIn(0f, 1f))
+            .putFloat("speechRate", settings.speechRate.coerceIn(.65f, 1.35f))
+            .apply()
+    }
+
+    fun saveAudioPreferences(autoSpeak: Boolean, speechVolume: Float, speechRate: Float) {
+        prefs.edit()
+            .putBoolean("autoSpeak", autoSpeak)
+            .putFloat("speechVolume", speechVolume.coerceIn(0f, 1f))
+            .putFloat("speechRate", speechRate.coerceIn(.65f, 1.35f))
             .apply()
     }
 }

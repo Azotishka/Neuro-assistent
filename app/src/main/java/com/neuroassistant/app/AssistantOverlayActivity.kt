@@ -8,6 +8,16 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,7 +44,9 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,6 +56,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -75,9 +88,22 @@ class AssistantOverlayActivity : ComponentActivity() {
     private var listening by mutableStateOf(false)
     private var busy by mutableStateOf(false)
     private var status by mutableStateOf("Спроси голосом или текстом")
+    private var backgroundEnabled by mutableStateOf(false)
+    private var backgroundStarting by mutableStateOf(false)
+    private var showControls by mutableStateOf(false)
+    private var autoSpeak by mutableStateOf(false)
+    private var speechVolume by mutableStateOf(1f)
+    private var speechRate by mutableStateOf(1f)
 
     private val micPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { allowed ->
         if (allowed) voiceInput.start() else addAssistant("Разреши доступ к микрофону в настройках приложения, чтобы говорить голосом.")
+    }
+    private val notifications = registerForActivityResult(ActivityResultContracts.RequestPermission()) { allowed ->
+        if (allowed) activateBackgroundMode() else {
+            backgroundStarting = false
+            status = "Нужны уведомления для фонового режима"
+            addAssistant("Разреши уведомления, чтобы Android мог держать режим ожидания активным.")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +111,13 @@ class AssistantOverlayActivity : ComponentActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         window.setDimAmount(0.34f)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
+        settings.load().also {
+            autoSpeak = it.autoSpeak
+            speechVolume = it.speechVolume
+            speechRate = it.speechRate
+        }
+        backgroundEnabled = intent.getBooleanExtra(MainActivity.EXTRA_BACKGROUND_ACTIVE, false)
 
         voiceInput = VoiceInputController(
             context = this,
@@ -110,8 +143,22 @@ class AssistantOverlayActivity : ComponentActivity() {
                     },
                     busy = busy,
                     listening = listening,
+                    backgroundEnabled = backgroundEnabled,
+                    backgroundStarting = backgroundStarting,
+                    showControls = showControls,
+                    autoSpeak = autoSpeak,
+                    speechVolume = speechVolume,
+                    speechRate = speechRate,
                     onMic = { if (listening) voiceInput.stop() else startListeningWithPermission() },
                     onSubmit = { submitPrompt(prompt) },
+                    onBackground = { toggleBackgroundMode() },
+                    onToggleControls = { showControls = !showControls },
+                    onAutoSpeakChange = { autoSpeak = it; saveAudioPreferences() },
+                    onVolumeChange = { speechVolume = it },
+                    onVolumeChangeFinished = { saveAudioPreferences() },
+                    onRateChange = { speechRate = it },
+                    onRateChangeFinished = { saveAudioPreferences() },
+                    onStopSpeech = { tts?.stop(); status = "Озвучка остановлена" },
                     onOpenFull = { openFullChat() },
                     onClose = { finish() }
                 )
@@ -126,6 +173,11 @@ class AssistantOverlayActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        if (intent.getBooleanExtra(MainActivity.EXTRA_BACKGROUND_ACTIVE, false)) {
+            backgroundStarting = false
+            backgroundEnabled = true
+            status = "Фоновый режим включён"
+        }
         if (intent.getBooleanExtra(MainActivity.EXTRA_START_VOICE, false)) startListeningWithPermission()
     }
 
@@ -150,7 +202,8 @@ class AssistantOverlayActivity : ComponentActivity() {
             addAssistant(reply)
             if (settings.load().autoSpeak) {
                 if (tts == null) tts = TtsController(this@AssistantOverlayActivity)
-                tts?.speak(reply.take(900))
+                val audio = settings.load()
+                tts?.speak(reply.take(900), audio.speechVolume, audio.speechRate)
             }
             busy = false
             status = "Готово"
@@ -181,6 +234,34 @@ class AssistantOverlayActivity : ComponentActivity() {
         finish()
     }
 
+    private fun toggleBackgroundMode() {
+        if (backgroundStarting) return
+        if (backgroundEnabled) {
+            stopService(Intent(this, AssistantStandbyService::class.java).setAction("STOP"))
+            backgroundEnabled = false
+            status = "Фоновый режим выключен"
+            return
+        }
+        backgroundStarting = true
+        status = "Включаю Live-режим…"
+        if (android.os.Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            notifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            activateBackgroundMode()
+        }
+    }
+
+    private fun activateBackgroundMode() {
+        ContextCompat.startForegroundService(this, Intent(this, AssistantStandbyService::class.java))
+        backgroundStarting = false
+        backgroundEnabled = true
+        status = "Фоновый режим включён"
+    }
+
+    private fun saveAudioPreferences() {
+        settings.saveAudioPreferences(autoSpeak, speechVolume, speechRate)
+    }
+
     override fun onDestroy() {
         runCatching { voiceInput.destroy() }
         runCatching { tts?.shutdown() }
@@ -196,8 +277,22 @@ private fun QuickAssistantOverlay(
     status: String,
     busy: Boolean,
     listening: Boolean,
+    backgroundEnabled: Boolean,
+    backgroundStarting: Boolean,
+    showControls: Boolean,
+    autoSpeak: Boolean,
+    speechVolume: Float,
+    speechRate: Float,
     onMic: () -> Unit,
     onSubmit: () -> Unit,
+    onBackground: () -> Unit,
+    onToggleControls: () -> Unit,
+    onAutoSpeakChange: (Boolean) -> Unit,
+    onVolumeChange: (Float) -> Unit,
+    onVolumeChangeFinished: () -> Unit,
+    onRateChange: (Float) -> Unit,
+    onRateChangeFinished: () -> Unit,
+    onStopSpeech: () -> Unit,
     onOpenFull: () -> Unit,
     onClose: () -> Unit
 ) {
@@ -213,7 +308,7 @@ private fun QuickAssistantOverlay(
                 .navigationBarsPadding()
                 .imePadding()
                 .padding(horizontal = 14.dp, vertical = 16.dp)
-                .heightIn(max = 560.dp),
+                .heightIn(max = 700.dp),
             shape = RoundedCornerShape(30.dp),
             color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
             tonalElevation = 8.dp,
@@ -224,18 +319,25 @@ private fun QuickAssistantOverlay(
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(14.dp)
-                            .clip(CircleShape)
-                            .background(if (listening) Color(0xFF67F6A3) else MaterialTheme.colorScheme.primary)
-                    )
+                    LivePulse(active = listening || backgroundEnabled || backgroundStarting, compact = true)
                     Spacer(Modifier.width(10.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text("NeuroAssistant Live", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                         Text(status, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     OutlinedButton(onClick = onClose, contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp)) { Text("×") }
+                }
+
+                AnimatedVisibility(
+                    visible = backgroundEnabled || backgroundStarting,
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically()
+                ) {
+                    BackgroundLiveCard(
+                        enabled = backgroundEnabled,
+                        starting = backgroundStarting,
+                        onStop = onBackground
+                    )
                 }
 
                 Column(
@@ -258,7 +360,31 @@ private fun QuickAssistantOverlay(
 
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     AssistChip(onClick = onMic, label = { Text(if (listening) "Стоп" else "Голос") })
+                    AssistChip(
+                        onClick = onBackground,
+                        enabled = !backgroundStarting,
+                        label = { Text(if (backgroundEnabled) "Фон включён" else "Фон") }
+                    )
+                    AssistChip(onClick = onToggleControls, label = { Text(if (showControls) "Скрыть настройки" else "Настройки") })
                     AssistChip(onClick = onOpenFull, label = { Text("Полный чат") })
+                }
+
+                AnimatedVisibility(
+                    visible = showControls,
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically()
+                ) {
+                    AudioControls(
+                        autoSpeak = autoSpeak,
+                        volume = speechVolume,
+                        rate = speechRate,
+                        onAutoSpeakChange = onAutoSpeakChange,
+                        onVolumeChange = onVolumeChange,
+                        onVolumeChangeFinished = onVolumeChangeFinished,
+                        onRateChange = onRateChange,
+                        onRateChangeFinished = onRateChangeFinished,
+                        onStopSpeech = onStopSpeech
+                    )
                 }
 
                 OutlinedTextField(
@@ -282,6 +408,111 @@ private fun QuickAssistantOverlay(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun BackgroundLiveCard(enabled: Boolean, starting: Boolean, onStop: () -> Unit) {
+    Surface(
+        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = .94f),
+        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            LivePulse(active = true)
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(
+                    if (starting) "Включаю Live-режим…" else "Фоновый режим включён",
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Text(
+                    if (starting) "Настраиваю уведомление и быстрый вызов" else "Нажми кнопку ассистента для нового запроса",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = .78f)
+                )
+            }
+            if (enabled) {
+                OutlinedButton(onClick = onStop, contentPadding = PaddingValues(horizontal = 10.dp, vertical = 7.dp)) {
+                    Text("Выкл.")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AudioControls(
+    autoSpeak: Boolean,
+    volume: Float,
+    rate: Float,
+    onAutoSpeakChange: (Boolean) -> Unit,
+    onVolumeChange: (Float) -> Unit,
+    onVolumeChangeFinished: () -> Unit,
+    onRateChange: (Float) -> Unit,
+    onRateChangeFinished: () -> Unit,
+    onStopSpeech: () -> Unit
+) {
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .66f),
+        shape = RoundedCornerShape(20.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("Озвучка ответов", fontWeight = FontWeight.SemiBold)
+                    Text("Громкость и скорость сохраняются", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Switch(checked = autoSpeak, onCheckedChange = onAutoSpeakChange)
+            }
+            Text("Громкость ${volumePercent(volume)}%", style = MaterialTheme.typography.labelMedium)
+            Slider(value = volume, onValueChange = onVolumeChange, onValueChangeFinished = onVolumeChangeFinished, valueRange = 0f..1f)
+            Text("Скорость речи ${String.format(java.util.Locale.US, "%.1f", rate)}×", style = MaterialTheme.typography.labelMedium)
+            Slider(value = rate, onValueChange = onRateChange, onValueChangeFinished = onRateChangeFinished, valueRange = .65f..1.35f)
+            OutlinedButton(onClick = onStopSpeech, modifier = Modifier.fillMaxWidth()) { Text("Остановить озвучку") }
+        }
+    }
+}
+
+private fun volumePercent(value: Float): Int = (value.coerceIn(0f, 1f) * 100).toInt()
+
+@Composable
+private fun LivePulse(active: Boolean, compact: Boolean = false) {
+    val transition = rememberInfiniteTransition(label = "live-pulse")
+    val scale by transition.animateFloat(
+        initialValue = .86f,
+        targetValue = 1.16f,
+        animationSpec = infiniteRepeatable(tween(1050), RepeatMode.Reverse),
+        label = "live-scale"
+    )
+    val alpha by transition.animateFloat(
+        initialValue = .16f,
+        targetValue = .42f,
+        animationSpec = infiniteRepeatable(tween(1050), RepeatMode.Reverse),
+        label = "live-alpha"
+    )
+    val size = if (compact) 18.dp else 76.dp
+    Box(modifier = Modifier.size(size), contentAlignment = Alignment.Center) {
+        if (active) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .graphicsLayer { scaleX = scale; scaleY = scale; this.alpha = alpha }
+                    .background(MaterialTheme.colorScheme.primary, CircleShape)
+            )
+        }
+        Box(
+            modifier = Modifier
+                .size(if (compact) 10.dp else 42.dp)
+                .clip(CircleShape)
+                .background(if (active) Color(0xFF67F6A3) else MaterialTheme.colorScheme.primary)
+        )
+        if (!compact && active) Text("LIVE", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = Color(0xFF052317))
     }
 }
 

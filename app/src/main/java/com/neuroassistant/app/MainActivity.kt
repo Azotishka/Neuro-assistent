@@ -17,11 +17,13 @@ class MainActivity : ComponentActivity() {
         startActivity(
             Intent(this, target)
                 .putExtra(EXTRA_START_VOICE, startVoice || destination == AssistantEntryDestination.QUICK_OVERLAY)
+                .putExtra(EXTRA_BACKGROUND_ACTIVE, intent.getBooleanExtra(EXTRA_BACKGROUND_ACTIVE, false))
         )
         finish()
     }
 
     companion object {
         const val EXTRA_START_VOICE = "com.neuroassistant.app.START_VOICE"
+        const val EXTRA_BACKGROUND_ACTIVE = "com.neuroassistant.app.BACKGROUND_ACTIVE"
     }
 }

@@ -12,4 +12,7 @@ test("Android bridge keeps the POCO profile automatic", () => {
   assert.match(bridge, /2311drk48/);
   assert.match(bridge, /poco-x6-pro/);
   assert.match(bridge, /setItem\("qwen:selected",\s*"fast"\)/);
+  const shell = read("neuro-shell.js");
+  assert.match(shell, /setBackgroundState/);
+  assert.match(shell, /Фоновый режим включён/);
 });
