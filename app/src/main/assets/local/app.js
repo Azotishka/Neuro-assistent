@@ -1869,7 +1869,14 @@ async function ensureRuntimeFor(key) {
   const desired = getContextWindow(key);
   if (loadedKey === key && loadedContext === desired && engine) return true;
   const tuning = getModelTuning(key);
-  return loadModelKey(key, { context: desired, quiet: workflowKind === "battle" || workflowKind === "turbo", runtimePreference: tuning.runtime });
+  return loadModelKey(key, {
+    context: desired,
+    // The compact Android overlay has no visible WebView surface for a
+    // confirmation dialog. Its POCO-safe model profile must fail fast instead
+    // of leaving a hidden prompt waiting forever.
+    quiet: workflowKind === "battle" || workflowKind === "turbo" || workflowKind === "overlay",
+    runtimePreference: tuning.runtime,
+  });
 }
 
 function modelFamily(key = selectedKey) {
@@ -2899,6 +2906,11 @@ const coreApi = {
   },
   refreshWorkspaceUI: () => { updateWorkspaceBadges(); renderHubMemory(); renderHubFiles(); renderHubChats(); },
 };
+
+// Native Android shell and the compact overlay use the very same local runtime
+// as the full chat. Keep this surface intentionally small: no model or message
+// state is duplicated in Kotlin, so both entry points stay in sync.
+window.NeuroQwenCore = coreApi;
 
 
 window.QwenMobileBridge = {
