@@ -2190,6 +2190,14 @@ let contextSetting = localStorage.getItem("qwen:context") || (DEVICE.isPocoX6Pro
 if (contextSettingMigrationPending) { contextSetting = "1024"; localStorage.setItem("qwen:context", "1024"); localStorage.setItem("qwen:thinking", "0"); }
 if (!["auto", "1024", "1536", "2048", "4096"].includes(contextSetting)) contextSetting = "auto";
 if (DEVICE.isIOS && contextSetting === "4096") { contextSetting = "auto"; localStorage.setItem("qwen:context", "auto"); }
+if (DEVICE.isPocoX6Pro && !freeModelChoice && ["max", "deepseek"].includes(selectedKey)) {
+  selectedKey = POCO_DEFAULTS.modelKey;
+  localStorage.setItem("qwen:selected", selectedKey);
+}
+if (DEVICE.isPocoX6Pro && !freeModelChoice && contextSetting === "4096") {
+  contextSetting = POCO_DEFAULTS.context;
+  localStorage.setItem("qwen:context", contextSetting);
+}
 let thinkingEnabled = localStorage.getItem("qwen:thinking") === "1";
 const interruptedLoad = (() => { try { return JSON.parse(localStorage.getItem("qwen:lastModelLoadAttempt") || "null"); } catch { return null; } })();
 const interruptedGeneration = (() => { try { return JSON.parse(localStorage.getItem("qwen:lastGenerationAttempt") || "null"); } catch { return null; } })();
