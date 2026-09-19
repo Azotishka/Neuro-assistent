@@ -125,7 +125,13 @@ class LocalModelsActivity : ComponentActivity() {
         }
         setContentView(FrameLayout(this).apply { addView(web, FrameLayout.LayoutParams(-1, -1)) })
         web.loadUrl("https://appassets.androidplatform.net/assets/local/index.html#chat")
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) { override fun handleOnBackPressed() { moveTaskToBack(true) } })
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                web.evaluateJavascript("window.NeuroShell?.handleBack() === true") { consumed ->
+                    if (consumed != "true") moveTaskToBack(true)
+                }
+            }
+        })
     }
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent); setIntent(intent)

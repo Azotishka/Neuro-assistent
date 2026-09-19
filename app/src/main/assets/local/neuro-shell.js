@@ -30,6 +30,17 @@
       if (el) { el.value = text; el.dispatchEvent(new Event('input', {bubbles:true})); el.focus(); }
       document.querySelector('[data-route="chat"]')?.click();
     },
+    handleBack() {
+      const dialog = [...document.querySelectorAll('dialog[open]')].at(-1);
+      if (dialog) { dialog.close(); return true; }
+      const settings = document.querySelector('.neuro-details');
+      if (settings?.open) { settings.open = false; return true; }
+      if (document.body.dataset.page !== 'chat') {
+        document.querySelector('[data-route="chat"]')?.click();
+        return true;
+      }
+      return false;
+    },
     async command(text) {
       const result = await call('command', {text});
       if (result.error) throw new Error(errorText(result));
