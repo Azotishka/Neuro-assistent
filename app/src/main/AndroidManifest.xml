@@ -23,7 +23,7 @@
         android:allowBackup="true"
         android:label="NeuroAssistant"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
+        android:usesCleartextTraffic="false"
         android:theme="@style/Theme.NeuroAssistant">
 
         <activity android:name=".LocalModelsActivity" android:launchMode="singleTask" android:exported="false" android:hardwareAccelerated="true" />

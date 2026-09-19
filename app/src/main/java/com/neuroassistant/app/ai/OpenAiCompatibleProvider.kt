@@ -19,8 +19,9 @@ class OpenAiCompatibleProvider(
 
     override suspend fun reply(messages: List<ChatMessage>): String = withContext(Dispatchers.IO) {
         require(settings.apiKey.isNotBlank()) { "API-ключ не задан. Открой настройки ⚙." }
-        require(settings.baseUrl.startsWith("https://") || settings.baseUrl.startsWith("http://")) {
-            "Некорректный Base URL."
+        val base = runCatching { java.net.URI(settings.baseUrl.trim()) }.getOrNull()
+        require(base?.scheme == "https" && !base.host.isNullOrBlank() && base.userInfo == null && base.query == null && base.fragment == null) {
+            "Укажи HTTPS-адрес API без параметров и пароля."
         }
         require(settings.model.isNotBlank()) { "Модель не задана." }
 

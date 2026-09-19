@@ -3968,8 +3968,14 @@ async function sendMessage() {
   const content = els.prompt.value.trim();
   if (!content || isLoading) return;
   if (window.NeuroShell) {
-    const native = await window.NeuroShell.command(content);
-    if (native?.handled) { await appendDirectAnswer(content, native.reply, "Android · NeuroAssistant"); return; }
+    try {
+      const native = await window.NeuroShell.command(content);
+      if (native?.handled) { await appendDirectAnswer(content, native.reply, "Android · NeuroAssistant"); return; }
+    } catch (error) { window.NeuroShell.notice(error.message); return; }
+  }
+  if (window.NeuroShell?.mode === 'cloud') {
+    await window.NeuroShell.cloudReply(content, messages);
+    return;
   }
   let route = null;
   try { route = await window.QwenFeatureContext?.route?.(content); } catch (err) { console.warn("router", err); }
@@ -4626,6 +4632,7 @@ const coreApi = {
   },
   refreshWorkspaceUI: () => { updateWorkspaceBadges(); renderHubMemory(); renderHubFiles(); renderHubChats(); },
 };
+window.NeuroQwenCore = coreApi;
 
 
 window.QwenMobileBridge = {
