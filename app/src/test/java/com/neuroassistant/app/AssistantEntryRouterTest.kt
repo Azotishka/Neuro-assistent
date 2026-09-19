@@ -14,7 +14,7 @@ class AssistantEntryRouterTest {
     }
 
     @Test fun voiceAssistActionOpensQuickOverlay() {
-        assertEquals(AssistantEntryDestination.QUICK_OVERLAY, AssistantEntryRouter.destinationFor(Intent.ACTION_VOICE_ASSIST, false))
+        assertEquals(AssistantEntryDestination.QUICK_OVERLAY, AssistantEntryRouter.destinationFor(AssistantEntryRouter.ACTION_VOICE_ASSIST, false))
     }
 
     @Test fun explicitVoiceExtraOpensQuickOverlay() {
