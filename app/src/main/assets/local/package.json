@@ -1,13 +1,13 @@
 {
   "name": "qwen-local-pwa",
-  "version": "3.9.4",
+  "version": "3.10.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build:compat": "node ./scripts/build-compat.mjs",
     "test:release": "node ./tests/release-tests.mjs",
     "build": "npm run build:compat && npm run test:release",
-    "test": "npm run test:release",
+    "test": "npm run test:release && node --test ./tests/poco-performance.test.mjs",
     "test:android": "node ./tests/android-tests.mjs && node ./tests/poco-twa-tests.mjs",
     "test:android-bridge": "node ./tests/android-tests.mjs",
     "test:android-native": "node ./tests/poco-twa-tests.mjs",

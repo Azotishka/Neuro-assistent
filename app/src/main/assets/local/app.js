@@ -1,9 +1,10 @@
-import { openLocalDB, getAll, getOne, putOne, deleteOne, makeId } from "./db.js?v=3.9.4";
-import { initAdvancedFeatures } from "./features.js?v=3.9.4";
-import { detectDeviceProfile, effectiveMaxTokens, applyDeviceProfile } from "./device-profile.js?v=3.9.4";
-import { renderMarkdown } from "./markdown.js?v=3.9.4";
+import { openLocalDB, getAll, getOne, putOne, deleteOne, makeId } from "./db.js?v=3.10.0";
+import { initAdvancedFeatures } from "./features.js?v=3.10.0";
+import { detectDeviceProfile, effectiveMaxTokens, applyDeviceProfile } from "./device-profile.js?v=3.10.0";
+import { getPocoDefaults } from "./poco-performance.js?v=1";
+import { renderMarkdown } from "./markdown.js?v=3.10.0";
 
-const APP_VERSION = "3.9.4";
+const APP_VERSION = "3.10.0";
 const NATIVE_APP = window.__QWEN_NATIVE_ANDROID__ === true || window.Capacitor?.isNativePlatform?.() === true;
 const LOCAL_PREVIEW = !NATIVE_APP && (location.protocol === "file:" || ["localhost", "127.0.0.1", "::1"].includes(location.hostname));
 if (LOCAL_PREVIEW) document.documentElement.dataset.localPreview = "1";
@@ -21,6 +22,7 @@ function getWebLLM() {
 }
 const HISTORY_LIMIT = 200;
 const DEVICE = detectDeviceProfile();
+const POCO_DEFAULTS = getPocoDefaults();
 applyDeviceProfile(DEVICE);
 const MAX_FILE_BYTES = 2.5 * 1024 * 1024;
 const MAX_DOC_CHARS = 260000;
@@ -29,7 +31,7 @@ const MAX_MEMORIES_IN_PROMPT = 14;
 const SAFE_MODEL_KEY = DEVICE.isPocoX6Pro ? "lite" : "mini";
 const STABLE_CORE_PRIMARY_KEY = "fast";
 const STABLE_CORE_FALLBACK_KEY = "lite";
-const MODEL_LOAD_STALL_MS = DEVICE.isIOS ? 120000 : 180000;
+const MODEL_LOAD_STALL_MS = DEVICE.isPocoX6Pro ? 120000 : DEVICE.isIOS ? 120000 : 180000;
 const FREE_MODEL_CHOICE_STORAGE_KEY = "qwen:freeModelChoice";
 const CUSTOM_MODELS_STORAGE_KEY = "qwen:customModelRecords";
 const MODEL_TUNING_STORAGE_KEY = "qwen:modelTuningV1";
@@ -66,7 +68,12 @@ function sanitizeTuning(value = {}) {
 }
 function getModelTuning(key = selectedKey) {
   const id = modelTuningStorageId(key);
-  return sanitizeTuning({ ...DEFAULT_MODEL_TUNING, ...(modelTuningStore[id] || {}) });
+  const pocoDefaults = DEVICE.isPocoX6Pro ? {
+    preset: POCO_DEFAULTS.tuningPreset,
+    runtime: POCO_DEFAULTS.runtime,
+    autoRelease: POCO_DEFAULTS.autoRelease,
+  } : {};
+  return sanitizeTuning({ ...DEFAULT_MODEL_TUNING, ...pocoDefaults, ...(modelTuningStore[id] || {}) });
 }
 function saveModelTuning(key, patch = {}) {
   const id = modelTuningStorageId(key);
@@ -271,11 +278,11 @@ const els = {
   repetitionPenaltyRange: $("repetitionPenaltyRange"), repetitionPenaltyValue: $("repetitionPenaltyValue"), frequencyPenaltyRange: $("frequencyPenaltyRange"), frequencyPenaltyValue: $("frequencyPenaltyValue"),
   presencePenaltyRange: $("presencePenaltyRange"), presencePenaltyValue: $("presencePenaltyValue"), maxTokensRange: $("maxTokensRange"), maxTokensValue: $("maxTokensValue"),
   advancedContextSelect: $("advancedContextSelect"), runtimePreferenceSelect: $("runtimePreferenceSelect"), antiLoopToggle: $("antiLoopToggle"), autoReleaseToggle: $("autoReleaseToggle"), advancedResetBtn: $("advancedResetBtn"),
-  quickModelName: $("quickModelName"), quickModelState: $("quickModelState"), quickLoadModelBtn: $("quickLoadModelBtn"), quickReleaseModelBtn: $("quickReleaseModelBtn"), quickAdvancedBtn: $("quickAdvancedBtn"),
+  quickModelName: $("quickModelName"), quickModelState: $("quickModelState"), quickLoadModelBtn: $("quickLoadModelBtn"), quickReleaseModelBtn: $("quickReleaseModelBtn"), quickAdvancedBtn: $("quickAdvancedBtn"), pocoSpeedPresetBtn: $("pocoSpeedPresetBtn"),
 };
 
 let contextSettingMigrationPending = false;
-let selectedKey = localStorage.getItem("qwen:selected") || (DEVICE.isIOS ? SAFE_MODEL_KEY : "fast");
+let selectedKey = localStorage.getItem("qwen:selected") || (DEVICE.isPocoX6Pro ? POCO_DEFAULTS.modelKey : DEVICE.isIOS ? SAFE_MODEL_KEY : "fast");
 if (!MODELS[selectedKey]) selectedKey = DEVICE.isIOS ? SAFE_MODEL_KEY : "fast";
 // 3.3: после подтверждённой перезагрузки Safari на iPhone один раз переводим старую установку в безопасный профиль.
 if (DEVICE.isIOS && !freeModelChoice && localStorage.getItem("qwen:mobileSafeMigration33") !== "1") {
@@ -291,7 +298,7 @@ if (DEVICE.isIOS && !freeModelChoice && localStorage.getItem("qwen:mobileSafeMig
 }
 let responseMode = localStorage.getItem("qwen:mode") || "balanced";
 if (!MODES[responseMode]) responseMode = "balanced";
-let contextSetting = localStorage.getItem("qwen:context") || "auto";
+let contextSetting = localStorage.getItem("qwen:context") || (DEVICE.isPocoX6Pro ? POCO_DEFAULTS.context : "auto");
 if (contextSettingMigrationPending) { contextSetting = "1024"; localStorage.setItem("qwen:context", "1024"); localStorage.setItem("qwen:thinking", "0"); }
 if (!["auto", "1024", "1536", "2048", "4096"].includes(contextSetting)) contextSetting = "auto";
 if (DEVICE.isIOS && contextSetting === "4096") { contextSetting = "auto"; localStorage.setItem("qwen:context", "auto"); }
@@ -333,6 +340,7 @@ let lastPerf = null;
 let cachedStorageEstimate = null;
 let storageEstimateAt = 0;
 let storageEstimatePromise = null;
+let lastProgressStatsAt = 0;
 let installPrompt = null;
 let generationTimer = null;
 let lastRetrievedChunks = [];
@@ -380,7 +388,7 @@ async function getGPUCapabilities({ refresh = false } = {}) {
   const base = { checked: true, available: !!navigator.gpu, shaderF16: null, maxStorageBufferBindingSize: 0, adapterInfo: "" };
   if (!navigator.gpu) { gpuCapabilities = base; return gpuCapabilities; }
   try {
-    const adapter = await navigator.gpu.requestAdapter();
+    const adapter = await navigator.gpu.requestAdapter({ powerPreference: "high-performance" });
     if (!adapter) { gpuCapabilities = base; return gpuCapabilities; }
     const features = adapter.features;
     base.available = true;
@@ -513,26 +521,35 @@ function recordAppError(err, source = "window") {
   } catch {}
 }
 
-async function fetchProbe(url, { method = "GET", timeoutMs = 12000 } = {}) {
+async function fetchProbe(url, { method = "GET", timeoutMs = 12000, cache = "no-store" } = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetch(url, { method, cache: "no-store", redirect: "follow", signal: controller.signal });
+    const response = await fetch(url, { method, cache, redirect: "follow", signal: controller.signal });
     return { ok: response.ok, status: response.status, url: response.url || url, host: new URL(response.url || url).host };
   } catch (err) {
     return { ok: false, status: 0, url, host: (() => { try { return new URL(url).host; } catch { return ""; } })(), error: formatRuntimeError(err) };
   } finally { clearTimeout(timer); }
 }
 
+const preflightCache = new Map();
+const PREFLIGHT_CACHE_MS = 120000;
+
 async function preflightModelResources(webllm, modelSpec) {
   const modelId = modelSpec?.id || String(modelSpec || "");
+  const cached = preflightCache.get(modelId);
+  if (cached && Date.now() - cached.at < PREFLIGHT_CACHE_MS) return cached.value;
   const record = modelSpec?.customRecord || webllm.prebuiltAppConfig?.model_list?.find?.((item) => item.model_id === modelId) || null;
   if (!record) return { catalog: false, modelId, error: `Модель ${modelId} отсутствует в каталоге WebLLM ${WEBLLM_VERSION}` };
   const modelBase = String(record.model || "").replace(/\/$/, "");
   const configUrl = /\/resolve\//.test(modelBase) ? `${modelBase}/mlc-chat-config.json` : `${modelBase}/resolve/main/mlc-chat-config.json`;
-  const modelConfig = await fetchProbe(configUrl);
-  const wasm = record.model_lib ? await fetchProbe(record.model_lib, { method: "HEAD" }) : { ok: false, status: 0, error: "model_lib отсутствует" };
-  return { catalog: true, modelId, modelConfig, wasm, modelHost: modelConfig.host, wasmHost: wasm.host };
+  const [modelConfig, wasm] = await Promise.all([
+    fetchProbe(configUrl, { cache: "force-cache" }),
+    record.model_lib ? fetchProbe(record.model_lib, { method: "HEAD", cache: "force-cache" }) : Promise.resolve({ ok: false, status: 0, error: "model_lib отсутствует" }),
+  ]);
+  const value = { catalog: true, modelId, modelConfig, wasm, modelHost: modelConfig.host, wasmHost: wasm.host };
+  preflightCache.set(modelId, { at: Date.now(), value });
+  return value;
 }
 
 async function createRuntimeEngine(webllm, modelSpec, context, progressCallback, mode = "worker") {
@@ -542,10 +559,10 @@ async function createRuntimeEngine(webllm, modelSpec, context, progressCallback,
     lastActivityAt = Date.now();
     progressCallback?.(report);
   };
-  const engineConfig = { initProgressCallback: trackedProgress, logLevel: "INFO", appConfig: getAppConfigForModel(webllm, modelSpec) };
+  const engineConfig = { initProgressCallback: trackedProgress, logLevel: DEVICE.isPocoX6Pro ? "ERROR" : "INFO", appConfig: getAppConfigForModel(webllm, modelSpec) };
   const chatOptions = { context_window_size: context };
   if (mode === "worker") {
-    const localWorker = new Worker("./worker.js?v=3.9.4", { type: "module" });
+    const localWorker = new Worker("./worker.js?v=3.10.0", { type: "module" });
     pendingWorkers.add(localWorker);
     let watchdog = null;
     const stalled = new Promise((_, reject) => {
@@ -586,7 +603,7 @@ function getContextWindow(key = selectedKey) {
 }
 
 function getMaxPromptChars(key = selectedKey) {
-  return Math.max(1100, Math.floor(getContextWindow(key) * (DEVICE.isIOS ? 1.55 : 2.05)));
+  return Math.max(1100, Math.floor(getContextWindow(key) * (DEVICE.promptCharsPerToken || (DEVICE.isIOS ? 1.55 : 2.05))));
 }
 
 const verifiedModelCache = new Map();
@@ -643,7 +660,11 @@ function setProgress(progress, text) {
     modelTrafficBytes += delta * (getRuntimeModelSpec(loadingModelKey) || MODELS[loadingModelKey]).downloadMB * 1024 * 1024;
   }
   lastProgress = p;
-  updateStats();
+  const now = performance.now();
+  if (p >= 1 || now - lastProgressStatsAt >= DEVICE.perfRefreshMs) {
+    lastProgressStatsAt = now;
+    updateStats();
+  }
 }
 
 function updateCacheBadges() {
@@ -702,7 +723,8 @@ function updateContextUI() {
   els.contextLabel.textContent = contextSetting === "auto" ? `АВТО / ${formatK(resolved)}` : formatK(resolved);
   els.contextSelect.value = contextSetting;
   const opt4k = els.contextSelect.querySelector('option[value="4096"]');
-  if (opt4k) { opt4k.disabled = DEVICE.isIOS && !freeModelChoice; opt4k.textContent = DEVICE.isIOS && !freeModelChoice ? "4K — включи свободный выбор" : "4K — максимум"; }
+  const restricted4k = (DEVICE.isIOS || DEVICE.isPocoX6Pro) && !freeModelChoice;
+  if (opt4k) { opt4k.disabled = restricted4k; opt4k.textContent = restricted4k ? "4K — включи свободный выбор" : "4K — максимум"; }
 }
 
 function updateWorkspaceBadges() {
@@ -809,6 +831,24 @@ function setCustomTuningValue(field, value) {
   const patch = { preset: "custom", [field]: value };
   saveModelTuning(selectedKey, patch);
   updateAdvancedTuningUI();
+}
+
+async function applyPocoSpeedProfile() {
+  if (!DEVICE.isPocoX6Pro || isLoading || isGenerating) return false;
+  if (loadedKey && loadedKey !== POCO_DEFAULTS.modelKey) await hardReleaseRuntime({ updateUI: false });
+  selectedKey = POCO_DEFAULTS.modelKey;
+  contextSetting = POCO_DEFAULTS.context;
+  thinkingEnabled = POCO_DEFAULTS.thinking;
+  responseMode = "balanced";
+  saveModelTuning(selectedKey, { ...TUNING_PRESETS.speed, preset: POCO_DEFAULTS.tuningPreset, runtime: POCO_DEFAULTS.runtime, autoRelease: POCO_DEFAULTS.autoRelease });
+  localStorage.setItem("qwen:selected", selectedKey);
+  localStorage.setItem("qwen:context", contextSetting);
+  localStorage.setItem("qwen:thinking", "0");
+  updateModelUI();
+  applyModeUI();
+  updateContextUI();
+  showToast("Быстрый профиль POCO включён: Qwen3 1.7B · 1.5K · Worker", 2600);
+  return true;
 }
 
 function actualThemeForMode(mode) {
@@ -1413,7 +1453,7 @@ function buildRequestMessages({ baseMessages = messages, key = selectedKey, over
   const query = [...baseMessages].reverse().find((m) => m.role === "user")?.content || "";
   const system = buildSystemPrompt(query, key, overrideSystem);
   const context = getContextWindow(key);
-  const charBudget = Math.max(1050, Math.floor(context * (DEVICE.isIOS ? 1.55 : 2.05)));
+  const charBudget = Math.max(1050, Math.floor(context * (DEVICE.promptCharsPerToken || (DEVICE.isIOS ? 1.55 : 2.05))));
   const selected = [];
   let used = system.length;
   for (let i = baseMessages.length - 1; i >= 0; i -= 1) {
@@ -1439,7 +1479,7 @@ function buildRequestMessages({ baseMessages = messages, key = selectedKey, over
 
 function fitRequestMessagesForRuntime(items, key = selectedKey) {
   const context = getContextWindow(key);
-  const charBudget = Math.max(900, Math.floor(context * (DEVICE.isIOS ? 1.48 : 1.95)));
+  const charBudget = Math.max(900, Math.floor(context * (DEVICE.isPocoX6Pro ? 2.10 : DEVICE.isIOS ? 1.48 : 1.95)));
   const source = Array.isArray(items) ? items.filter((m) => m && typeof m.content === "string") : [];
   if (!source.length) return [];
   const systemItem = source.find((m) => m.role === "system");
@@ -1545,6 +1585,7 @@ function setGeneratingUI(active, kind = null) {
   els.regenerateBtn.disabled = active || isLoading;
   els.newChatBtn.disabled = active || isLoading;
   els.newChatHubBtn.disabled = active || isLoading;
+  if (els.pocoSpeedPresetBtn) els.pocoSpeedPresetBtn.disabled = active || isLoading;
 }
 
 function updatePerfHud(startedAt, firstTokenAt, raw, usage) {
@@ -1653,8 +1694,8 @@ async function loadModelKey(key, { context = getContextWindow(key), quiet = fals
   setStatus("loading", `Запускаю ${model.label}…`);
   setProgress(0, isModelMarkedCached(key) ? "Читаю модель из локального кэша…" : "Подготавливаю WebGPU…");
   if (DEVICE.isIOS && key === "fast" && !quiet) showToast("1.7B уже перегружала Safari на этом устройстве. Если вкладка перезапустится — попробуй Qwen2.5 0.5B.", 4200);
-  if (key === "max" && !quiet) showToast("4B — экспериментальный режим для iPhone. Риск перезапуска Safari высокий.", 4200);
-  if (key === "deepseek" && !quiet) showToast("DeepSeek R1 7B требует около 5.1 ГБ GPU-памяти. На iPhone/Koder риск перезапуска страницы очень высокий.", 5200);
+  if (key === "max" && !quiet) showToast(DEVICE.isPocoX6Pro ? "4B — экспериментальный режим для POCO. Ответы могут быть медленнее.": "4B — экспериментальный режим для iPhone. Риск перезапуска Safari высокий.", 4200);
+  if (key === "deepseek" && !quiet) showToast(DEVICE.isPocoX6Pro ? "DeepSeek R1 7B требует около 5.1 ГБ GPU-памяти. Для POCO это тяжёлый режим.": "DeepSeek R1 7B требует около 5.1 ГБ GPU-памяти. На iPhone/Koder риск перезапуска страницы очень высокий.", 5200);
 
   const progressCallback = (report) => {
     if (loadingModelKey !== key || loadEpoch !== runtimeEpoch || activeLoadEpoch !== loadEpoch) return;
@@ -1784,7 +1825,7 @@ async function loadModelKey(key, { context = getContextWindow(key), quiet = fals
     if (/shader[- ]?f16|required feature|feature.*f16/i.test(message)) {
       showToast("Текущий Safari не поддержал F16-режим этой модели. Будет использован совместимый 32-битный вариант лёгкой модели.", 5200);
     } else if (/device|memory|alloc|buffer|gpu|out of memory/i.test(message)) {
-      showToast(key === "deepseek" ? "DeepSeek R1 7B не поместилась в доступную память браузера. Модель остаётся в каталоге и кэше; для iPhone попробуй Qwen2.5 0.5B или Qwen3 1.7B." : key === "max" ? "4B не поместилась в память. Попробуй Qwen2.5 0.5B или Мини 135M." : key === "fast" ? "Qwen3 1.7B оказалась слишком тяжёлой для этой сессии. Попробуй Qwen2.5 0.5B — она заметно легче и качественнее 135M." : "Ошибка WebGPU. Закрой тяжёлые вкладки и повтори запуск лёгкой модели.", 5200);
+      showToast(key === "deepseek" ? (DEVICE.isPocoX6Pro ? "DeepSeek R1 7B не поместилась в доступную память POCO. Выбери Qwen3 1.7B или Lite 360M." : "DeepSeek R1 7B не поместилась в доступную память браузера. Модель остаётся в каталоге и кэше; для iPhone попробуй Qwen2.5 0.5B или Qwen3 1.7B.") : key === "max" ? "4B не поместилась в память. Попробуй Qwen2.5 0.5B или Мини 135M." : key === "fast" ? "Qwen3 1.7B оказалась слишком тяжёлой для этой сессии. Попробуй Qwen2.5 0.5B — она заметно легче и качественнее 135M." : "Ошибка WebGPU. Закрой тяжёлые вкладки и повтори запуск лёгкой модели.", 5200);
     } else if (/fetch|network|http|cors|failed to load|download/i.test(message)) {
       showToast("Не удалось скачать файл модели. Проверь интернет и повтори загрузку.", 4200);
     } else {
@@ -1969,7 +2010,7 @@ async function runCompletion({ key, requestMessages, maxTokens, temperature, top
     const configuredMaxTokens = tuning.preset === "auto" ? maxTokens : presetValues.maxTokens;
     const requestedMaxTokens = effectiveMaxTokens(DEVICE, key, configuredMaxTokens, thinking);
     const promptChars = fittedMessages.reduce((sum, item) => sum + String(item?.content || "").length, 0);
-    const approxPromptTokens = Math.ceil(promptChars / (DEVICE.isIOS ? 2.35 : DEVICE.isPocoX6Pro ? 2.25 : 2.7));
+    const approxPromptTokens = Math.ceil(promptChars / (DEVICE.promptCharsPerToken || (DEVICE.isIOS ? 2.35 : 2.7)));
     const contextRoom = Math.max(96, getContextWindow(key) - approxPromptTokens - 48);
     const safeMaxTokens = Math.min(requestedMaxTokens, contextRoom);
     let runtimeRecoveryAttempted = false;
@@ -2189,10 +2230,6 @@ async function sendMessage() {
   if (isGenerating) { await stopGeneration(); return; }
   const content = els.prompt.value.trim();
   if (!content || isLoading) return;
-  if (window.NeuroShell) {
-    const native = await window.NeuroShell.command(content);
-    if (native?.handled) { await appendDirectAnswer(content, native.reply, "Android · NeuroAssistant"); return; }
-  }
   let route = null;
   try { route = await window.QwenFeatureContext?.route?.(content); } catch (err) { console.warn("router", err); }
   if (route?.modelKey && MODELS[route.modelKey]) { selectedKey = route.modelKey; updateModelUI(); }
@@ -2518,7 +2555,12 @@ function setFreeModelChoice(enabled) {
   localStorage.setItem(FREE_MODEL_CHOICE_STORAGE_KEY, freeModelChoice ? "1" : "0");
   document.body.classList.toggle("show-heavy-models", freeModelChoice);
   const heavyToggle = document.getElementById("heavyModelsToggle");
-  if (heavyToggle) { heavyToggle.setAttribute("aria-expanded", String(freeModelChoice)); heavyToggle.textContent = freeModelChoice ? "Скрыть мощные модели" : "Показать мощные модели"; }
+  if (heavyToggle) {
+    heavyToggle.setAttribute("aria-expanded", String(freeModelChoice));
+    heavyToggle.textContent = freeModelChoice
+      ? "Скрыть экспериментальные модели"
+      : DEVICE.isPocoX6Pro ? "Показать экспериментальные модели" : "Показать мощные модели";
+  }
   updateContextUI();
   updateModelUI();
   return freeModelChoice;
@@ -2526,8 +2568,8 @@ function setFreeModelChoice(enabled) {
 
 async function setContext(next) {
   if (!["auto", "1024", "1536", "2048", "4096"].includes(next) || isLoading || isGenerating) return;
-  if (DEVICE.isIOS && next === "4096" && !freeModelChoice) { showToast("4K отключён в безопасном профиле. Включи «Свободный выбор», чтобы снять ограничение.", 3600); next = "2048"; }
-  if (DEVICE.isIOS && next === "4096" && freeModelChoice) showToast("Свободный режим: контекст 4K разрешён. Он заметно повышает расход памяти.", 3200);
+  if ((DEVICE.isIOS || DEVICE.isPocoX6Pro) && next === "4096" && !freeModelChoice) { showToast("4K отключён в безопасном профиле. Включи «Свободный выбор», чтобы снять ограничение.", 3600); next = "2048"; }
+  if ((DEVICE.isIOS || DEVICE.isPocoX6Pro) && next === "4096" && freeModelChoice) showToast("Свободный режим: контекст 4K разрешён. Он заметно повышает расход памяти.", 3200);
   if (contextSetting === next) return;
   contextSetting = next;
   localStorage.setItem("qwen:context", next);
@@ -2676,7 +2718,8 @@ async function detectCapabilities() {
     const caps = await getGPUCapabilities({ refresh: true });
     if (!caps.available) throw new Error("adapter unavailable");
     const parts = ["WebGPU готов"];
-    if (DEVICE.isIOS) parts.push(DEVICE.matches14ProViewport ? "профиль iPhone 14 Pro" : "профиль iPhone");
+    if (DEVICE.isPocoX6Pro) parts.push("профиль POCO X6 Pro");
+    else if (DEVICE.isIOS) parts.push(DEVICE.matches14ProViewport ? "профиль iPhone 14 Pro" : "профиль iPhone");
     parts.push(caps.shaderF16 ? "F16 ✓" : "F16 нет · совместимый режим");
     if (caps.maxStorageBufferBindingSize) parts.push(`buffer ${(caps.maxStorageBufferBindingSize / 1024 / 1024).toFixed(0)} МБ`);
     els.footerRuntime.textContent = parts.join(" • ");
@@ -2899,7 +2942,8 @@ els.advancedContextSelect?.addEventListener("change", async () => {
   const before = getContextWindow(selectedKey);
   saveModelTuning(selectedKey, { context: els.advancedContextSelect.value });
   const after = getContextWindow(selectedKey);
-  if (DEVICE.isIOS && after >= 4096) showToast(`Контекст ${after}: высокая нагрузка на память iPhone.`, 2800);
+  if (DEVICE.isPocoX6Pro && after >= 2048) showToast(`Контекст ${after}: высокая нагрузка на память POCO.`, 2800);
+  else if (DEVICE.isIOS && after >= 4096) showToast(`Контекст ${after}: высокая нагрузка на память iPhone.`, 2800);
   if (loadedKey === selectedKey && before !== after) { await hardReleaseRuntime({ updateUI: true }); showToast("Контекст модели изменён — runtime выгружен для безопасного перезапуска.", 2600); }
   updateAdvancedTuningUI(); updateContextUI();
 });
@@ -2927,6 +2971,7 @@ els.quickAdvancedBtn?.addEventListener("click", () => {
   els.advancedModelDetails?.setAttribute("open", "");
   els.advancedModelDetails?.scrollIntoView({ behavior: DEVICE.isIOS ? "auto" : "smooth", block: "start" });
 });
+els.pocoSpeedPresetBtn?.addEventListener("click", applyPocoSpeedProfile);
 
 els.freeModelChoiceToggle?.addEventListener("change", () => {
   const enabled = setFreeModelChoice(els.freeModelChoiceToggle.checked);
@@ -3087,7 +3132,10 @@ async function bootstrap() {
   if (freeModelChoice) {
     document.body.classList.add("show-heavy-models");
     const heavyToggle = document.getElementById("heavyModelsToggle");
-    if (heavyToggle) { heavyToggle.setAttribute("aria-expanded", "true"); heavyToggle.textContent = "Скрыть мощные модели"; }
+    if (heavyToggle) { heavyToggle.setAttribute("aria-expanded", "true"); heavyToggle.textContent = DEVICE.isPocoX6Pro ? "Скрыть экспериментальные модели" : "Скрыть мощные модели"; }
+  } else if (DEVICE.isPocoX6Pro) {
+    const heavyToggle = document.getElementById("heavyModelsToggle");
+    if (heavyToggle) heavyToggle.textContent = "Показать экспериментальные модели";
   }
   applyThemeMode(localStorage.getItem("qwen:themeMode") || "system", false);
   applyModeUI();

@@ -1,4 +1,4 @@
-/* Qwen Local 3.9.4 — responsive multi-page shell */
+/* Qwen Local 3.10 — responsive multi-page shell */
 :root { --ql-nav-h: 72px; --ql-route-gap: 18px; }
 .desktop-nav,.desktop-chat-rail,.mobile-nav,.route-page,.mobile-home-dashboard { display:none; }
 
@@ -226,7 +226,17 @@ body[data-page="chats"] #chatsPage, body[data-page="data"] #mobileLibraryPage, b
 @keyframes qlPageIn { from{opacity:0;transform:translateY(7px)} to{opacity:1;transform:none} }
 .chat-show-more { width:100%; min-height:46px; border:1px dashed var(--soft-line); border-radius:15px; background:transparent; color:var(--ink); font-weight:800; }
 
-/* POCO X6 Pro 3.9.4 performance profile */
+/* POCO X6 Pro 3.10 performance profile and simplified controls */
+.poco-quick-card { display:none; }
+html.is-poco-x6-pro .poco-quick-card { display:flex; align-items:center; justify-content:space-between; gap:14px; margin:12px 0 14px; padding:15px 16px; border:1px solid var(--ink); border-radius:18px; background:var(--ink); color:var(--paper); }
+html.is-poco-x6-pro .poco-quick-card strong { display:block; margin-top:5px; font-size:17px; }
+html.is-poco-x6-pro .poco-quick-card p { margin:5px 0 0; color:color-mix(in srgb,var(--paper) 72%,transparent); font-size:11px; line-height:1.35; }
+html.is-poco-x6-pro .poco-quick-card .eyebrow { color:var(--accent); }
+html.is-poco-x6-pro .poco-quick-card button { flex:0 0 auto; min-height:42px; border-color:var(--accent); background:var(--accent); color:#171612; }
+html.is-poco-x6-pro .model-freedom-panel { display:none; }
+html.is-poco-x6-pro .advanced-model-panel { margin-top:10px; }
+html.is-poco-x6-pro .advanced-model-panel[open] { display:block; }
+html.is-poco-x6-pro .stable-core-note { background:color-mix(in srgb,var(--accent) 12%,var(--surface)); }
 @media (max-width:760px){
 html.is-poco-x6-pro .topbar{background:var(--paper)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-bottom:1px solid var(--soft-line)}
 html.is-poco-x6-pro .mobile-nav{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
@@ -235,4 +245,12 @@ html.is-poco-x6-pro .message-actions{transition:none!important}
 html.is-poco-x6-pro .composer{transform:translateZ(0)}
 html.is-poco-x6-pro .error-bubble{max-width:min(92vw,720px);overflow-wrap:anywhere}
 html.is-poco-x6-pro .message .bubble{line-height:1.48}
+html.is-poco-x6-pro body:not(.show-heavy-models) .model-card[data-model="fast"]{display:flex!important}
+html.is-poco-x6-pro body:not(.show-heavy-models) .model-card[data-model="max"],
+html.is-poco-x6-pro body:not(.show-heavy-models) .model-card[data-model="deepseek"]{display:none!important}
+html.is-poco-x6-pro .model-card{min-height:218px}
+html.is-poco-x6-pro .model-note{font-size:11px}
+html.is-poco-x6-pro .heavy-model-toggle{font-size:11px}
+html.is-poco-x6-pro .poco-quick-card{align-items:flex-start; flex-direction:column}
+html.is-poco-x6-pro .poco-quick-card button{width:100%}
 }

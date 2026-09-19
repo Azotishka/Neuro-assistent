@@ -1,3 +1,5 @@
+import { isPocoX6ProUserAgent, pocoMaxTokens } from "./poco-performance.js?v=1";
+
 export function detectDeviceProfile() {
   const ua = navigator.userAgent || "";
   const isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -6,7 +8,7 @@ export function detectDeviceProfile() {
   const explicitProfile = (() => {
     try { return window.__QWEN_DEVICE_PROFILE_OVERRIDE__ || new URLSearchParams(location.search).get("profile") || ""; } catch { return ""; }
   })();
-  const isPocoX6Pro = isAndroid && explicitProfile === "poco-x6-pro";
+  const isPocoX6Pro = isAndroid && (explicitProfile === "poco-x6-pro" || isPocoX6ProUserAgent(ua));
   const isNativeAndroid = isAndroid && window.__QWEN_NATIVE_ANDROID__ === true;
   const deviceMemoryGB = Number(navigator.deviceMemory || 0);
   const androidConstrained = isAndroid && deviceMemoryGB > 0 && deviceMemoryGB <= 4;
@@ -41,18 +43,16 @@ export function detectDeviceProfile() {
       fast: isPocoX6Pro ? 1536 : isIOS ? 1024 : (androidConstrained ? 1024 : isAndroid ? 1536 : 2048),
       max: isPocoX6Pro ? 1280 : 1024,
     },
-    domMessageLimit: isPocoX6Pro ? 44 : isIOS ? 48 : isAndroid ? 64 : 90,
-    typewriterFrameMs: isPocoX6Pro ? 32 : isIOS ? 34 : isAndroid ? 24 : 17,
-    perfRefreshMs: isPocoX6Pro ? 500 : isIOS ? 360 : isAndroid ? 300 : 220,
-    scrollThrottleMs: isPocoX6Pro ? 140 : isIOS ? 130 : isAndroid ? 100 : 70,
+    domMessageLimit: isPocoX6Pro ? 40 : isIOS ? 48 : isAndroid ? 64 : 90,
+    typewriterFrameMs: isPocoX6Pro ? 40 : isIOS ? 34 : isAndroid ? 24 : 17,
+    perfRefreshMs: isPocoX6Pro ? 650 : isIOS ? 360 : isAndroid ? 300 : 220,
+    scrollThrottleMs: isPocoX6Pro ? 160 : isIOS ? 130 : isAndroid ? 100 : 70,
+    promptCharsPerToken: isPocoX6Pro ? 2.35 : isIOS ? 2.35 : 2.7,
   };
 }
 
 export function effectiveMaxTokens(profile, key, requested, thinking = false) {
-  if (profile?.isPocoX6Pro) {
-    const cap = key === "mini" ? (thinking ? 180 : 260) : key === "lite" ? (thinking ? 220 : 320) : key === "max" ? (thinking ? 220 : 340) : key === "fast" ? (thinking ? 280 : 560) : (thinking ? 240 : 420);
-    return Math.max(96, Math.min(Number(requested) || cap, cap));
-  }
+  if (profile?.isPocoX6Pro) return pocoMaxTokens(key, thinking, requested);
   if (!profile?.isIOS) return requested;
   const cap = key === "mini"
     ? (thinking ? 180 : 240)
@@ -72,6 +72,7 @@ export function applyDeviceProfile(profile) {
   document.documentElement.classList.toggle("is-android", !!profile.isAndroid);
   document.documentElement.classList.toggle("is-native-android", !!profile.isNativeAndroid);
   document.documentElement.classList.toggle("is-poco-x6-pro", !!profile.isPocoX6Pro);
+  document.documentElement.classList.toggle("poco-simple-mode", !!profile.isPocoX6Pro);
   document.documentElement.classList.toggle("is-standalone", !!profile.standalone);
   document.documentElement.style.setProperty("--ql-vh", `${window.innerHeight * 0.01}px`);
 }

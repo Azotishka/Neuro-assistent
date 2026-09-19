@@ -1,4 +1,4 @@
-import { tryToolRoute, calculateExpression, prettyNumber } from "./tools.js?v=3.9.4";
+import { tryToolRoute, calculateExpression, prettyNumber } from "./tools.js?v=3.10.0";
 
 const ROUTES = new Set(["home", "chats", "chat", "models", "data", "tools", "settings"]);
 const ROUTE_ALIAS = new Map([["library", "data"], ["more", "settings"]]);
@@ -323,7 +323,12 @@ $("enableSafeModeBtn")?.addEventListener("click", async () => {
 
 const heavyToggle = $("heavyModelsToggle");
 heavyToggle?.addEventListener("click", () => {
-  const shown = body.classList.toggle("show-heavy-models"); heavyToggle.setAttribute("aria-expanded", String(shown)); heavyToggle.textContent = shown ? "Скрыть мощные модели" : "Показать мощные модели";
+  const shown = body.classList.toggle("show-heavy-models");
+  const poco = document.documentElement.classList.contains("is-poco-x6-pro");
+  heavyToggle.setAttribute("aria-expanded", String(shown));
+  heavyToggle.textContent = shown
+    ? (poco ? "Скрыть экспериментальные модели" : "Скрыть мощные модели")
+    : (poco ? "Показать экспериментальные модели" : "Показать мощные модели");
 });
 
 function syncStandaloneChrome() {

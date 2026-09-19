@@ -1,9 +1,12 @@
 (() => {
+  const ua = navigator.userAgent || "";
+  const pocoUserAgent = /(?:poco[\s_-]*x6[\s_-]*pro|2311drk48[a-z]?)/i.test(ua);
   const explicitProfile = (() => {
     try { return new URLSearchParams(location.search).get("profile") || ""; } catch { return ""; }
   })();
   if (explicitProfile) window.__QWEN_DEVICE_PROFILE_OVERRIDE__ = explicitProfile;
-  const pocoTwa = explicitProfile === "poco-x6-pro" && /Android/i.test(navigator.userAgent || "");
+  else if (pocoUserAgent) window.__QWEN_DEVICE_PROFILE_OVERRIDE__ = "poco-x6-pro";
+  const pocoTwa = (explicitProfile === "poco-x6-pro" || pocoUserAgent) && /Android/i.test(ua);
   if (pocoTwa) {
     window.__QWEN_ANDROID_TWA__ = true;
     window.__QWEN_ANDROID_CAPS__ = {
@@ -18,8 +21,11 @@
     const firstRun = !localStorage.getItem("qwen:selected");
     if (firstRun) {
       localStorage.setItem("qwen:selected", "fast");
-      localStorage.setItem("qwen:context", "auto");
+      localStorage.setItem("qwen:context", "1536");
       localStorage.setItem("qwen:thinking", "0");
+      localStorage.setItem("qwen:modelTuningV1", JSON.stringify({
+        "Qwen3-1.7B-q4f16_1-MLC": { preset: "speed", runtime: "worker", autoRelease: false },
+      }));
     }
     document.addEventListener("DOMContentLoaded", () => {
       document.body.classList.add("twa-android-app");
@@ -32,7 +38,6 @@
       }
     }, { once: true });
   }
-  const ua = navigator.userAgent || "";
   const capacitorPlatform = (() => {
     try { return window.Capacitor?.getPlatform?.() || ""; } catch { return ""; }
   })();
@@ -49,9 +54,13 @@
   const firstRun = !localStorage.getItem("qwen:selected");
   if (firstRun) {
     // Android hardware varies far more than iPhone. Start conservatively and let the user opt up.
-    localStorage.setItem("qwen:selected", memoryGB > 0 && memoryGB <= 4 ? "lite" : "stable");
-    localStorage.setItem("qwen:context", "1024");
+    const poco = window.__QWEN_DEVICE_PROFILE_OVERRIDE__ === "poco-x6-pro";
+    localStorage.setItem("qwen:selected", poco ? "fast" : memoryGB > 0 && memoryGB <= 4 ? "lite" : "stable");
+    localStorage.setItem("qwen:context", poco ? "1536" : "1024");
     localStorage.setItem("qwen:thinking", "0");
+    if (poco) localStorage.setItem("qwen:modelTuningV1", JSON.stringify({
+      "Qwen3-1.7B-q4f16_1-MLC": { preset: "speed", runtime: "worker", autoRelease: false },
+    }));
   }
 
   window.__QWEN_ANDROID_CAPS__ = {

@@ -8,10 +8,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Qwen Local" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="./manifest.webmanifest?v=3.9.4" />
+  <link rel="manifest" href="./manifest.webmanifest?v=3.10.0" />
   <link rel="icon" href="./icon.svg" />
   <link rel="apple-touch-icon" href="./icon-180.png" />
-  <title>Qwen Local 3.9.4</title>
+  <title>Qwen Local · POCO X6 Pro</title>
   <script>
     (() => {
       const mode = localStorage.getItem("qwen:themeMode") || "system";
@@ -19,9 +19,9 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="./styles.css?v=3.9.4" />
-  <link rel="stylesheet" href="./features.css?v=3.9.4" />
-  <link rel="stylesheet" href="./mobile-shell.css?v=3.9.4" />
+  <link rel="stylesheet" href="./styles.css?v=3.10.0" />
+  <link rel="stylesheet" href="./features.css?v=3.10.0" />
+  <link rel="stylesheet" href="./mobile-shell.css?v=3.10.0" />
 </head>
 <body data-page="home">
   <div class="grain" aria-hidden="true"></div>
@@ -30,7 +30,7 @@
       <div class="brand">
         <div class="brand-badge" aria-hidden="true">Q</div>
         <div>
-          <div class="eyebrow">ЛОКАЛЬНЫЙ ИИ / IPHONE</div>
+          <div class="eyebrow">ЛОКАЛЬНЫЙ ИИ / POCO X6 PRO</div>
           <h1>Qwen Local</h1>
           <div id="currentChatTitle" class="current-chat-title">Новый чат</div>
         </div>
@@ -66,13 +66,13 @@
     <section class="intro compact-intro">
       <div class="intro-number">02</div>
       <div class="intro-main">
-        <div class="intro-label">ЛОКАЛЬНАЯ ИИ-СИСТЕМА / 3.9.4</div>
+        <div class="intro-label">ЛОКАЛЬНАЯ ИИ-СИСТЕМА / 3.10</div>
         <h2>Локальный ИИ.<br>На твоём<br>POCO.</h2>
-        <p>Локальный ассистент без обязательного облака. Начни с безопасной модели «Мини 135M», а более тяжёлые Qwen3 запускай только при необходимости. Чаты, память и файлы остаются на устройстве.</p>
+        <p>Быстрый локальный ассистент для POCO X6 Pro. Основная модель — Qwen3 1.7B, резерв — Lite 360M. Чаты, память и файлы остаются на устройстве.</p>
       </div>
       <div class="intro-stamp">
         <span>ПРИВАТНО</span>
-        <strong>3.9.4</strong>
+        <strong>3.10</strong>
         <small>локально</small>
       </div>
     </section>
@@ -80,7 +80,7 @@
     <section id="mobileHomeDashboard" class="mobile-home-dashboard route-home">
       <div class="home-welcome-grid">
         <article class="quick-start-card home-primary-card">
-          <div><span>БЫСТРЫЙ СТАРТ</span><h3>Локальный ИИ без лишних шагов.</h3><p>Для iPhone 14 Pro приложение автоматически выбирает безопасные параметры. Начни с Мини 135M, а мощные модели включай только вручную.</p></div>
+          <div><span>БЫСТРЫЙ СТАРТ</span><h3>Qwen3 1.7B уже настроена.</h3><p>Профиль POCO держит одну модель в GPU, отключает лишнее рассуждение и использует Worker для более быстрой генерации.</p></div>
           <div class="home-primary-actions"><button type="button" data-route="chat">Открыть чат</button><button type="button" data-route="models" class="secondary-home-action">Модели</button></div>
         </article>
         <article class="home-resume-card">
@@ -119,10 +119,19 @@
         </div>
       </div>
 
+      <section id="pocoQuickCard" class="poco-quick-card" aria-label="Быстрая настройка POCO">
+        <div>
+          <span class="eyebrow">POCO X6 PRO · БЫСТРЫЙ ПРОФИЛЬ</span>
+          <strong>Один переключатель для стабильной скорости</strong>
+          <p>Qwen3 1.7B · контекст 1.5K · без рассуждений · Worker.</p>
+        </div>
+        <button id="pocoSpeedPresetBtn" type="button" class="load-btn">Включить быстрый режим</button>
+      </section>
+
       <div class="stable-core-note" role="note">
         <span>STABLE CORE</span>
         <strong>Qwen3 1.7B + Lite 360M</strong>
-        <p>Основная и резервная локальные модели для iPhone. В GPU одновременно держится только одна; при проблеме запуска Qwen3 приложение переключается на Lite.</p>
+        <p>Основная и резервная модели для POCO. В GPU одновременно держится только одна; при сбое Qwen3 можно запустить Lite.</p>
       </div>
 
       <button id="heavyModelsToggle" class="heavy-model-toggle" type="button" aria-expanded="false">Показать мощные модели</button>
@@ -135,7 +144,7 @@
           <span class="model-name">Мини<br>135M</span>
           <div class="model-divider"></div>
           <span id="miniModelMeta" class="model-meta">~0.35 ГБ GPU • ≈ 273 МБ загрузка</span>
-          <span class="model-note">Аварийный минимум для Safari/iPhone. Если Worker не запускается, приложение автоматически попробует совместимый запуск без Worker.</span>
+          <span class="model-note">Резервный минимум. Нужна, если WebGPU не выдерживает более крупную модель.</span>
           <span class="model-choice">ВЫБРАТЬ →</span>
         </button>
 
@@ -147,7 +156,7 @@
           <span class="model-name">Лайт<br>360M</span>
           <div class="model-divider"></div>
           <span id="liteModelMeta" class="model-meta">~0.37 ГБ GPU • ≈ 207 МБ загрузка</span>
-          <span class="model-note">Лёгкая модель с более сильными ответами. Если Мини 135M работает стабильно, можно перейти к ней.</span>
+          <span class="model-note">Самый лёгкий резерв с более сильными ответами, чем Мини.</span>
           <span class="model-choice">ВЫБРАТЬ →</span>
         </button>
 
@@ -159,7 +168,7 @@
           <span class="model-name">Qwen2.5<br>0.5B</span>
           <div class="model-divider"></div>
           <span id="stableModelMeta" class="model-meta">~0.92 ГБ GPU • стабильный чат</span>
-          <span class="model-note">Компромисс для iPhone: заметно умнее 135M/360M и гораздо легче Qwen3 1.7B. Хороший первый выбор для русского языка.</span>
+          <span class="model-note">Стабильный вариант для длинных русских ответов, если 1.7B перегружена.</span>
           <span class="model-choice">ВЫБРАТЬ →</span>
         </button>
 
@@ -171,7 +180,7 @@
           <span class="model-name">Qwen3<br>1.7B</span>
           <div class="model-divider"></div>
           <span class="model-meta">~2.04 ГБ GPU • ≈ 1 ГБ загрузка</span>
-          <span class="model-note">Для повседневных запросов, быстрых черновиков и первого этапа Турбо → Макс.</span>
+          <span class="model-note">Рекомендуется для POCO: быстрые ответы и хороший русский язык.</span>
           <span class="model-choice">ВЫБРАТЬ →</span>
         </button>
 
@@ -183,7 +192,7 @@
           <span class="model-name">Qwen3<br>4B</span>
           <div class="model-divider"></div>
           <span class="model-meta">~3.43 ГБ GPU • ≈ 2.2 ГБ загрузка</span>
-          <span class="model-note">Мощнее, но на iPhone 14 Pro остаётся экспериментальным режимом с повышенной нагрузкой.</span>
+          <span class="model-note">Эксперимент: больше памяти и заметно выше риск сбоя WebGPU.</span>
           <span class="model-choice">ВЫБРАТЬ →</span>
         </button>
 
@@ -195,7 +204,7 @@
           <span class="model-name">DeepSeek R1<br>7B</span>
           <div class="model-divider"></div>
           <span class="model-meta">~4.99 ГБ GPU • ≈ 4.29 ГБ загрузка</span>
-          <span class="model-note">Рассуждающая DeepSeek-R1-Distill-Qwen-7B. Очень тяжёлая для iPhone/Koder: свободный режим разрешает ручной запуск, но iOS может перезагрузить страницу.</span>
+          <span class="model-note">Очень тяжёлая для телефона: оставлена только для ручного эксперимента.</span>
           <span class="model-choice">ВЫБРАТЬ →</span>
         </button>
       </div>
@@ -203,7 +212,7 @@
       <section class="model-freedom-panel" aria-label="Свободный выбор локальной модели">
         <div class="model-freedom-head">
           <div><span class="eyebrow">СВОБОДНЫЙ ВЫБОР</span><h4>Любая локальная модель WebLLM</h4><p>Приложение больше не ограничивает мощность вручную выбранной модели. Безопасный режим остаётся рекомендацией, а не запретом.</p></div>
-          <label class="free-model-toggle"><span>Свободный режим</span><input id="freeModelChoiceToggle" type="checkbox" checked><span class="switch"></span></label>
+          <label class="free-model-toggle"><span>Свободный режим</span><input id="freeModelChoiceToggle" type="checkbox"><span class="switch"></span></label>
         </div>
         <div class="model-freedom-current"><small>СЕЙЧАС ВЫБРАНА</small><strong id="freedomCurrentModel">Мини 135M</strong><span id="freedomCurrentMeta">безопасный профиль</span></div>
         <div class="catalog-toolbar">
@@ -214,7 +223,7 @@
           <select id="catalogModelSelect" aria-label="Каталог моделей"><option value="">Нажми «Обновить каталог»</option></select>
           <button id="catalogUseBtn" class="load-btn" type="button">Выбрать</button>
         </div>
-        <p id="catalogInfo" class="model-freedom-note">Каталог берётся непосредственно из WebLLM 0.2.82. Чем больше VRAM, тем выше риск перезапуска Safari на iPhone.</p>
+        <p id="catalogInfo" class="model-freedom-note">Каталог берётся из WebLLM. Чем больше VRAM, тем выше нагрузка на WebGPU.</p>
         <details class="custom-model-details">
           <summary>Добавить свою MLC-модель вручную</summary>
           <p>Для модели вне встроенного каталога вставь ModelRecord WebLLM: <code>model_id</code>, HTTPS <code>model</code> и HTTPS <code>model_lib</code>. Можно указать VRAM, контекст и required_features.</p>
@@ -223,7 +232,7 @@
         </details>
       </section>
 
-      <details id="advancedModelDetails" class="advanced-model-panel" open>
+      <details id="advancedModelDetails" class="advanced-model-panel">
         <summary>
           <span><small>ТОЧНАЯ НАСТРОЙКА</small><strong>Продвинутые параметры модели</strong></span>
           <span class="advanced-summary-state" id="advancedSummaryState">АВТО</span>
@@ -288,7 +297,7 @@
 
           <div class="advanced-switches">
             <label><span><b>Анти-зацикливание</b><small>Останавливать и повторять генерацию при повторах.</small></span><input id="antiLoopToggle" type="checkbox" checked><span class="switch"></span></label>
-            <label><span><b>Автовыгрузка тяжёлой модели</b><small>После ответа освобождать GPU-память на iPhone.</small></span><input id="autoReleaseToggle" type="checkbox" checked><span class="switch"></span></label>
+            <label><span><b>Автовыгрузка тяжёлой модели</b><small>После ответа освобождать GPU-память.</small></span><input id="autoReleaseToggle" type="checkbox" checked><span class="switch"></span></label>
           </div>
 
           <div class="advanced-actions">
@@ -355,7 +364,7 @@
         <select id="contextSelect">
           <option value="auto">Авто — безопасно</option>
           <option value="1024">1K — минимум памяти</option>
-          <option value="1536">1.5K — оптимально для iPhone</option>
+          <option value="1536">1.5K — оптимально для POCO</option>
           <option value="2048">2K — повышенная нагрузка</option>
           <option value="4096">4K — максимум</option>
         </select>
@@ -430,7 +439,7 @@
     </section>
 
     <section id="mobileSettingsPage" class="mobile-page-section route-page settings-page" aria-label="Настройки">
-      <div class="mobile-page-head"><span>НАСТРОЙКИ</span><h2>Система и производительность</h2><p>Профиль iPhone защищает Safari от лишних пиков памяти. Все продвинутые функции остаются доступны.</p></div><div id="settingsDeviceSummary" class="settings-device-summary"></div>
+      <div class="mobile-page-head"><span>НАСТРОЙКИ</span><h2>Система и производительность</h2><p>Профиль POCO держит память под контролем. Все продвинутые функции остаются доступны.</p></div><div id="settingsDeviceSummary" class="settings-device-summary"></div>
       <div class="safe-mode-card">
         <div><small>МОБИЛЬНЫЙ SAFE MODE</small><strong id="safeModeSummary">Мини 135M · 1K · экономный режим</strong></div>
         <button id="enableSafeModeBtn" type="button">Включить безопасный режим</button>
@@ -595,7 +604,6 @@
       setTimeout(() => { if (!window.QwenAppBridge) reportBootFailure("основной JS-бандл не сообщил о готовности"); }, 2500);
     })();
   </script>
-  <script src="./neuro-shell.js"></script>
-  <script src="./app-compat.js?v=3.9.4"></script>
+  <script src="./app-compat.js?v=3.10.0"></script>
 </body>
 </html>

@@ -1,10 +1,10 @@
-import { getAll, getOne, putOne, putMany, deleteOne, exportDatabase, makeId } from "./db.js?v=3.9.4";
-import { tryToolRoute, calculateExpression, prettyNumber, convertUnits, formatJson, testRegex, csvSummary, scoreComplexity, escapeHtml } from "./tools.js?v=3.9.4";
-import { createVault, unlockVault, encryptValue, decryptValue } from "./vault.js?v=3.9.4";
-import { runPython, stopPython } from "./python-runner.js?v=3.9.4";
-import { recognizeImage } from "./ocr.js?v=3.9.4";
+import { getAll, getOne, putOne, putMany, deleteOne, exportDatabase, makeId } from "./db.js?v=3.10.0";
+import { tryToolRoute, calculateExpression, prettyNumber, convertUnits, formatJson, testRegex, csvSummary, scoreComplexity, escapeHtml } from "./tools.js?v=3.10.0";
+import { createVault, unlockVault, encryptValue, decryptValue } from "./vault.js?v=3.10.0";
+import { runPython, stopPython } from "./python-runner.js?v=3.10.0";
+import { recognizeImage } from "./ocr.js?v=3.10.0";
 
-const FEATURE_VERSION = "3.9.4";
+const FEATURE_VERSION = "3.10.0";
 const DEFAULT_WORKSPACE_ID = "workspace-default";
 const el = (id) => document.getElementById(id);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

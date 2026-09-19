@@ -1,7 +1,7 @@
 {
   "name": "Qwen Local — локальный ИИ",
   "short_name": "Qwen Local",
-  "description": "Qwen Local 3.9.4: локальная ИИ-система для iPhone с Qwen, DeepSeek R1, свободным выбором WebLLM/MLC-моделей, чатами, памятью, файлами, Python, OCR и приватным хранилищем.",
+  "description": "Qwen Local 3.10: локальный ИИ-ассистент для POCO X6 Pro с Qwen3, чатами, памятью, файлами и WebGPU.",
   "start_url": "./#home",
   "scope": "./",
   "display": "standalone",
