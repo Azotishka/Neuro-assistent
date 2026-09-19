@@ -4,12 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 
-/** Launcher and Android assistant entry point share the same conversation screen. */
+/** Launcher entry opens the full chat; Android assistant entry opens the quick overlay. */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivity(Intent(this, LocalModelsActivity::class.java)
-            .putExtra(EXTRA_START_VOICE, intent.getBooleanExtra(EXTRA_START_VOICE, false) || intent.action == Intent.ACTION_ASSIST))
+        val startVoice = intent.getBooleanExtra(EXTRA_START_VOICE, false)
+        val destination = AssistantEntryRouter.destinationFor(intent.action, startVoice)
+        val target = when (destination) {
+            AssistantEntryDestination.FULL_CHAT -> LocalModelsActivity::class.java
+            AssistantEntryDestination.QUICK_OVERLAY -> AssistantOverlayActivity::class.java
+        }
+        startActivity(
+            Intent(this, target)
+                .putExtra(EXTRA_START_VOICE, startVoice || destination == AssistantEntryDestination.QUICK_OVERLAY)
+        )
         finish()
     }
 

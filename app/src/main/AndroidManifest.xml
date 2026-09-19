@@ -28,6 +28,13 @@
 
         <activity android:name=".LocalModelsActivity" android:launchMode="singleTask" android:exported="false" android:hardwareAccelerated="true" />
         <activity
+            android:name=".AssistantOverlayActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop"
+            android:showWhenLocked="true"
+            android:theme="@style/Theme.NeuroAssistant.QuickOverlay" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
