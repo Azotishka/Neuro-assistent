@@ -13,8 +13,8 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.view.WindowManager
-import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -70,9 +70,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.webkit.WebViewAssetLoader
 import androidx.lifecycle.lifecycleScope
@@ -155,45 +154,45 @@ class AssistantOverlayActivity : ComponentActivity() {
         }
 
         setupLocalRuntime()
-        val composeView = ComposeView(this).apply {
-            setContent {
+        setContent {
             NeuroAssistantTheme {
-                QuickAssistantOverlay(
-                    messages = messages,
-                    prompt = prompt,
-                    onPromptChange = { prompt = it },
-                    status = when {
-                        listening -> "Слушаю…"
-                        else -> status
-                    },
-                    busy = busy,
-                    listening = listening,
-                    backgroundEnabled = backgroundEnabled,
-                    backgroundStarting = backgroundStarting,
-                    showControls = showControls,
-                    autoSpeak = autoSpeak,
-                    speechVolume = speechVolume,
-                    speechRate = speechRate,
-                    onMic = { if (listening) voiceInput.stop() else startListeningWithPermission() },
-                    onSubmit = { submitPrompt(prompt) },
-                    onBackground = { toggleBackgroundMode() },
-                    onToggleControls = { showControls = !showControls },
-                    onAutoSpeakChange = { autoSpeak = it; saveAudioPreferences() },
-                    onVolumeChange = { speechVolume = it },
-                    onVolumeChangeFinished = { saveAudioPreferences() },
-                    onRateChange = { speechRate = it },
-                    onRateChangeFinished = { saveAudioPreferences() },
-                    onStopSpeech = { tts?.stop(); status = "Озвучка остановлена" },
-                    onOpenFull = { openFullChat() },
-                    onClose = { finish() }
-                )
+                Box(modifier = Modifier.fillMaxSize()) {
+                    AndroidView(
+                        factory = { localWeb },
+                        modifier = Modifier.size(1.dp)
+                    )
+                    QuickAssistantOverlay(
+                        messages = messages,
+                        prompt = prompt,
+                        onPromptChange = { prompt = it },
+                        status = when {
+                            listening -> "Слушаю…"
+                            else -> status
+                        },
+                        busy = busy,
+                        listening = listening,
+                        backgroundEnabled = backgroundEnabled,
+                        backgroundStarting = backgroundStarting,
+                        showControls = showControls,
+                        autoSpeak = autoSpeak,
+                        speechVolume = speechVolume,
+                        speechRate = speechRate,
+                        onMic = { if (listening) voiceInput.stop() else startListeningWithPermission() },
+                        onSubmit = { submitPrompt(prompt) },
+                        onBackground = { toggleBackgroundMode() },
+                        onToggleControls = { showControls = !showControls },
+                        onAutoSpeakChange = { autoSpeak = it; saveAudioPreferences() },
+                        onVolumeChange = { speechVolume = it },
+                        onVolumeChangeFinished = { saveAudioPreferences() },
+                        onRateChange = { speechRate = it },
+                        onRateChangeFinished = { saveAudioPreferences() },
+                        onStopSpeech = { tts?.stop(); status = "Озвучка остановлена" },
+                        onOpenFull = { openFullChat() },
+                        onClose = { finish() }
+                    )
+                }
             }
         }
-        }
-        setContentView(FrameLayout(this).apply {
-            addView(localWeb, FrameLayout.LayoutParams(1, 1))
-            addView(composeView, FrameLayout.LayoutParams(-1, -1))
-        })
         localWeb.loadUrl("https://appassets.androidplatform.net/assets/local/index.html?profile=poco-x6-pro&app=overlay#chat")
 
         if (intent.getBooleanExtra(MainActivity.EXTRA_START_VOICE, false)) {
