@@ -16,6 +16,7 @@ test("classic bundle is generated from the POCO source", () => {
   assert.match(bundle, /__qwen_poco/);
   assert.match(bundle, /pocoSpeedPresetBtn/);
   assert.match(bundle, /powerPreference:\s*["']high-performance["']/);
+  assert.match(bundle, /window\.NeuroQwenCore\s*=\s*coreApi/);
 });
 
 test("key web assets parse as JavaScript", () => {
