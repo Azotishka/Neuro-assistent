@@ -1,6 +1,11 @@
 name: Publish school newspaper
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'school-newspaper-site/**'
+      - '.github/workflows/school-newspaper-pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -21,6 +26,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Build issue catalogue from Markdown
+        run: python3 school-newspaper-site/build_catalogue.py
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
