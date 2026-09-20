@@ -37,7 +37,7 @@ function chosenFilename() {
   const issue = getIssue();
   const stamp = /^\d{4}-\d{2}-\d{2}$/.test(issue.date) ? issue.date : today();
   // Keep filenames portable across GitHub and local downloads.
-  return stamp + "-" + (slug(issue.title).replace(/[^a-z0-9-]/g, "") || "new-issue") + ".md";
+  return stamp + "-issue-" + (slug(issue.issue_number).replace(/[^a-z0-9-]/g, "") || "new") + "-" + (slug(issue.title).replace(/[^a-z0-9-]/g, "") || "news") + ".md";
 }
 
 function makeMarkdown() {
@@ -91,7 +91,7 @@ function fillIssue(issue, origin = "") {
   loading = true;
   fieldNames.forEach((name) => { fields[name].value = text(issue[name]); });
   sourceFile = origin;
-  chooser.value = origin || "";
+  if (!origin) chooser.value = "";
   loading = false;
   status.textContent = sourceFile
     ? "После правок скопируйте текст и замените содержимое существующего файла в GitHub."
