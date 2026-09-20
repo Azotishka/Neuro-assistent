@@ -1,12 +1,92 @@
 <!doctype html>
 <html lang="ru">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Редактор газеты губернаторского лицея</title>
-  </head>
-  <body>
-    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
-  </body>
-</html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eee5d4">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; font-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+  <title>Редакция · Газета губернаторского лицея</title>
+  <link rel="stylesheet" href="editor.css">
+  <script src="editor.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <header class="masthead">
+      <a class="back" href="../">← На сайт газеты</a>
+      <span class="overline">Служебная редакция · школьная газета</span>
+      <h1>Редактор выпусков</h1>
+      <p class="lead">Создавайте и правьте выпуски прямо на телефоне. Текст готовится здесь, а публикация подтверждается в вашем аккаунте GitHub.</p>
+    </header>
 
+    <aside class="security-note" aria-labelledby="security-title">
+      <h2 id="security-title">Как устроен доступ</h2>
+      <p>Эта страница общедоступна: она не раскрывает черновики и не даёт прав на изменение сайта. Публиковать могут только сотрудники, которым владелец репозитория выдал доступ на запись в GitHub. Шестизначный общий пароль нельзя безопасно проверить на одном лишь GitHub Pages, поэтому здесь нет ложного «входа по паролю».</p>
+      <p>Ни пароль, ни GitHub-токен сайт не запрашивает, не хранит и не отправляет. При публикации GitHub попросит войти обычным способом.</p>
+    </aside>
+
+    <main class="editor-layout">
+      <section class="workspace" aria-labelledby="workspace-title">
+        <div class="section-heading">
+          <div><span class="eyebrow">01 / Мастерская</span><h2 id="workspace-title">Подготовка номера</h2></div>
+          <button class="small-button" id="new" type="button">+ Новый выпуск</button>
+        </div>
+        <label for="existing">Выбрать выпуск для редактирования</label>
+        <select id="existing"><option value="">Новый выпуск</option></select>
+        <p class="muted" id="catalogue-status" role="status">Загружаем опубликованные выпуски…</p>
+
+        <form id="issue-form" novalidate>
+          <div class="field-grid">
+            <div><label for="issue_number">Номер выпуска *</label><input id="issue_number" name="issue_number" maxlength="32" placeholder="01" required></div>
+            <div><label for="date">Дата публикации *</label><input id="date" name="date" type="date" required></div>
+          </div>
+          <label for="title">Заголовок *</label>
+          <input id="title" name="title" maxlength="180" placeholder="Что нового в нашем лицее" required>
+          <label for="theme">Тема / рубрика</label>
+          <input id="theme" name="theme" maxlength="100" placeholder="События лицея">
+          <label for="summary">Краткое описание</label>
+          <textarea id="summary" name="summary" rows="3" maxlength="600" placeholder="Пара предложений о содержании выпуска"></textarea>
+          <label for="body">Текст выпуска (Markdown) *</label>
+          <textarea id="body" name="body" rows="17" required placeholder="# Заголовок статьи&#10;&#10;Ваш текст.&#10;&#10;## Подзаголовок&#10;&#10;- Первый пункт&#10;- Второй пункт"></textarea>
+          <p class="hint">Поддерживаются заголовки с #, ## и ###, списки с «-», выделение **жирным**, *курсивом* и цитаты с &gt;. Изображения вставляются ссылками на файлы, уже загруженные в репозиторий.</p>
+        </form>
+      </section>
+
+      <section class="preview" aria-labelledby="preview-title">
+        <span class="eyebrow">02 / Вёрстка</span>
+        <h2 id="preview-title">Предпросмотр выпуска</h2>
+        <div class="preview-paper">
+          <div class="preview-meta" id="preview-meta"></div>
+          <h3 id="preview-heading">Новый выпуск</h3>
+          <p id="preview-summary"></p>
+          <div id="preview-body" class="preview-body"></div>
+        </div>
+        <p class="hint">Предпросмотр упрощённый. Окончательное оформление появится на странице газеты после публикации.</p>
+      </section>
+    </main>
+
+    <section class="publish" aria-labelledby="publish-title">
+      <span class="eyebrow">03 / Выход в свет</span>
+      <h2 id="publish-title">Сохранение и публикация</h2>
+      <p>Сначала подготовьте выпуск, затем скопируйте или скачайте файл. В GitHub добавьте его как Markdown-файл и подтвердите изменение. После сохранения сайт пересоберёт архив автоматически.</p>
+      <div class="file-name">Имя файла: <code id="filename" aria-live="polite"></code></div>
+      <div class="actions">
+        <button id="copy" type="button" class="primary">Скопировать текст для GitHub</button>
+        <button id="download" type="button">Скачать .md</button>
+        <a id="github-link" class="action-link" href="https://github.com/Azotishka/Neuro-assistent/tree/main/school-newspaper-site/content/issues" target="_blank" rel="noopener noreferrer">Продолжить в GitHub ↗</a>
+      </div>
+      <p class="muted" id="publish-status" role="status" aria-live="polite">Вход в GitHub потребуется только при сохранении изменений в репозитории.</p>
+      <details>
+        <summary>Как опубликовать выпуск на телефоне</summary>
+        <ol>
+          <li>Заполните поля и нажмите «Скопировать текст для GitHub».</li>
+          <li>Откройте GitHub по кнопке выше и войдите в аккаунт, у которого есть право редактировать репозиторий.</li>
+          <li>Для нового выпуска создайте файл с указанным именем и вставьте скопированный текст. Для существующего откройте редактирование его файла и замените содержимое.</li>
+          <li>Сохраните изменение (Commit changes). GitHub Pages автоматически обновит каталог после завершения публикации.</li>
+        </ol>
+      </details>
+    </section>
+    <footer>Газета губернаторского лицея · Редактор работает без сторонних скриптов, паролей и API-токенов.</footer>
+  </div>
+</body>
+</html>
