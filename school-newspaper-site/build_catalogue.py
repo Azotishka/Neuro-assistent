@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+"""Build the public issue catalogue from the Markdown files committed by editors.
+
+No GitHub credentials are needed: this runs in GitHub Actions before Pages deploy.
+Only a small, deliberately restricted YAML front-matter subset is accepted.
+"""
+import json
+import re
+import sys
+from datetime import date
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+ISSUES_DIR = ROOT / "content" / "issues"
+OUTPUT = ROOT / "content" / "issues.json"
+FIELDS = ("title", "issue_number", "date", "theme", "summary")
+REQUIRED = ("title", "issue_number", "date")
+
+
+def frontmatter_value(raw: str, path: Path, key: str) -> str:
+    raw = raw.strip()
+    if raw.startswith('"'):
+        try:
+            result = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{path.name}: invalid double-quoted {key}: {exc}") from exc
+    elif raw.startswith("'"):
+        if not raw.endswith("'") or len(raw) < 2:
+            raise ValueError(f"{path.name}: invalid single-quoted {key}")
+        result = raw[1:-1].replace("''", "'")
+    else:
+        result = raw
+    if not isinstance(result, str):
+        raise ValueError(f"{path.name}: {key} must be text")
+    return result
+
+
+def parse_issue(path: Path) -> dict:
+    content = path.read_text(encoding="utf-8-sig").replace("\r\n", "\n")
+    match = re.match(r"\A---\n(.*?)\n---\n(?:\n)?(.*)\Z", content, re.DOTALL)
+    if not match:
+        raise ValueError(f"{path.name}: expected --- front matter and Markdown body")
+    fields = {}
+    for line in match.group(1).splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        if ":" not in line:
+            raise ValueError(f"{path.name}: invalid front matter line: {line!r}")
+        name, value = line.split(":", 1)
+        key = name.strip()
+        if key not in FIELDS or key in fields:
+            raise ValueError(f"{path.name}: unknown or duplicate field: {key}")
+        fields[key] = frontmatter_value(value, path, key)
+    for required in REQUIRED:
+        if not fields.get(required):
+            raise ValueError(f"{path.name}: missing {required}")
+    try:
+        date.fromisoformat(fields["date"])
+    except ValueError as exc:
+        raise ValueError(f"{path.name}: date must be YYYY-MM-DD") from exc
+    body = match.group(2).strip()
+    if not body:
+        raise ValueError(f"{path.name}: empty article")
+    return {**{key: fields.get(key, "") for key in FIELDS},
+            "body": body, "source_file": path.name}
+
+
+def main() -> None:
+    issues = [parse_issue(path) for path in sorted(ISSUES_DIR.glob("*.md"))]
+    issues.sort(key=lambda issue: (issue["date"], issue["issue_number"]), reverse=True)
+    OUTPUT.write_text(json.dumps(issues, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Built {len(issues)} issue(s) into {OUTPUT.relative_to(ROOT)}")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (OSError, ValueError) as exc:
+        print(f"Issue catalogue build failed: {exc}", file=sys.stderr)
+        sys.exit(1)
