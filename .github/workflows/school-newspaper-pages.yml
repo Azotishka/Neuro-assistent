@@ -1,12 +1,6 @@
 name: Publish school newspaper
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "school-newspaper-site/**"
-      - ".github/workflows/school-newspaper-pages.yml"
   workflow_dispatch:
 
 permissions:
