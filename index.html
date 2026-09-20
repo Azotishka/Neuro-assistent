@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Школьная газета | Проекты и выпуски</title>
+    <meta name="description" content="Онлайн-газета школьной редакции: свежие выпуски, проекты, статьи и архив.">
+    <meta name="theme-color" content="#f3ead8">
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="edition-line">
+        <span>Школьная редакция</span>
+        <span id="today"></span>
+        <span>Онлайн-архив</span>
+      </div>
+      <div class="brand-row">
+        <a class="brand" href="#top" aria-label="На главную">Школьная газета</a>
+        <nav class="nav" aria-label="Разделы сайта">
+          <a href="#issues">Выпуски</a>
+          <a href="#projects">Проекты</a>
+          <a href="#editorial">Редакция</a>
+          <a href="admin/">Добавить выпуск</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="front-page" aria-labelledby="front-title">
+        <div class="front-kicker">Газетный стиль для школьных проектов</div>
+        <h1 id="front-title">Новости, исследования и творческие работы в одном аккуратном онлайн-номере</h1>
+        <p>
+          Сайт сделан как цифровая школьная газета: читатели открывают выпуски онлайн, ищут материалы по темам,
+          а редакторы добавляют новые номера через защищённый доступ GitHub.
+        </p>
+        <div class="front-actions">
+          <a class="button primary" href="#reader">Открыть свежий выпуск</a>
+          <a class="button" href="#issues">Смотреть архив</a>
+        </div>
+      </section>
+
+      <section class="news-strip" aria-label="Основные рубрики">
+        <article>
+          <span class="rubric">Репортаж</span>
+          <h2>События школы</h2>
+          <p>Короткие заметки о конкурсах, встречах, олимпиадах и важных датах.</p>
+        </article>
+        <article>
+          <span class="rubric">Проекты</span>
+          <h2>Работы учеников</h2>
+          <p>Исследования, макеты, медиа, интервью и командные инициативы.</p>
+        </article>
+        <article>
+          <span class="rubric">Мнение</span>
+          <h2>Колонка редакции</h2>
+          <p>Авторские тексты, рекомендации и взгляд школьной команды.</p>
+        </article>
+      </section>
+
+      <section class="layout" id="issues">
+        <aside class="archive-panel" aria-labelledby="archive-title">
+          <div class="section-label">Архив</div>
+          <h2 id="archive-title">Выпуски</h2>
+          <label class="search-label" for="search">Поиск по выпускам</label>
+          <input id="search" class="search" type="search" placeholder="Тема, дата, автор..." autocomplete="off">
+          <div id="issue-list" class="issue-list" aria-live="polite"></div>
+        </aside>
+
+        <section class="reader" id="reader" aria-live="polite">
+          <div class="reader-empty">
+            <p class="section-label">Читальный зал</p>
+            <h2>Загрузка выпусков...</h2>
+            <p>Если выпусков пока нет, редакция может добавить первый номер через раздел «Добавить выпуск».</p>
+          </div>
+        </section>
+      </section>
+
+      <section class="projects" id="projects" aria-labelledby="projects-title">
+        <div>
+          <p class="section-label">Проектная полоса</p>
+          <h2 id="projects-title">Что можно публиковать</h2>
+        </div>
+        <div class="project-grid">
+          <article>
+            <h3>Исследования</h3>
+            <p>Тексты с выводами, диаграммами, ссылками на источники и комментариями руководителя.</p>
+          </article>
+          <article>
+            <h3>Интервью</h3>
+            <p>Беседы с учениками, учителями, выпускниками и гостями школы.</p>
+          </article>
+          <article>
+            <h3>Медиа</h3>
+            <p>Фоторепортажи, подборки иллюстраций и короткие редакционные заметки.</p>
+          </article>
+          <article>
+            <h3>Афиша</h3>
+            <p>Анонсы мероприятий, дедлайны конкурсов и планы следующих номеров.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="editorial" id="editorial" aria-labelledby="editorial-title">
+        <div>
+          <p class="section-label">Редакция</p>
+          <h2 id="editorial-title">Как устроено добавление выпусков</h2>
+          <p>
+            Сайт статический и размещается на GitHub Pages. Поэтому он не хранит пароли и не содержит скрытых серверных ключей.
+            Новые номера добавляются как Markdown-файлы в репозиторий через админку с GitHub-доступом редактора.
+          </p>
+        </div>
+        <a class="button primary" href="admin/">Открыть редактор</a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Школьная газета</span>
+      <span>GitHub Pages</span>
+      <span>Сделано для чтения онлайн</span>
+    </footer>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
