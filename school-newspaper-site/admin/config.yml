@@ -1,0 +1,52 @@
+backend:
+  name: github
+  repo: Azotishka/Neuro-assistent
+  branch: main
+  auth_methods:
+    - token
+
+site_url: https://azotishka.github.io/Neuro-assistent/
+display_url: https://azotishka.github.io/Neuro-assistent/
+logo_url: https://azotishka.github.io/Neuro-assistent/
+locale: ru
+media_folder: school-newspaper-site/assets/uploads
+public_folder: /Neuro-assistent/assets/uploads
+
+collections:
+  - name: issues
+    label: Выпуски
+    label_singular: Выпуск
+    folder: school-newspaper-site/content/issues
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{issue_number}} · {{title}}"
+    sortable_fields:
+      - date
+      - title
+      - issue_number
+    fields:
+      - label: Заголовок выпуска
+        name: title
+        widget: string
+      - label: Номер выпуска
+        name: issue_number
+        widget: string
+        hint: Например, 01 или 2026/09.
+      - label: Дата публикации
+        name: date
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+      - label: Тема
+        name: theme
+        widget: string
+        required: false
+      - label: Краткое описание
+        name: summary
+        widget: text
+        required: false
+      - label: Текст выпуска
+        name: body
+        widget: markdown
