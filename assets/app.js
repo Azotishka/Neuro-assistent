@@ -3,15 +3,15 @@ const BRANCH = "main";
 const CONTENT_DIR = "school-newspaper-site/content/issues";
 const FALLBACK_ISSUES = [
   {
-    title: "Пилотный выпуск школьной газеты",
+    title: "Пилотный выпуск газеты губернаторского лицея",
     issue_number: "01",
     date: "2026-09-20",
     theme: "Старт редакции",
-    summary: "Первый демонстрационный номер: как редакция собирает новости, проекты и идеи для будущих выпусков.",
+    summary: "Первый демонстрационный номер: как редакция лицея собирает новости, проекты и идеи для будущих выпусков.",
     path: "content/issues/2026-09-20-pilot.md",
     body: `# Пилотный выпуск
 
-Добро пожаловать в онлайн-газету школы. Здесь можно публиковать новости, исследования, интервью и творческие проекты.
+Добро пожаловать в онлайн-газету губернаторского лицея. Здесь можно публиковать новости, исследования, интервью и творческие проекты.
 
 ## Что будет в следующих номерах
 
@@ -248,9 +248,16 @@ function markdownToHtml(markdown) {
 
 function inlineMarkdown(text) {
   return text
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, src) => `<img src="${resolveMediaUrl(src)}" alt="${alt}">`)
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.+?)\*/g, "<em>$1</em>")
     .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+}
+
+function resolveMediaUrl(src) {
+  if (/^https?:\/\//.test(src)) return src;
+  const cleaned = src.replace(/^\.?\//, "");
+  return `https://raw.githubusercontent.com/${REPO}/${BRANCH}/school-newspaper-site/${cleaned}`;
 }
 
 function formatDate(date) {

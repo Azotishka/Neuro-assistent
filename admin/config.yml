@@ -9,7 +9,7 @@ site_url: https://azotishka.github.io/Neuro-assistent/
 display_url: https://azotishka.github.io/Neuro-assistent/
 logo_url: https://azotishka.github.io/Neuro-assistent/
 media_folder: school-newspaper-site/assets/uploads
-public_folder: https://raw.githubusercontent.com/Azotishka/Neuro-assistent/main/school-newspaper-site/assets/uploads
+public_folder: assets/uploads
 
 collections:
   - name: issues
