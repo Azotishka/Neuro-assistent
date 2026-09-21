@@ -46,7 +46,13 @@ def split_articles(body: str, fallback_theme: str) -> list[dict]:
     """Turn editor ## sections into a news-style list without changing source text."""
     matches = list(re.finditer(r"(?m)^##\s+(.+?)\s*$", body))
     if not matches:
-        return []
+        teasers = []
+        for paragraph in re.split(r"\n\s*\n", body):
+            teaser = re.match(r"^\*\*(.+?)\*\*\s*(.+)$", paragraph.strip(), re.DOTALL)
+            if teaser:
+                teaser_body = teaser.group(2).strip()
+                teasers.append({"id": f"article-{len(teasers) + 1}", "title": plain_markdown(teaser.group(1))[:180], "section": fallback_theme or "Материалы выпуска", "author": "", "lead": plain_markdown(teaser_body)[:360], "body": teaser_body})
+        return teasers if len(teasers) >= 2 else []
     articles = []
     for index, match in enumerate(matches):
         end = matches[index + 1].start() if index + 1 < len(matches) else len(body)
