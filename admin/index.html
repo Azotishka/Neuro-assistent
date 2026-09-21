@@ -1,93 +1,12 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#eee5d4">
-  <meta name="robots" content="noindex,nofollow">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; img-src 'self' data: blob:; script-src 'self'; style-src 'self'; font-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
-  <title>Редакция · Газета «ЛУЧ»</title>
-  <link rel="stylesheet" href="editor.css">
-  <script src="editor.js" defer></script>
-</head>
-<body>
-  <div class="shell">
-    <header class="masthead">
-      <a class="back" href="../">← На сайт газеты</a>
-      <span class="overline">Служебная редакция · школьная газета</span>
-      <h1>ЛУЧ · Редактор выпусков</h1>
-      <p class="lead">Создавайте и правьте выпуски прямо на телефоне. Текст готовится здесь, а публикация подтверждается в вашем аккаунте GitHub.</p>
-    </header>
-
-    <aside class="security-note" aria-labelledby="security-title">
-      <h2 id="security-title">Как устроен доступ</h2>
-      <p>Эта страница общедоступна: она не раскрывает черновики и не даёт прав на изменение сайта. Публиковать могут только сотрудники, которым владелец репозитория выдал доступ на запись в GitHub. Шестизначный общий пароль нельзя безопасно проверить на одном лишь GitHub Pages, поэтому здесь нет ложного «входа по паролю».</p>
-      <p>Ни пароль, ни GitHub-токен сайт не запрашивает, не хранит и не отправляет. При публикации GitHub попросит войти обычным способом.</p>
-    </aside>
-
-    <main class="editor-layout">
-      <section class="workspace" aria-labelledby="workspace-title">
-        <div class="section-heading">
-          <div><span class="eyebrow">01 / Мастерская</span><h2 id="workspace-title">Подготовка номера</h2></div>
-          <button class="small-button" id="new" type="button">+ Новый выпуск</button>
-        </div>
-        <label for="existing">Выбрать выпуск для редактирования</label>
-        <select id="existing"><option value="">Новый выпуск</option></select>
-        <p class="muted" id="catalogue-status" role="status">Загружаем опубликованные выпуски…</p>
-
-        <form id="issue-form" novalidate>
-          <div class="field-grid">
-            <div><label for="issue_number">Номер выпуска *</label><input id="issue_number" name="issue_number" maxlength="32" placeholder="01" required></div>
-            <div><label for="date">Дата публикации *</label><input id="date" name="date" type="date" required></div>
-          </div>
-          <label for="title">Заголовок *</label>
-          <input id="title" name="title" maxlength="180" placeholder="Что нового в нашем лицее" required>
-          <label for="theme">Тема / рубрика</label>
-          <input id="theme" name="theme" maxlength="100" placeholder="События лицея">
-          <label for="summary">Краткое описание</label>
-          <textarea id="summary" name="summary" rows="3" maxlength="600" placeholder="Пара предложений о содержании выпуска"></textarea>
-          <label for="body">Текст выпуска (Markdown) *</label>
-          <textarea id="body" name="body" rows="17" required placeholder="# Заголовок статьи&#10;&#10;Ваш текст.&#10;&#10;## Подзаголовок&#10;&#10;- Первый пункт&#10;- Второй пункт"></textarea>
-          <p class="hint">Поддерживаются заголовки с #, ## и ###, списки с «-», выделение **жирным**, *курсивом* и цитаты с &gt;. Изображения вставляются ссылками на файлы, уже загруженные в репозиторий.</p>
-<div class="upload-panel"><h3>Прикрепить оригинал выпуска или материал</h3><p class="hint">PDF, Word (DOC/DOCX), ODT, RTF, TXT, PowerPoint, Excel, CSV, изображения и ZIP. До 25 МБ. Выбор файла здесь даёт локальный предпросмотр; для публикации файл отдельно загружается в GitHub.</p><label for="attachment">Выберите файл на устройстве</label><input id="attachment" type="file" accept=".pdf,.doc,.docx,.odt,.rtf,.txt,.ppt,.pptx,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp,.zip"><label for="file">Путь к файлу в архиве</label><input id="file" name="file" maxlength="260" placeholder="content/files/имя-файла.pdf" readonly><p class="hint" id="attachment-status" role="status">Прикреплённого файла пока нет.</p><div id="attachment-preview" class="attachment-preview"></div><a class="action-link upload-link" id="upload-link" href="https://github.com/Azotishka/Neuro-assistent/upload/gh-pages/content/files" target="_blank" rel="noopener noreferrer">Загрузить выбранный файл в GitHub ↗</a></div>
-        </form>
-      </section>
-
-      <section class="preview" aria-labelledby="preview-title">
-        <span class="eyebrow">02 / Вёрстка</span>
-        <h2 id="preview-title">Предпросмотр выпуска</h2>
-        <div class="preview-paper">
-          <div class="preview-meta" id="preview-meta"></div>
-          <h3 id="preview-heading">Новый выпуск</h3>
-          <p id="preview-summary"></p>
-          <div id="preview-body" class="preview-body"></div>
-        </div>
-        <p class="hint">Предпросмотр упрощённый. Окончательное оформление появится на странице газеты после публикации.</p>
-      </section>
-    </main>
-
-    <section class="publish" aria-labelledby="publish-title">
-      <span class="eyebrow">03 / Выход в свет</span>
-      <h2 id="publish-title">Сохранение и публикация</h2>
-      <p>Если прикрепляете файл, сначала загрузите его через GitHub и подтвердите сохранение. Затем скопируйте текст выпуска и сохраните Markdown-файл. PDF будет показан внутри газеты, остальные форматы — как документы для открытия и скачивания.</p>
-      <div class="file-name">Имя файла: <code id="filename" aria-live="polite"></code></div>
-      <div class="actions">
-        <button id="copy" type="button" class="primary">Скопировать текст для GitHub</button>
-        <button id="download" type="button">Скачать .md</button>
-        <a id="github-link" class="action-link" href="https://github.com/Azotishka/Neuro-assistent/tree/main/school-newspaper-site/content/issues" target="_blank" rel="noopener noreferrer">Продолжить в GitHub ↗</a>
-      </div>
-      <p class="muted" id="publish-status" role="status" aria-live="polite">Вход в GitHub потребуется только при сохранении изменений в репозитории.</p>
-      <details>
-        <summary>Как опубликовать выпуск на телефоне</summary>
-        <ol>
-          <li>При наличии вложения выберите файл, нажмите «Загрузить выбранный файл в GitHub», выберите тот же файл на странице GitHub и подтвердите сохранение.</li><li>Заполните поля и нажмите «Скопировать текст для GitHub».</li>
-          <li>Откройте GitHub по кнопке выше и войдите в аккаунт, у которого есть право редактировать репозиторий.</li>
-          <li>Для нового выпуска создайте файл с указанным именем и вставьте скопированный текст. Для существующего откройте редактирование его файла и замените содержимое.</li>
-          <li>Сохраните изменение (Commit changes). GitHub Pages автоматически обновит каталог после завершения публикации.</li>
-        </ol>
-      </details>
-    </section>
-    <footer>Газета губернаторского лицея · Редактор работает без сторонних скриптов, паролей и API-токенов.</footer>
-  </div>
-</body>
-</html>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f8f5ee"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; img-src 'self' data: blob:; script-src 'self'; style-src 'self'; font-src 'self'; object-src 'self' blob:; frame-src 'self' blob:; base-uri 'self'; form-action 'self'"><title>Редакция ЛУЧ</title><link rel="stylesheet" href="editor.css"><script src="editor.js" defer></script></head><body>
+<header class="top"><a href="../" class="back">← Газета</a><a href="../mobile/" class="mobile-link">Версия для смартфона ↗</a></header>
+<main class="shell"><section class="brand"><div><span class="kicker">Редакционная мастерская</span><h1>ЛУЧ</h1><b>ЛУЧШЕЕ УТРО ЧЕТВЕРГА</b></div><p>Редактируй текст, собирай выпуск и прикрепляй исходные документы прямо в браузере. Черновик автоматически сохраняется на этом устройстве.</p></section>
+<section class="notice"><b>Редактор работает без входа в GitHub.</b> Текст и выбранные файлы сохраняются локально в браузере. Текущий публичный сайт работает на GitHub Pages, поэтому публикация для всех читателей всё ещё требует загрузки файлов в хранилище. GitHub Pages сам по себе не умеет принимать и сохранять изменения с веб-формы.</section>
+<div class="layout"><section class="panel editor"><div class="panel-head"><div><span class="step">01 / Выпуск</span><h2>Содержание</h2></div><button id="new" type="button" class="ghost">+ Новый</button></div>
+<label>Открыть опубликованный выпуск<select id="existing"><option value="">Локальный черновик</option></select></label><p id="catalogue-status" class="muted">Загружаем архив…</p>
+<form id="issue-form"><div class="two"><label>Номер<input id="issue_number" required placeholder="05"></label><label>Дата<input id="date" type="date" required></label></div><label>Заголовок<input id="title" required maxlength="180" placeholder="Название выпуска"></label><div class="two"><label>Рубрика<input id="theme" maxlength="100" placeholder="События лицея"></label><label>Короткий анонс<input id="summary" maxlength="600" placeholder="О чём этот номер"></label></div>
+<div class="body-label"><label for="body">Текст выпуска</label><div class="toolbar" aria-label="Форматирование"><button type="button" data-wrap="**|**">B</button><button type="button" data-wrap="*|*"><i>I</i></button><button type="button" data-prefix="# ">H1</button><button type="button" data-prefix="## ">H2</button><button type="button" data-prefix="> ">❝</button><button type="button" data-prefix="- ">• список</button></div></div><textarea id="body" rows="18" required placeholder="# Заголовок статьи&#10;&#10;Пиши текст прямо здесь…"></textarea>
+<div class="files"><div class="files-head"><div><span class="step">02 / Материалы</span><h2>Файлы выпуска</h2></div><span id="file-count">0 файлов</span></div><label class="drop" for="attachment"><strong>Добавить документы и фотографии</strong><span>PDF, Word, ODT, RTF, TXT, Markdown, PowerPoint, Excel, CSV, JPG, PNG, WEBP, ZIP · до 25 МБ каждый</span><input id="attachment" type="file" multiple accept=".pdf,.doc,.docx,.odt,.rtf,.txt,.md,.ppt,.pptx,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp,.zip"></label><div id="file-list" class="file-list"></div><div id="attachment-preview" class="attachment-preview"></div></div></form>
+<div class="actions"><button id="save-local" type="button" class="primary">Сохранить черновик</button><button id="download" type="button">Экспорт .md</button><button id="clear-local" type="button" class="ghost">Очистить локально</button></div><p id="publish-status" class="status" role="status"></p>
+<details class="publish"><summary>Публикация на текущем GitHub Pages</summary><p>Это только этап публикации. Редактирование выше полностью локальное. Сначала загрузите прикреплённые файлы в <code>content/files/</code>, затем сохраните Markdown выпуска в <code>content/issues/</code>.</p><div class="publish-actions"><a id="upload-link" class="button" href="https://github.com/Azotishka/Neuro-assistent/upload/gh-pages/content/files" target="_blank" rel="noopener noreferrer">Загрузить файлы ↗</a><a id="github-link" class="button" href="#" target="_blank" rel="noopener noreferrer">Создать выпуск ↗</a><button id="copy" type="button">Скопировать Markdown</button></div><small>Имя Markdown: <code id="filename"></code></small></details></section>
+<aside class="panel preview"><span class="step">03 / Предпросмотр</span><div class="preview-paper"><div id="preview-meta" class="preview-meta"></div><h2 id="preview-heading">Новый выпуск</h2><p id="preview-summary" class="preview-summary"></p><div id="preview-body" class="preview-body"></div></div></aside></div></main></body></html>
