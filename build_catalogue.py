@@ -35,6 +35,50 @@ def frontmatter_value(raw: str, path: Path, key: str) -> str:
     return result
 
 
+
+def plain_markdown(value: str) -> str:
+    value = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", value)
+    value = re.sub(r"[*_~]+", "", value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def split_articles(body: str, fallback_theme: str) -> list[dict]:
+    """Turn editor ## sections into a news-style list without changing source text."""
+    matches = list(re.finditer(r"(?m)^##\s+(.+?)\s*$", body))
+    if not matches:
+        return []
+    articles = []
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(body)
+        chunk = body[match.end():end].strip()
+        chunk = re.sub(r"(?m)^---\s*$", "", chunk).strip()
+        if not chunk:
+            continue
+        title = plain_markdown(match.group(1))[:180]
+        section = fallback_theme or "Материалы выпуска"
+        author = ""
+        meta = re.match(r"^\*\*(.+?)\*\*\s*(?:\n+|$)", chunk)
+        if meta:
+            meta_text = plain_markdown(meta.group(1))
+            parts = [part.strip() for part in meta_text.split("·") if part.strip()]
+            if parts:
+                section = parts[0][:80]
+            for part in parts[1:]:
+                if part.lower().startswith("автор:"):
+                    author = part.split(":", 1)[1].strip()[:100]
+            chunk = chunk[meta.end():].strip()
+        paragraphs = [plain_markdown(p) for p in re.split(r"\n\s*\n", chunk) if plain_markdown(p)]
+        lead = (paragraphs[0] if paragraphs else "")[:360]
+        articles.append({
+            "id": f"article-{index + 1}",
+            "title": title,
+            "section": section,
+            "author": author,
+            "lead": lead,
+            "body": chunk,
+        })
+    return articles
+
 def parse_issue(path: Path) -> dict:
     content = path.read_text(encoding="utf-8-sig").replace("\r\n", "\n")
     match = re.match(r"\A---\n(.*?)\n---\n(?:\n)?(.*)\Z", content, re.DOTALL)
@@ -89,7 +133,7 @@ def parse_issue(path: Path) -> dict:
     if not body:
         raise ValueError(f"{path.name}: empty article")
     return {**{key: fields.get(key, [] if key == "attachments" else "") for key in FIELDS},
-            "body": body, "source_file": path.name}
+            "body": body, "articles": split_articles(body, fields.get("theme", "")), "source_file": path.name}
 
 
 def main() -> None:
