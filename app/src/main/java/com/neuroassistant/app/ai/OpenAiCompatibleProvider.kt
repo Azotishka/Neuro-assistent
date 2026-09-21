@@ -18,6 +18,9 @@ class OpenAiCompatibleProvider(
     override val displayName: String = settings.model.ifBlank { "OpenAI-compatible" }
 
     override suspend fun reply(messages: List<ChatMessage>): String = withContext(Dispatchers.IO) {
+        if (settings.model == AliceFoundationProvider.MODEL_ID) {
+            return@withContext AliceFoundationProvider(settings).reply(messages)
+        }
         require(settings.apiKey.isNotBlank()) { "API-ключ не задан. Открой настройки ⚙." }
         val base = runCatching { java.net.URI(settings.baseUrl.trim()) }.getOrNull()
         require(base?.scheme == "https" && !base.host.isNullOrBlank() && base.userInfo == null && base.query == null && base.fragment == null) {
