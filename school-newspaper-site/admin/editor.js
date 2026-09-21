@@ -2,7 +2,8 @@
 
 // An editor for public Markdown files. No secret, PIN or GitHub credential is used.
 const REPO = "Azotishka/Neuro-assistent";
-const FOLDER = "school-newspaper-site/content/issues";
+const FOLDER = "content/issues";
+const PUBLICATION_BRANCH = "gh-pages";
 const fieldNames = ["title", "issue_number", "date", "theme", "summary", "body"];
 const form = document.querySelector("#issue-form");
 const chooser = document.querySelector("#existing");
@@ -63,10 +64,10 @@ function updateLinks() {
   filenameEl.textContent = name;
   const base = "https://github.com/" + REPO;
   if (sourceFile) {
-    githubLink.href = base + "/edit/main/" + FOLDER + "/" + encodeURIComponent(sourceFile);
+    githubLink.href = base + "/edit/" + PUBLICATION_BRANCH + "/" + FOLDER + "/" + encodeURIComponent(sourceFile);
     githubLink.textContent = "Редактировать файл в GitHub ↗";
   } else {
-    githubLink.href = base + "/new/main/" + FOLDER + "?filename=" + encodeURIComponent(name);
+    githubLink.href = base + "/new/" + PUBLICATION_BRANCH + "/" + FOLDER + "?filename=" + encodeURIComponent(name);
     githubLink.textContent = "Создать файл в GitHub ↗";
   }
 }
@@ -133,7 +134,7 @@ chooser.addEventListener("change", () => {
   if (!/^[\w.-]+\.md$/.test(issue.source_file || "")) {
     catalogueStatus.textContent = "Этот выпуск пока не связан с исходным файлом. Дождитесь обновления сайта или найдите файл вручную в репозитории.";
     fillIssue(issue, "");
-    githubLink.href = "https://github.com/" + REPO + "/tree/main/" + FOLDER;
+    githubLink.href = "https://github.com/" + REPO + "/tree/" + PUBLICATION_BRANCH + "/" + FOLDER;
     githubLink.textContent = "Найти исходный файл в GitHub ↗";
     return;
   }
