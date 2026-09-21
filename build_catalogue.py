@@ -61,7 +61,7 @@ def parse_issue(path: Path) -> dict:
     # A link appears only after the original binary is present in the repository.
     attached = fields.get("file", "")
     if attached:
-        valid = re.fullmatch(r"content/files/[\\w\\u0400-\\u04ff .()\\-]+\\.(?:pdf|docx?|odt|rtf|txt|pptx?|xlsx?|csv|jpe?g|png|webp|zip)", attached, re.IGNORECASE)
+        valid = re.fullmatch(r"content/files/[\w\u0400-\u04ff .()\-]+\.(?:pdf|docx?|odt|rtf|txt|pptx?|xlsx?|csv|jpe?g|png|webp|zip)", attached, re.IGNORECASE)
         if not valid or ".." in attached:
             raise ValueError(f"{path.name}: invalid attachment path")
         if not (ROOT / attached).is_file():
