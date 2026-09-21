@@ -8,6 +8,7 @@ on:
       - 'assets/**'
       - 'content/**'
       - 'index.html'
+      - 'mobile/**'
       - 'privacy.html'
       - '404.html'
       - 'build_catalogue.py'
