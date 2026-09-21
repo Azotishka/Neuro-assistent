@@ -26,6 +26,7 @@
         android:usesCleartextTraffic="false"
         android:theme="@style/Theme.NeuroAssistant">
 
+        <activity android:name=".knowledge.KnowledgeActivity" android:exported="false" />
         <activity android:name=".LocalModelsActivity" android:launchMode="singleTask" android:exported="false" android:hardwareAccelerated="true" />
         <activity
             android:name=".AssistantOverlayActivity"
