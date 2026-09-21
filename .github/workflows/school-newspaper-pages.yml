@@ -2,9 +2,15 @@ name: Publish school newspaper
 
 on:
   push:
-    branches: [main]
+    branches: [gh-pages]
     paths:
-      - 'school-newspaper-site/**'
+      - 'admin/**'
+      - 'assets/**'
+      - 'content/**'
+      - 'index.html'
+      - 'privacy.html'
+      - '404.html'
+      - 'build_catalogue.py'
       - '.github/workflows/school-newspaper-pages.yml'
   workflow_dispatch:
 
@@ -19,23 +25,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout newspaper source
+      - name: Checkout published branch
         uses: actions/checkout@v4
 
-      - name: Generate issue catalogue
-        run: python3 school-newspaper-site/build_catalogue.py
+      - name: Generate catalogue from issue files
+        run: python3 build_catalogue.py
 
-      - name: Validate public files
+      - name: Validate and stage public site
         run: |
-          test -s school-newspaper-site/index.html
-          test -s school-newspaper-site/admin/index.html
-          test -s school-newspaper-site/content/issues.json
-          python3 -m json.tool school-newspaper-site/content/issues.json > /dev/null
+          test -s index.html
+          test -s admin/index.html
+          test -s content/issues.json
+          python3 -m json.tool content/issues.json > /dev/null
+          mkdir _site
+          cp index.html privacy.html 404.html .nojekyll _site/
+          cp -R admin assets content _site/
 
-      - name: Upload newspaper artifact
+      - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: school-newspaper-site
+          path: _site
 
   deploy:
     needs: build
@@ -47,6 +56,6 @@ jobs:
       name: newspaper-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy newspaper to GitHub Pages
+      - name: Deploy from gh-pages branch
         id: deployment
         uses: actions/deploy-pages@v4
