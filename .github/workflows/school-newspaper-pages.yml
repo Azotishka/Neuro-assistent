@@ -40,7 +40,7 @@ jobs:
           python3 -m json.tool content/issues.json > /dev/null
           mkdir _site
           cp index.html privacy.html 404.html .nojekyll _site/
-          cp -R admin assets content _site/
+          cp -R admin assets content mobile _site/
 
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
