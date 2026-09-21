@@ -1,206 +1,38 @@
 "use strict";
-
-// An editor for public Markdown files. No secret, PIN or GitHub credential is used.
-const REPO = "Azotishka/Neuro-assistent";
-const FOLDER = "content/issues";
-const PUBLICATION_BRANCH = "gh-pages";
-const fieldNames = ["title", "issue_number", "date", "theme", "summary", "body", "file"];
-const form = document.querySelector("#issue-form");
-const chooser = document.querySelector("#existing");
-const status = document.querySelector("#publish-status");
-const catalogueStatus = document.querySelector("#catalogue-status");
-const filenameEl = document.querySelector("#filename");
-const githubLink = document.querySelector("#github-link");
-const fields = Object.fromEntries(fieldNames.map((name) => [name, document.getElementById(name)]));
-let issues = [];
-let sourceFile = "";
-let loading = false;
-
-const today = () => {
-  const now = new Date();
-  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-  return local.toISOString().slice(0, 10);
-};
-const text = (value) => String(value ?? "").trim();
-
-function getIssue() {
-  return Object.fromEntries(fieldNames.map((name) => [name, fields[name].value.trim()]));
-}
-
-function slug(value) {
-  return value.toLowerCase().normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\u0430-\u044f\u0451]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48);
-}
-
-function chosenFilename() {
-  if (sourceFile) return sourceFile;
-  const issue = getIssue();
-  const stamp = /^\d{4}-\d{2}-\d{2}$/.test(issue.date) ? issue.date : today();
-  // Keep filenames portable across GitHub and local downloads.
-  return stamp + "-issue-" + (slug(issue.issue_number).replace(/[^a-z0-9-]/g, "") || "new") + "-" + (slug(issue.title).replace(/[^a-z0-9-]/g, "") || "news") + ".md";
-}
-
-function makeMarkdown() {
-  const issue = getIssue();
-  // JSON-quoted string values are a safe subset of YAML front matter.
-  const meta = ["title", "issue_number", "date", "theme", "summary", "file"]
-    .map((key) => key + ": " + JSON.stringify(issue[key])).join("\n");
-  return "---\n" + meta + "\n---\n\n" + issue.body + "\n";
-}
-
-function valid() {
-  const issue = getIssue();
-  if (!issue.title || !issue.issue_number || !issue.date || !issue.body) {
-    status.textContent = "Заполните заголовок, номер, дату и текст выпуска.";
-    form.reportValidity();
-    return false;
-  }
-  return true;
-}
-
-function updateLinks() {
-  const name = chosenFilename();
-  filenameEl.textContent = name;
-  const base = "https://github.com/" + REPO;
-  if (sourceFile) {
-    githubLink.href = base + "/edit/" + PUBLICATION_BRANCH + "/" + FOLDER + "/" + encodeURIComponent(sourceFile);
-    githubLink.textContent = "Редактировать файл в GitHub ↗";
-  } else {
-    githubLink.href = base + "/new/" + PUBLICATION_BRANCH + "/" + FOLDER + "?filename=" + encodeURIComponent(name);
-    githubLink.textContent = "Создать файл в GitHub ↗";
-  }
-}
-
-function previewText(element, value, fallback = "") {
-  element.textContent = value || fallback;
-}
-
-function updatePreview() {
-  const issue = getIssue();
-  previewText(document.querySelector("#preview-meta"),
-    [issue.issue_number && "№ " + issue.issue_number, issue.date, issue.theme].filter(Boolean).join(" · "),
-    "Черновик школьной газеты");
-  previewText(document.querySelector("#preview-heading"), issue.title, "Новый выпуск");
-  previewText(document.querySelector("#preview-summary"), issue.summary);
-  // Never interpret untrusted Markdown as HTML in the admin.
-  previewText(document.querySelector("#preview-body"), issue.body, "Здесь появится текст выпуска…");
-  updateLinks();
-}
-
-function fillIssue(issue, origin = "") {
-  loading = true;
-  fieldNames.forEach((name) => { fields[name].value = text(issue[name]); });
-  sourceFile = origin;
-  if (!origin) chooser.value = "";
-  loading = false;
-  resetLocalAttachment();
-  status.textContent = sourceFile
-    ? "После правок скопируйте текст и замените содержимое существующего файла в GitHub."
-    : "Новый номер ещё не опубликован. Подготовьте его и добавьте файл в GitHub.";
-  updatePreview();
-}
-
-function resetIssue() {
-  fillIssue({date: today()}, "");
-}
-
-async function loadIssues() {
-  try {
-    const response = await fetch("../content/issues.json", {credentials: "same-origin", cache: "no-store"});
-    if (!response.ok) throw new Error("HTTP " + response.status);
-    const data = await response.json();
-    if (!Array.isArray(data)) throw new Error("Некорректный каталог");
-    issues = data;
-    data.forEach((issue, index) => {
-      const option = document.createElement("option");
-      option.value = String(index);
-      option.textContent = (issue.issue_number ? "№ " + issue.issue_number + " · " : "") + issue.title;
-      chooser.appendChild(option);
-    });
-    catalogueStatus.textContent = data.length
-      ? "В архиве опубликовано выпусков: " + data.length + ". Выберите номер из списка или создайте новый."
-      : "Архив пока пуст. Можно подготовить первый выпуск.";
-  } catch (_) {
-    catalogueStatus.textContent = "Не удалось получить архив. Создать новый выпуск всё равно можно.";
-  }
-}
-
-chooser.addEventListener("change", () => {
-  const idx = Number(chooser.value);
-  if (chooser.value === "" || !issues[idx]) { resetIssue(); return; }
-  const issue = issues[idx];
-  // A missing source_file means the catalogue predates the auto-build workflow.
-  // Do not guess a filename: that could silently create a duplicate.
-  if (!/^[\w.-]+\.md$/.test(issue.source_file || "")) {
-    catalogueStatus.textContent = "Этот выпуск пока не связан с исходным файлом. Дождитесь обновления сайта или найдите файл вручную в репозитории.";
-    fillIssue(issue, "");
-    githubLink.href = "https://github.com/" + REPO + "/tree/" + PUBLICATION_BRANCH + "/" + FOLDER;
-    githubLink.textContent = "Найти исходный файл в GitHub ↗";
-    return;
-  }
-  fillIssue(issue, issue.source_file);
-});
-
-document.querySelector("#new").addEventListener("click", () => resetIssue());
-form.addEventListener("input", () => { if (!loading) updatePreview(); });
-
-document.querySelector("#copy").addEventListener("click", async () => {
-  if (!valid()) return;
-  const content = makeMarkdown();
-  try {
-    await navigator.clipboard.writeText(content);
-    status.textContent = "Текст скопирован. Откройте GitHub и вставьте его в файл. Изменения ещё не опубликованы.";
-  } catch (_) {
-    status.textContent = "Браузер не разрешил копирование. Нажмите «Скачать .md» и перенесите содержимое файла в GitHub.";
-  }
-});
-
-document.querySelector("#download").addEventListener("click", () => {
-  if (!valid()) return;
-  const url = URL.createObjectURL(new Blob([makeMarkdown()], {type: "text/markdown;charset=utf-8"}));
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = chosenFilename();
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-  status.textContent = "Файл скачан на устройство. Для публикации его всё ещё нужно сохранить в GitHub.";
-});
-
-githubLink.addEventListener("click", (event) => {
-  if (!valid()) event.preventDefault();
-  else status.textContent = "GitHub откроется отдельно. Скопируйте текст, вставьте его в файл и подтвердите сохранение.";
-});
-
-const attachmentInput=document.getElementById("attachment");
-const attachmentStatus=document.getElementById("attachment-status");
-const attachmentPreview=document.getElementById("attachment-preview");
-let attachmentUrl="";
-function resetLocalAttachment(){
-  if(attachmentUrl){URL.revokeObjectURL(attachmentUrl);attachmentUrl="";}
-  attachmentInput.value="";attachmentPreview.replaceChildren();
-  attachmentStatus.textContent=fields.file.value?"Сохранённый путь: "+fields.file.value:"Прикреплённого файла пока нет.";
-}
-attachmentInput.addEventListener("change",()=>{
-  if(attachmentUrl){URL.revokeObjectURL(attachmentUrl);attachmentUrl="";}
-  attachmentPreview.replaceChildren();
-  const f=attachmentInput.files&&attachmentInput.files[0];
-  if(!f)return;
-  const ext=f.name.split(".").pop().toLowerCase();
-  if(!/^(pdf|doc|docx|odt|rtf|txt|ppt|pptx|xls|xlsx|csv|jpg|jpeg|png|webp|zip)$/.test(ext)||f.size>25*1024*1024||f.name.includes("/")||f.name.includes("\\")||f.name.includes("..")){
-    attachmentInput.value="";attachmentStatus.textContent="Недопустимый формат, имя или размер файла (максимум 25 МБ).";return;
-  }
-  fields.file.value="content/files/"+f.name;
-  attachmentStatus.textContent="Выбран: "+f.name+". Для публикации загрузите ЭТОТ ЖЕ файл в GitHub и подтвердите сохранение.";
-  if(ext==="pdf"||["png","jpg","jpeg","webp"].includes(ext)){
-    attachmentUrl=URL.createObjectURL(f);
-    const preview=document.createElement(ext==="pdf"?"iframe":"img");
-    preview.src=attachmentUrl;preview.title="Локальный предпросмотр: "+f.name;preview.alt=f.name;
-    preview.className="local-file-preview";attachmentPreview.append(preview);
-  }
-  updatePreview();
-});
-resetIssue();
-loadIssues();
+const REPO="Azotishka/Neuro-assistent",FOLDER="content/issues",BRANCH="gh-pages",DRAFT_KEY="luch:draft:v3",DB_NAME="luch-editor-v1",STORE="files";
+const names=["title","issue_number","date","theme","summary","body"],form=document.querySelector("#issue-form"),chooser=document.querySelector("#existing"),status=document.querySelector("#publish-status"),catalogueStatus=document.querySelector("#catalogue-status"),fileInput=document.querySelector("#attachment"),fileList=document.querySelector("#file-list"),fileCount=document.querySelector("#file-count"),filePreview=document.querySelector("#attachment-preview"),githubLink=document.querySelector("#github-link"),filenameEl=document.querySelector("#filename");
+const fields=Object.fromEntries(names.map(n=>[n,document.getElementById(n)]));let issues=[],sourceFile="",attachments=[],saveTimer=0,previewUrl="";
+const today=()=>{const d=new Date(Date.now()-new Date().getTimezoneOffset()*60000);return d.toISOString().slice(0,10)},clean=v=>String(v??"").trim();
+function slug(v){return clean(v).toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9а-яё]+/g,"-").replace(/^-+|-+$/g,"").slice(0,48)}
+function chosenFilename(){if(sourceFile)return sourceFile;return (/^d{4}-d{2}-d{2}$/.test(fields.date.value)?fields.date.value:today())+"-issue-"+(slug(fields.issue_number.value).replace(/[^a-z0-9-]/g,"")||"new")+"-"+(slug(fields.title.value).replace(/[^a-z0-9-]/g,"")||"news")+".md"}
+function paths(){return attachments.filter(x=>!x.published).map(x=>"content/files/"+x.name)}
+function makeMarkdown(){const meta={title:clean(fields.title.value),issue_number:clean(fields.issue_number.value),date:clean(fields.date.value),theme:clean(fields.theme.value),summary:clean(fields.summary.value),file:paths()[0]||"",attachments:JSON.stringify(paths().slice(1))};return "---\n"+Object.entries(meta).map(([k,v])=>k+": "+JSON.stringify(v)).join("\n")+"\n---\n\n"+fields.body.value.trim()+"\n"}
+function draft(){return {fields:Object.fromEntries(names.map(n=>[n,fields[n].value])),attachments:attachments.filter(x=>!x.published),sourceFile,updatedAt:new Date().toISOString()}}
+function saveDraft(message=true){localStorage.setItem(DRAFT_KEY,JSON.stringify(draft()));if(message)status.textContent="Черновик сохранён на этом устройстве."}
+function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveDraft(false),350);updatePreview()}
+function restoreDraft(){try{const d=JSON.parse(localStorage.getItem(DRAFT_KEY)||"null");if(!d)return false;names.forEach(n=>fields[n].value=d.fields?.[n]||"");attachments=Array.isArray(d.attachments)?d.attachments:[];sourceFile=d.sourceFile||"";return true}catch{return false}}
+function db(){return new Promise((ok,no)=>{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>r.result.createObjectStore(STORE,{keyPath:"id"});r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
+async function putFile(file,id){const d=await db();return new Promise((ok,no)=>{const r=d.transaction(STORE,"readwrite").objectStore(STORE).put({id,name:file.name,type:file.type,size:file.size,blob:file});r.onsuccess=()=>ok();r.onerror=()=>no(r.error)})}
+async function getFile(id){const d=await db();return new Promise((ok,no)=>{const r=d.transaction(STORE).objectStore(STORE).get(id);r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
+async function delFile(id){const d=await db();return new Promise((ok,no)=>{const r=d.transaction(STORE,"readwrite").objectStore(STORE).delete(id);r.onsuccess=()=>ok();r.onerror=()=>no(r.error)})}
+function human(n){if(!n)return "опубликован";if(n<1024)return n+" Б";if(n<1048576)return (n/1024).toFixed(1)+" КБ";return (n/1048576).toFixed(1)+" МБ"}
+async function addFiles(files){for(const f of files){const ext=(f.name.split(".").pop()||"").toLowerCase();if(!/^(pdf|doc|docx|odt|rtf|txt|md|ppt|pptx|xls|xlsx|csv|jpg|jpeg|png|webp|zip)$/.test(ext)||f.size>25*1024*1024){status.textContent="Пропущен файл "+f.name+": неподдерживаемый формат или больше 25 МБ.";continue}const id=crypto.randomUUID();await putFile(f,id);attachments.push({id,name:f.name,type:f.type||"application/octet-stream",size:f.size});if(/^(txt|md|csv)$/.test(ext)){const t=await f.text();if(!fields.body.value.trim())fields.body.value=t.slice(0,120000)}}saveDraft(false);renderFiles();updatePreview()}
+async function renderFiles(){fileList.replaceChildren();fileCount.textContent=attachments.length+" файл"+(attachments.length===1?"":attachments.length<5?"а":"ов");for(const a of attachments){const row=document.createElement("div");row.className="file-row";row.innerHTML='<div><strong>'+escapeHtml(a.name)+'</strong><small>'+escapeHtml(a.type||"файл")+' · '+human(a.size)+'</small></div><div class="file-actions"><button type="button" data-open>Открыть</button><button type="button" data-remove>×</button></div>';const open=row.querySelector("[data-open]"),remove=row.querySelector("[data-remove]");if(a.published){open.onclick=()=>window.open("../"+a.path,"_blank","noopener");remove.disabled=true}else{open.onclick=()=>previewAttachment(a.id);remove.onclick=async()=>{await delFile(a.id);attachments=attachments.filter(x=>x.id!==a.id);saveDraft(false);renderFiles();updatePreview()}}fileList.append(row)}}
+async function previewAttachment(id){const rec=await getFile(id);if(!rec)return;if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=URL.createObjectURL(rec.blob);filePreview.replaceChildren();const ext=rec.name.split(".").pop().toLowerCase();if(ext==="pdf"){const f=document.createElement("iframe");f.src=previewUrl;f.title=rec.name;filePreview.append(f)}else if(/^(jpg|jpeg|png|webp)$/.test(ext)){const img=document.createElement("img");img.src=previewUrl;img.alt=rec.name;filePreview.append(img)}else{const box=document.createElement("div");box.className="file-open";box.innerHTML="<b>"+escapeHtml(rec.name)+"</b><p>Формат сохранён целиком вместе со встроенным текстом, изображениями и оформлением.</p>";const a=document.createElement("a");a.href=previewUrl;a.download=rec.name;a.textContent="Открыть / скачать файл";box.append(a);filePreview.append(box)}}
+function escapeHtml(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+function md(src){const safe=escapeHtml(src);return safe.split(/
+{2,}/).map(block=>{const s=block.trim();if(!s)return"";if(s.startsWith("### "))return"<h3>"+inline(s.slice(4))+"</h3>";if(s.startsWith("## "))return"<h2>"+inline(s.slice(3))+"</h2>";if(s.startsWith("# "))return"<h1>"+inline(s.slice(2))+"</h1>";if(s.split("
+").every(x=>x.startsWith("- ")))return"<ul>"+s.split("
+").map(x=>"<li>"+inline(x.slice(2))+"</li>").join("")+"</ul>";if(s.startsWith("&gt; "))return"<blockquote>"+inline(s.slice(5).replace(/
+/g," "))+"</blockquote>";return"<p>"+inline(s.replace(/
+/g,"<br>"))+"</p>"}).join("")}
+function inline(s){return s.replace(/**(.+?)**/g,"<strong>$1</strong>").replace(/*(.+?)*/g,"<em>$1</em>")}
+function updatePreview(){document.querySelector("#preview-meta").textContent=[fields.issue_number.value&&"№ "+fields.issue_number.value,fields.date.value,fields.theme.value].filter(Boolean).join(" · ")||"Черновик";document.querySelector("#preview-heading").textContent=fields.title.value||"Новый выпуск";document.querySelector("#preview-summary").textContent=fields.summary.value;document.querySelector("#preview-body").innerHTML=md(fields.body.value||"Здесь появится текст выпуска…");filenameEl.textContent=chosenFilename();const base="https://github.com/"+REPO;githubLink.href=sourceFile?base+"/edit/"+BRANCH+"/"+FOLDER+"/"+encodeURIComponent(sourceFile):base+"/new/"+BRANCH+"/"+FOLDER+"?filename="+encodeURIComponent(chosenFilename())}
+function fill(issue,origin=""){names.forEach(n=>fields[n].value=clean(issue[n]));sourceFile=origin;attachments=[];if(issue.file){attachments.push({id:"published-main",name:String(issue.file).split("/").pop(),type:"опубликованный файл",size:0,published:true,path:issue.file})}if(Array.isArray(issue.attachments))issue.attachments.forEach((p,i)=>attachments.push({id:"published-"+i,name:String(p).split("/").pop(),type:"опубликованный файл",size:0,published:true,path:p}));updatePreview();renderFiles()}
+async function loadIssues(){try{const r=await fetch("../content/issues.json",{cache:"no-store"});if(!r.ok)throw Error();issues=await r.json();issues.forEach((x,i)=>{const o=document.createElement("option");o.value=String(i);o.textContent=(x.issue_number?"№ "+x.issue_number+" · ":"")+x.title;chooser.append(o)});catalogueStatus.textContent="Опубликовано выпусков: "+issues.length+". Черновик хранится отдельно на этом устройстве."}catch{catalogueStatus.textContent="Архив недоступен, но локальный редактор продолжает работать."}}
+chooser.onchange=()=>{if(chooser.value===""){restoreDraft();renderFiles();updatePreview();return}const x=issues[Number(chooser.value)];if(x)fill(x,x.source_file||"")};
+fileInput.onchange=async()=>{await addFiles([...fileInput.files]);fileInput.value=""};form.addEventListener("input",scheduleSave);document.querySelector("#save-local").onclick=()=>saveDraft(true);document.querySelector("#new").onclick=()=>{names.forEach(n=>fields[n].value="");fields.date.value=today();attachments=[];sourceFile="";chooser.value="";saveDraft(false);renderFiles();updatePreview();status.textContent="Создан новый локальный черновик."};document.querySelector("#clear-local").onclick=()=>{localStorage.removeItem(DRAFT_KEY);status.textContent="Локальный черновик очищен."};
+document.querySelectorAll(".toolbar button").forEach(b=>b.onclick=()=>{const t=fields.body,start=t.selectionStart,end=t.selectionEnd,sel=t.value.slice(start,end);if(b.dataset.wrap){const [a,z]=b.dataset.wrap.split("|");t.setRangeText(a+sel+z,start,end,"select")}else{const line=t.value.lastIndexOf("
+",start-1)+1;t.setRangeText(b.dataset.prefix||"",line,line,"end")}t.focus();scheduleSave()});
+document.querySelector("#download").onclick=()=>{const blob=new Blob([makeMarkdown()],{type:"text/markdown;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=chosenFilename();a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);status.textContent="Markdown выпуска сохранён на устройство."};document.querySelector("#copy").onclick=async()=>{try{await navigator.clipboard.writeText(makeMarkdown());status.textContent="Markdown скопирован."}catch{status.textContent="Браузер запретил копирование — используй «Экспорт .md»."}};
+if(!restoreDraft()){fields.date.value=today();fields.title.value="ЛУЧ — Лучшее утро четверга"}renderFiles();updatePreview();loadIssues();
