@@ -10,34 +10,43 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: school-newspaper-pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - name: Checkout newspaper source
+        uses: actions/checkout@v4
 
-      - name: Build issue catalogue from Markdown
+      - name: Generate issue catalogue
         run: python3 school-newspaper-site/build_catalogue.py
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+      - name: Validate public files
+        run: |
+          test -s school-newspaper-site/index.html
+          test -s school-newspaper-site/admin/index.html
+          test -s school-newspaper-site/content/issues.json
+          python3 -m json.tool school-newspaper-site/content/issues.json > /dev/null
 
-      - name: Upload static site
-        uses: actions/upload-pages-artifact@v4
+      - name: Upload newspaper artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: school-newspaper-site
 
-      - name: Deploy to GitHub Pages
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: newspaper-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy newspaper to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
