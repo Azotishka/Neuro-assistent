@@ -13,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 ISSUES_DIR = ROOT / "content" / "issues"
 OUTPUT = ROOT / "content" / "issues.json"
-FIELDS = ("title", "issue_number", "date", "theme", "summary", "file")
+FIELDS = ("title", "issue_number", "date", "theme", "summary", "file", "attachments")
 REQUIRED = ("title", "issue_number", "date")
 
 
@@ -67,10 +67,28 @@ def parse_issue(path: Path) -> dict:
         if not (ROOT / attached).is_file():
             print(f"Attachment not uploaded yet: {attached}", file=sys.stderr)
             fields["file"] = ""
+    raw_attachments = fields.get("attachments", "")
+    attachments = []
+    if raw_attachments:
+        try:
+            candidates = json.loads(raw_attachments)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{path.name}: attachments must be a JSON array string") from exc
+        if not isinstance(candidates, list) or not all(isinstance(item, str) for item in candidates):
+            raise ValueError(f"{path.name}: attachments must contain file paths")
+        for item in candidates[:20]:
+            valid = re.fullmatch(r"content/files/[\w\u0400-\u04ff .()\-]+\.(?:pdf|docx?|odt|rtf|txt|md|pptx?|xlsx?|csv|jpe?g|png|webp|zip)", item, re.IGNORECASE)
+            if not valid or ".." in item:
+                raise ValueError(f"{path.name}: invalid attachment path")
+            if (ROOT / item).is_file():
+                attachments.append(item)
+            else:
+                print(f"Attachment not uploaded yet: {item}", file=sys.stderr)
+        fields["attachments"] = attachments
     body = match.group(2).strip()
     if not body:
         raise ValueError(f"{path.name}: empty article")
-    return {**{key: fields.get(key, "") for key in FIELDS},
+    return {**{key: fields.get(key, [] if key == "attachments" else "") for key in FIELDS},
             "body": body, "source_file": path.name}
 
 
