@@ -4,7 +4,7 @@
 const REPO = "Azotishka/Neuro-assistent";
 const FOLDER = "content/issues";
 const PUBLICATION_BRANCH = "gh-pages";
-const fieldNames = ["title", "issue_number", "date", "theme", "summary", "body"];
+const fieldNames = ["title", "issue_number", "date", "theme", "summary", "body", "file"];
 const form = document.querySelector("#issue-form");
 const chooser = document.querySelector("#existing");
 const status = document.querySelector("#publish-status");
@@ -44,7 +44,7 @@ function chosenFilename() {
 function makeMarkdown() {
   const issue = getIssue();
   // JSON-quoted string values are a safe subset of YAML front matter.
-  const meta = ["title", "issue_number", "date", "theme", "summary"]
+  const meta = ["title", "issue_number", "date", "theme", "summary", "file"]
     .map((key) => key + ": " + JSON.stringify(issue[key])).join("\n");
   return "---\n" + meta + "\n---\n\n" + issue.body + "\n";
 }
@@ -94,6 +94,7 @@ function fillIssue(issue, origin = "") {
   sourceFile = origin;
   if (!origin) chooser.value = "";
   loading = false;
+  resetLocalAttachment();
   status.textContent = sourceFile
     ? "После правок скопируйте текст и замените содержимое существующего файла в GitHub."
     : "Новый номер ещё не опубликован. Подготовьте его и добавьте файл в GitHub.";
@@ -173,5 +174,33 @@ githubLink.addEventListener("click", (event) => {
   else status.textContent = "GitHub откроется отдельно. Скопируйте текст, вставьте его в файл и подтвердите сохранение.";
 });
 
+const attachmentInput=document.getElementById("attachment");
+const attachmentStatus=document.getElementById("attachment-status");
+const attachmentPreview=document.getElementById("attachment-preview");
+let attachmentUrl="";
+function resetLocalAttachment(){
+  if(attachmentUrl){URL.revokeObjectURL(attachmentUrl);attachmentUrl="";}
+  attachmentInput.value="";attachmentPreview.replaceChildren();
+  attachmentStatus.textContent=fields.file.value?"Сохранённый путь: "+fields.file.value:"Прикреплённого файла пока нет.";
+}
+attachmentInput.addEventListener("change",()=>{
+  if(attachmentUrl){URL.revokeObjectURL(attachmentUrl);attachmentUrl="";}
+  attachmentPreview.replaceChildren();
+  const f=attachmentInput.files&&attachmentInput.files[0];
+  if(!f)return;
+  const ext=f.name.split(".").pop().toLowerCase();
+  if(!/^(pdf|doc|docx|odt|rtf|txt|ppt|pptx|xls|xlsx|csv|jpg|jpeg|png|webp|zip)$/.test(ext)||f.size>25*1024*1024||f.name.includes("/")||f.name.includes("\\")||f.name.includes("..")){
+    attachmentInput.value="";attachmentStatus.textContent="Недопустимый формат, имя или размер файла (максимум 25 МБ).";return;
+  }
+  fields.file.value="content/files/"+f.name;
+  attachmentStatus.textContent="Выбран: "+f.name+". Для публикации загрузите ЭТОТ ЖЕ файл в GitHub и подтвердите сохранение.";
+  if(ext==="pdf"||["png","jpg","jpeg","webp"].includes(ext)){
+    attachmentUrl=URL.createObjectURL(f);
+    const preview=document.createElement(ext==="pdf"?"iframe":"img");
+    preview.src=attachmentUrl;preview.title="Локальный предпросмотр: "+f.name;preview.alt=f.name;
+    preview.className="local-file-preview";attachmentPreview.append(preview);
+  }
+  updatePreview();
+});
 resetIssue();
 loadIssues();

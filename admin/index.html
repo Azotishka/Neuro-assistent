@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#eee5d4">
   <meta name="robots" content="noindex,nofollow">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; font-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
-  <title>Редакция · Газета губернаторского лицея</title>
+  <title>Редакция · Газета «ЛУЧ»</title>
   <link rel="stylesheet" href="editor.css">
   <script src="editor.js" defer></script>
 </head>
@@ -15,7 +15,7 @@
     <header class="masthead">
       <a class="back" href="../">← На сайт газеты</a>
       <span class="overline">Служебная редакция · школьная газета</span>
-      <h1>Редактор выпусков</h1>
+      <h1>ЛУЧ · Редактор выпусков</h1>
       <p class="lead">Создавайте и правьте выпуски прямо на телефоне. Текст готовится здесь, а публикация подтверждается в вашем аккаунте GitHub.</p>
     </header>
 
@@ -49,6 +49,7 @@
           <label for="body">Текст выпуска (Markdown) *</label>
           <textarea id="body" name="body" rows="17" required placeholder="# Заголовок статьи&#10;&#10;Ваш текст.&#10;&#10;## Подзаголовок&#10;&#10;- Первый пункт&#10;- Второй пункт"></textarea>
           <p class="hint">Поддерживаются заголовки с #, ## и ###, списки с «-», выделение **жирным**, *курсивом* и цитаты с &gt;. Изображения вставляются ссылками на файлы, уже загруженные в репозиторий.</p>
+<div class="upload-panel"><h3>Прикрепить оригинал выпуска или материал</h3><p class="hint">PDF, Word (DOC/DOCX), ODT, RTF, TXT, PowerPoint, Excel, CSV, изображения и ZIP. До 25 МБ. Выбор файла здесь даёт локальный предпросмотр; для публикации файл отдельно загружается в GitHub.</p><label for="attachment">Выберите файл на устройстве</label><input id="attachment" type="file" accept=".pdf,.doc,.docx,.odt,.rtf,.txt,.ppt,.pptx,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp,.zip"><label for="file">Путь к файлу в архиве</label><input id="file" name="file" maxlength="260" placeholder="content/files/имя-файла.pdf" readonly><p class="hint" id="attachment-status" role="status">Прикреплённого файла пока нет.</p><div id="attachment-preview" class="attachment-preview"></div><a class="action-link upload-link" id="upload-link" href="https://github.com/Azotishka/Neuro-assistent/upload/gh-pages/content/files" target="_blank" rel="noopener noreferrer">Загрузить выбранный файл в GitHub ↗</a></div>
         </form>
       </section>
 
@@ -68,7 +69,7 @@
     <section class="publish" aria-labelledby="publish-title">
       <span class="eyebrow">03 / Выход в свет</span>
       <h2 id="publish-title">Сохранение и публикация</h2>
-      <p>Сначала подготовьте выпуск, затем скопируйте или скачайте файл. В GitHub добавьте его как Markdown-файл и подтвердите изменение. После сохранения сайт пересоберёт архив автоматически.</p>
+      <p>Если прикрепляете файл, сначала загрузите его через GitHub и подтвердите сохранение. Затем скопируйте текст выпуска и сохраните Markdown-файл. PDF будет показан внутри газеты, остальные форматы — как документы для открытия и скачивания.</p>
       <div class="file-name">Имя файла: <code id="filename" aria-live="polite"></code></div>
       <div class="actions">
         <button id="copy" type="button" class="primary">Скопировать текст для GitHub</button>
@@ -79,7 +80,7 @@
       <details>
         <summary>Как опубликовать выпуск на телефоне</summary>
         <ol>
-          <li>Заполните поля и нажмите «Скопировать текст для GitHub».</li>
+          <li>При наличии вложения выберите файл, нажмите «Загрузить выбранный файл в GitHub», выберите тот же файл на странице GitHub и подтвердите сохранение.</li><li>Заполните поля и нажмите «Скопировать текст для GitHub».</li>
           <li>Откройте GitHub по кнопке выше и войдите в аккаунт, у которого есть право редактировать репозиторий.</li>
           <li>Для нового выпуска создайте файл с указанным именем и вставьте скопированный текст. Для существующего откройте редактирование его файла и замените содержимое.</li>
           <li>Сохраните изменение (Commit changes). GitHub Pages автоматически обновит каталог после завершения публикации.</li>

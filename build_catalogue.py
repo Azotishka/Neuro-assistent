@@ -13,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 ISSUES_DIR = ROOT / "content" / "issues"
 OUTPUT = ROOT / "content" / "issues.json"
-FIELDS = ("title", "issue_number", "date", "theme", "summary")
+FIELDS = ("title", "issue_number", "date", "theme", "summary", "file")
 REQUIRED = ("title", "issue_number", "date")
 
 
@@ -58,6 +58,15 @@ def parse_issue(path: Path) -> dict:
         date.fromisoformat(fields["date"])
     except ValueError as exc:
         raise ValueError(f"{path.name}: date must be YYYY-MM-DD") from exc
+    # A link appears only after the original binary is present in the repository.
+    attached = fields.get("file", "")
+    if attached:
+        valid = re.fullmatch(r"content/files/[\\w\\u0400-\\u04ff .()\\-]+\\.(?:pdf|docx?|odt|rtf|txt|pptx?|xlsx?|csv|jpe?g|png|webp|zip)", attached, re.IGNORECASE)
+        if not valid or ".." in attached:
+            raise ValueError(f"{path.name}: invalid attachment path")
+        if not (ROOT / attached).is_file():
+            print(f"Attachment not uploaded yet: {attached}", file=sys.stderr)
+            fields["file"] = ""
     body = match.group(2).strip()
     if not body:
         raise ValueError(f"{path.name}: empty article")
