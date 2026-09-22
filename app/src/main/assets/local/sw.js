@@ -1,7 +1,7 @@
-const SHELL = "qwen-local-shell-v28-poco";
+const SHELL = "qwen-local-shell-v29-webmcp";
 const APP_ASSETS = [
   "./", "./index.html",
-  "./app-compat.js?v=3.10.0", "./native-bridge.js?v=android2",
+  "./app-compat.js?v=3.10.0", "./webmcp.js?v=1", "./native-bridge.js?v=android2",
   "./styles.css?v=3.10.0", "./features.css?v=3.10.0", "./mobile-shell.css?v=3.10.0",
   "./worker.js?v=3.10.0", "./py-worker.js?v=3.10.0",
   "./manifest.webmanifest?v=3.10.0",
