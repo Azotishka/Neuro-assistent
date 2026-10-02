@@ -14,14 +14,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Reassemble project archive
+      - name: Unpack project archive
         shell: bash
         run: |
-          mkdir -p /tmp/ashen
-          test -f ashen-circuit-vs1/project-archive/part-01.b64
-          cat ashen-circuit-vs1/project-archive/part-*.b64 > /tmp/ashen/project.b64
-          base64 -d /tmp/ashen/project.b64 > /tmp/ashen/Ashen-Circuit-VS1-ci.zip
-          unzip -q /tmp/ashen/Ashen-Circuit-VS1-ci.zip -d /tmp/ashen/project
+          mkdir -p /tmp/ashen/project
+          test -f ashen-circuit-vs1/Ashen-Circuit-VS1-ci.zip
+          unzip -q ashen-circuit-vs1/Ashen-Circuit-VS1-ci.zip -d /tmp/ashen/project
           test -f /tmp/ashen/project/ProjectSettings/ProjectVersion.txt
       - name: Python static verification
         working-directory: /tmp/ashen/project
@@ -42,13 +40,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Reassemble project archive
+      - name: Unpack project archive
         shell: bash
         run: |
-          mkdir -p /tmp/ashen
-          cat ashen-circuit-vs1/project-archive/part-*.b64 > /tmp/ashen/project.b64
-          base64 -d /tmp/ashen/project.b64 > /tmp/ashen/Ashen-Circuit-VS1-ci.zip
-          unzip -q /tmp/ashen/Ashen-Circuit-VS1-ci.zip -d /tmp/ashen/project
+          mkdir -p /tmp/ashen/project
+          unzip -q ashen-circuit-vs1/Ashen-Circuit-VS1-ci.zip -d /tmp/ashen/project
 
       - name: Generate Unity activation request
         if: env.UNITY_LICENSE == ''
