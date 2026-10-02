@@ -18,6 +18,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p /tmp/ashen
+          test -f ashen-circuit-vs1/project-archive/part-01.b64
           cat ashen-circuit-vs1/project-archive/part-*.b64 > /tmp/ashen/project.b64
           base64 -d /tmp/ashen/project.b64 > /tmp/ashen/Ashen-Circuit-VS1-ci.zip
           unzip -q /tmp/ashen/Ashen-Circuit-VS1-ci.zip -d /tmp/ashen/project
@@ -32,13 +33,15 @@ jobs:
           python3 tools/verify_task12.py
           git diff --check
 
-  unity-tests-and-android:
+  unity:
     needs: static-gate
     runs-on: ubuntu-latest
-    if: ${{ secrets.UNITY_LICENSE != '' }}
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Reassemble project archive
         shell: bash
         run: |
@@ -46,58 +49,62 @@ jobs:
           cat ashen-circuit-vs1/project-archive/part-*.b64 > /tmp/ashen/project.b64
           base64 -d /tmp/ashen/project.b64 > /tmp/ashen/Ashen-Circuit-VS1-ci.zip
           unzip -q /tmp/ashen/Ashen-Circuit-VS1-ci.zip -d /tmp/ashen/project
+
+      - name: Generate Unity activation request
+        if: env.UNITY_LICENSE == ''
+        id: activation
+        uses: game-ci/unity-request-activation-file@v2
+        with:
+          unityVersion: 6000.3.0f1
+
+      - name: Upload Unity activation request
+        if: env.UNITY_LICENSE == ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ashen-Circuit-Unity-6000.3.0f1-activation
+          path: ${{ steps.activation.outputs.filePath }}
+
       - name: Unity EditMode tests
+        if: env.UNITY_LICENSE != ''
         uses: game-ci/unity-test-runner@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           projectPath: /tmp/ashen/project
           unityVersion: 6000.3.0f1
           testMode: editmode
           artifactsPath: unity-test-results/editmode
+
       - name: Unity PlayMode tests
+        if: env.UNITY_LICENSE != ''
         uses: game-ci/unity-test-runner@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           projectPath: /tmp/ashen/project
           unityVersion: 6000.3.0f1
           testMode: playmode
           artifactsPath: unity-test-results/playmode
+
       - name: Android IL2CPP build
+        if: env.UNITY_LICENSE != ''
         uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           projectPath: /tmp/ashen/project
           unityVersion: 6000.3.0f1
           targetPlatform: Android
+          androidExportType: androidPackage
           buildMethod: AshenCircuit.Build.CiAndroidBuild.BuildAndroid
           customParameters: -nographics -batchmode -quit
+
       - name: Upload APK
+        if: env.UNITY_LICENSE != ''
         uses: actions/upload-artifact@v4
         with:
           name: Ashen-Circuit-VS1-Android-APK
           path: /tmp/ashen/project/Builds/Android/AshenCircuit-VS1.apk
+
       - name: Upload Unity test results
+        if: env.UNITY_LICENSE != ''
         uses: actions/upload-artifact@v4
         with:
           name: Ashen-Circuit-VS1-Unity-Test-Results
           path: |
             unity-test-results/editmode
             unity-test-results/playmode
-
-  unity-activation-request:
-    runs-on: ubuntu-latest
-    if: ${{ secrets.UNITY_LICENSE == '' }}
-    steps:
-      - name: Generate Unity activation request
-        id: activation
-        uses: game-ci/unity-request-activation-file@v2
-        with:
-          unityVersion: 6000.3.0f1
-      - name: Upload activation request
-        uses: actions/upload-artifact@v4
-        with:
-          name: Ashen-Circuit-Unity-6000.3.0f1-activation
-          path: ${{ steps.activation.outputs.filePath }}
