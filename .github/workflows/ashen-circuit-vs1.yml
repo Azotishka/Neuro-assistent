@@ -34,8 +34,25 @@ jobs:
           python3 tools/verify_task11.py
           python3 tools/verify_task12.py
 
+  activation:
+    needs: static-gate
+    if: ${{ secrets.UNITY_LICENSE == '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request manual Unity activation file
+        id: getManualLicenseFile
+        uses: webbertakken/unity-request-manual-activation-file@v1.1
+        with:
+          unityVersion: 6000.3.0f1
+      - name: Upload Unity activation request
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ashen-Circuit-Unity-6000.3.0f1-activation
+          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+
   unity:
     needs: static-gate
+    if: ${{ secrets.UNITY_LICENSE != '' }}
     runs-on: ubuntu-latest
     env:
       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -50,22 +67,7 @@ jobs:
           echo "$ARCHIVE_SHA256  /tmp/ashen/Ashen-Circuit-VS1-ci.zip" | sha256sum -c -
           unzip -q /tmp/ashen/Ashen-Circuit-VS1-ci.zip -d /tmp/ashen/project
 
-      - name: Generate Unity activation request
-        if: env.UNITY_LICENSE == ''
-        id: activation
-        uses: game-ci/unity-request-activation-file@v2
-        with:
-          unityVersion: 6000.3.0f1
-
-      - name: Upload Unity activation request
-        if: env.UNITY_LICENSE == ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: Ashen-Circuit-Unity-6000.3.0f1-activation
-          path: ${{ steps.activation.outputs.filePath }}
-
       - name: Unity EditMode tests
-        if: env.UNITY_LICENSE != ''
         uses: game-ci/unity-test-runner@v4
         with:
           projectPath: /tmp/ashen/project
@@ -74,7 +76,6 @@ jobs:
           artifactsPath: unity-test-results/editmode
 
       - name: Unity PlayMode tests
-        if: env.UNITY_LICENSE != ''
         uses: game-ci/unity-test-runner@v4
         with:
           projectPath: /tmp/ashen/project
@@ -83,7 +84,6 @@ jobs:
           artifactsPath: unity-test-results/playmode
 
       - name: Android IL2CPP build
-        if: env.UNITY_LICENSE != ''
         uses: game-ci/unity-builder@v4
         with:
           projectPath: /tmp/ashen/project
@@ -94,14 +94,12 @@ jobs:
           customParameters: -nographics -batchmode -quit
 
       - name: Upload APK
-        if: env.UNITY_LICENSE != ''
         uses: actions/upload-artifact@v4
         with:
           name: Ashen-Circuit-VS1-Android-APK
           path: /tmp/ashen/project/Builds/Android/AshenCircuit-VS1.apk
 
       - name: Upload Unity test results
-        if: env.UNITY_LICENSE != ''
         uses: actions/upload-artifact@v4
         with:
           name: Ashen-Circuit-VS1-Unity-Test-Results
