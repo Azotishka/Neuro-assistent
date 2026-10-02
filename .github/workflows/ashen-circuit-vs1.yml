@@ -58,7 +58,7 @@ jobs:
     steps:
       - name: Request manual Unity activation file
         id: getManualLicenseFile
-        uses: webbertakken/unity-request-manual-activation-file@v1.1
+        uses: game-ci/unity-request-activation-file@v2
         with:
           unityVersion: 6000.3.0f1
       - name: Upload Unity activation request
