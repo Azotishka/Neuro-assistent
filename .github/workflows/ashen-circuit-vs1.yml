@@ -34,9 +34,26 @@ jobs:
           python3 tools/verify_task11.py
           python3 tools/verify_task12.py
 
-  activation:
+  check-license:
     needs: static-gate
-    if: ${{ secrets.UNITY_LICENSE == '' }}
+    runs-on: ubuntu-latest
+    outputs:
+      has_license: ${{ steps.license.outputs.has_license }}
+    steps:
+      - id: license
+        shell: bash
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        run: |
+          if [ -n "$UNITY_LICENSE" ]; then
+            echo "has_license=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_license=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  activation:
+    needs: check-license
+    if: ${{ needs.check-license.outputs.has_license == 'false' }}
     runs-on: ubuntu-latest
     steps:
       - name: Request manual Unity activation file
@@ -51,8 +68,8 @@ jobs:
           path: ${{ steps.getManualLicenseFile.outputs.filePath }}
 
   unity:
-    needs: static-gate
-    if: ${{ secrets.UNITY_LICENSE != '' }}
+    needs: check-license
+    if: ${{ needs.check-license.outputs.has_license == 'true' }}
     runs-on: ubuntu-latest
     env:
       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
