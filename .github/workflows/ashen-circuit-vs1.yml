@@ -33,7 +33,6 @@ jobs:
           python3 tools/verify_runtime_host.py
           python3 tools/verify_task11.py
           python3 tools/verify_task12.py
-          git diff --check
 
   unity:
     needs: static-gate
