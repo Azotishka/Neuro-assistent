@@ -1,0 +1,30 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.azotishka.ashencircuit'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.azotishka.ashencircuit'
+        minSdk 25
+        targetSdk 35
+        versionCode 1
+        versionName '0.1.0-vs1'
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
