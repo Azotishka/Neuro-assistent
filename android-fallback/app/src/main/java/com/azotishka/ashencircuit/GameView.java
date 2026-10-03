@@ -3,6 +3,8 @@ package com.azotishka.ashencircuit;
 import android.content.Context;
 import android.graphics.*;
 import android.os.SystemClock;
+import android.os.Vibrator;
+import android.os.VibrationEffect;
 import android.view.*;
 import java.util.*;
 
@@ -189,11 +191,11 @@ public final class GameView extends View {
         void draw(Canvas c,float s){ if(dead)return; p.setColor(hitT>0?Color.WHITE:Color.rgb(82,111,128)); rect(c,x-24,y-64,48,64,s);p.setColor(Color.rgb(189,96,78));c.drawCircle(x*s,(y-78)*s,13*s,p);p.setColor(Color.rgb(150,55,55));rect(c,x-25,y-95,50,5,s);}
     }
 
-    private static final class Bullet {
+    private final class Bullet {
         float x,y,vx,life=1.3f; Bullet(float x,float y,float vx){this.x=x;this.y=y;this.vx=vx;}
         void draw(Canvas c,float s){ p.setColor(Color.rgb(242,208,122)); c.drawCircle(x*s,y*s,5*s,p); }
     }
-    private static final class Particle {
+    private final class Particle {
         float x,y,vx,vy,life=.45f; Particle(float x,float y,float vx,float vy){this.x=x;this.y=y;this.vx=vx;this.vy=vy;}
         void draw(Canvas c,float s){ x+=vx*(1f/60f); y+=vy*(1f/60f); life-=1f/60f; p.setColor(Color.argb((int)(180*Math.max(0,life/.45f)),220,170,110)); c.drawCircle(x*s,y*s,3*s,p);}
     }
