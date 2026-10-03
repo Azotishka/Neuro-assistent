@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-apk:
@@ -45,3 +45,26 @@ jobs:
           name: Ashen-Circuit-VS1-Android-APK
           path: android-fallback/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+      - name: Publish APK as repository chunks
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          rm -rf generated-apk
+          mkdir -p generated-apk
+          python3 - <<'PY'
+          import base64
+          from pathlib import Path
+          apk = Path('android-fallback/app/build/outputs/apk/debug/app-debug.apk')
+          data = base64.b64encode(apk.read_bytes()).decode()
+          Path('generated-apk/manifest.txt').write_text(f"filename=Ashen-Circuit-VS1.apk\nbytes={apk.stat().st_size}\nbase64_chars={len(data)}\n")
+          for i in range(0, len(data), 900):
+              n = i // 900 + 1
+              Path(f'generated-apk/part-{n:03d}.b64').write_text(data[i:i+900])
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add generated-apk
+          git commit -m 'build: publish VS1 APK chunks [skip ci]'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
