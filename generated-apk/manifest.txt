@@ -1,0 +1,3 @@
+filename=Ashen-Circuit-VS1.apk
+bytes=15909
+base64_chars=21212
