@@ -51,21 +51,16 @@ jobs:
             echo "has_license=false" >> "$GITHUB_OUTPUT"
           fi
 
-  activation:
+  license-status:
     needs: check-license
     if: ${{ needs.check-license.outputs.has_license == 'false' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Request manual Unity activation file
-        id: getManualLicenseFile
-        uses: game-ci/unity-request-activation-file@v2
-        with:
-          unityVersion: 6000.3.0f1
-      - name: Upload Unity activation request
-        uses: actions/upload-artifact@v4
-        with:
-          name: Ashen-Circuit-Unity-6000.3.0f1-activation
-          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+      - name: Explain Unity license requirement
+        run: |
+          echo "Unity build is intentionally blocked until UNITY_LICENSE is configured."
+          echo "For a Personal license, activate Unity Hub locally and add the resulting .ulf contents as the UNITY_LICENSE GitHub Actions secret."
+          echo "Also configure UNITY_EMAIL and UNITY_PASSWORD for GameCI activation."
 
   unity:
     needs: check-license
@@ -73,6 +68,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - name: Reassemble and verify project archive
