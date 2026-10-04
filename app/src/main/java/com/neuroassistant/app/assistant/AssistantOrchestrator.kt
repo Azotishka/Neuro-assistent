@@ -8,13 +8,23 @@ import com.neuroassistant.app.model.MessageRole
 import com.neuroassistant.app.tools.ToolRequest
 import com.neuroassistant.app.tools.ToolResult
 import com.neuroassistant.app.tools.ToolRouter
-import java.util.concurrent.ConcurrentHashMap
 import java.util.UUID
-import kotlin.coroutines.coroutineContext
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
 
-data class AssistantResult(val requestId: String, val success: Boolean, val text: String = "", val errorCode: String? = null, val toolResults: List<ToolResult> = emptyList())
+data class AssistantResult(
+    val requestId: String,
+    val success: Boolean,
+    val text: String = "",
+    val errorCode: String? = null,
+    val toolResults: List<ToolResult> = emptyList(),
+)
 
 class AssistantOrchestrator(
     private val provider: AiProvider,
@@ -22,12 +32,35 @@ class AssistantOrchestrator(
     private val toolRouter: ToolRouter? = null,
     private val maxSteps: Int = 4,
 ) {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val activeJobs = ConcurrentHashMap<String, Job>()
     private val activeTools = ConcurrentHashMap<String, MutableSet<String>>()
 
-    suspend fun submit(text: String, toolRequests: List<ToolRequest> = emptyList(), requestId: String = UUID.randomUUID().toString()): AssistantResult {
+    suspend fun submit(
+        text: String,
+        toolRequests: List<ToolRequest> = emptyList(),
+        requestId: String = UUID.randomUUID().toString(),
+    ): AssistantResult {
         if (text.isBlank()) return AssistantResult(requestId, false, errorCode = "EMPTY_INPUT")
-        coroutineContext[Job]?.let { activeJobs[requestId] = it }
+        val execution = scope.async {
+            execute(requestId, text, toolRequests)
+        }
+        activeJobs[requestId] = execution
+        return try {
+            execution.await()
+        } catch (_: CancellationException) {
+            AssistantResult(requestId, false, errorCode = "CANCELLED")
+        } finally {
+            activeJobs.remove(requestId)
+            activeTools.remove(requestId)
+        }
+    }
+
+    private suspend fun execute(
+        requestId: String,
+        text: String,
+        toolRequests: List<ToolRequest>,
+    ): AssistantResult {
         memory.appendMessage(ChatMessage(role = MessageRole.USER, text = text.trim()))
         val toolResults = mutableListOf<ToolResult>()
         activeTools[requestId] = ConcurrentHashMap.newKeySet()
@@ -44,17 +77,18 @@ class AssistantOrchestrator(
             }
             val context = memory.buildContext(4096).toMutableList()
             toolResults.forEach { result ->
-                context += ChatMessage(role = MessageRole.SYSTEM, text = "Инструмент: " + (result.errorCode ?: "OK") + " " + result.output)
+                context += ChatMessage(
+                    role = MessageRole.SYSTEM,
+                    text = "Инструмент: " + (result.errorCode ?: "OK") + " " + result.output
+                )
             }
             val response = provider.generate(AiRequest(requestId = requestId, messages = context))
             memory.appendMessage(ChatMessage(role = MessageRole.ASSISTANT, text = response.text))
             AssistantResult(requestId, true, response.text, toolResults = toolResults)
         } catch (_: CancellationException) {
-            AssistantResult(requestId, false, errorCode = "CANCELLED", toolResults = toolResults)
+            throw
         } catch (_: Throwable) {
             AssistantResult(requestId, false, errorCode = "PROVIDER_ERROR", toolResults = toolResults)
-        } finally {
-            activeJobs.remove(requestId); activeTools.remove(requestId)
         }
     }
 
@@ -62,5 +96,11 @@ class AssistantOrchestrator(
         activeTools[requestId]?.forEach { toolRouter?.cancel(it) }
         provider.cancel(requestId)
         activeJobs[requestId]?.cancel(CancellationException("Cancelled by user"))
+    }
+
+    fun shutdown() {
+        scope.cancel()
+        activeJobs.clear()
+        activeTools.clear()
     }
 }
