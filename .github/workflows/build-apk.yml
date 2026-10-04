@@ -1,7 +1,7 @@
 name: Build NeuroAssistant APK
 
 concurrency:
-  group: neuroassistant-apk-${{ github.ref }}
+  group: neuroassistant-apk-${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 on:
