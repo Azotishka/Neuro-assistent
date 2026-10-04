@@ -119,8 +119,8 @@ class AssistantOrchestrator(
             memory.appendMessage(ChatMessage(role = MessageRole.ASSISTANT, text = response.text))
             onProgress(AssistantProgress(requestId, AssistantPhase.COMPLETED, "Готово", toolResults.size, toolRequests.size))
             AssistantResult(requestId, true, response.text, toolResults = toolResults)
-        } catch (_: CancellationException) {
-            throw
+        } catch (error: CancellationException) {
+            throw error
         } catch (_: Throwable) {
             onProgress(AssistantProgress(requestId, AssistantPhase.FAILED, "Не удалось получить ответ"))
             AssistantResult(requestId, false, errorCode = "PROVIDER_ERROR", toolResults = toolResults)
