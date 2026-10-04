@@ -7,6 +7,7 @@ import java.util.Locale
 
 class LocalDemoAiProvider : AiProvider {
     override val displayName: String = "Локальный демо-режим"
+    override val capabilities: AiCapabilities = AiCapabilities(providerId = "local-demo", local = true, streaming = true, cancellation = false, toolCalls = false)
 
     override suspend fun reply(messages: List<ChatMessage>): String {
         delay(180)
