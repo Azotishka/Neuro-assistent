@@ -78,6 +78,9 @@ import androidx.webkit.WebViewAssetLoader
 import androidx.lifecycle.lifecycleScope
 import com.neuroassistant.app.ai.LocalDemoAiProvider
 import com.neuroassistant.app.ai.OpenAiCompatibleProvider
+import com.neuroassistant.app.assistant.AssistantOrchestrator
+import com.neuroassistant.app.live.LiveAssistantController
+import com.neuroassistant.app.memory.MemoryStore
 import com.neuroassistant.app.data.SettingsRepository
 import com.neuroassistant.app.model.ChatMessage
 import com.neuroassistant.app.model.MessageRole
@@ -116,6 +119,8 @@ class AssistantOverlayActivity : ComponentActivity() {
     private var localCoreReady = false
     private var localRequestSequence = 0L
     private var localError: String? = null
+    private val liveMemory = MemoryStore()
+    private var liveController: LiveAssistantController? = null
     private val localRequests = ConcurrentHashMap<String, CompletableDeferred<LocalOverlayReply>>()
 
     private val micPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { allowed ->
@@ -257,9 +262,17 @@ class AssistantOverlayActivity : ComponentActivity() {
             status = "Локальная модель недоступна"
             LocalDemoAiProvider()
         }
-        return provider.reply(
-            messages.takeLast(16).map { ChatMessage(role = it.role, text = it.text.take(9000)) }
+        val controller = LiveAssistantController(
+            AssistantOrchestrator(
+                provider = provider,
+                memory = liveMemory
+            )
         )
+        liveController?.shutdown()
+        liveController = controller
+        val result = controller.submit(text)
+        if (!result.success) throw IllegalStateException(result.errorCode ?: "Не удалось получить ответ")
+        return result.text
     }
 
     /**
@@ -452,6 +465,7 @@ class AssistantOverlayActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
+        liveController?.shutdown()
         runCatching { voiceInput.destroy() }
         runCatching { tts?.shutdown() }
         localRequests.values.forEach { it.cancel() }
