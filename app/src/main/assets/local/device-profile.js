@@ -56,6 +56,11 @@ export function detectDeviceProfile() {
 }
 
 export function effectiveMaxTokens(profile, key, requested, thinking = false) {
+  if (profile?.isXiaomiPad7Pro) {
+    const caps = { mini: 420, lite: 520, stable: 680, fast: 760, max: 620, deepseek: 680 };
+    const cap = caps[key] || 560;
+    return Math.max(128, Math.min(Number(requested) || cap, thinking ? Math.min(cap, 520) : cap));
+  }
   if (profile?.isPocoX6Pro) return pocoMaxTokens(key, thinking, requested);
   if (!profile?.isIOS) return requested;
   const cap = key === "mini"
@@ -76,6 +81,8 @@ export function applyDeviceProfile(profile) {
   document.documentElement.classList.toggle("is-android", !!profile.isAndroid);
   document.documentElement.classList.toggle("is-native-android", !!profile.isNativeAndroid);
   document.documentElement.classList.toggle("is-poco-x6-pro", !!profile.isPocoX6Pro);
+  document.documentElement.classList.toggle("is-tablet", !!profile.isTablet);
+  document.documentElement.classList.toggle("is-xiaomi-pad-7-pro", !!profile.isXiaomiPad7Pro);
   document.documentElement.classList.toggle("poco-simple-mode", !!profile.isPocoX6Pro);
   document.documentElement.classList.toggle("is-standalone", !!profile.standalone);
   document.documentElement.style.setProperty("--ql-vh", `${window.innerHeight * 0.01}px`);
