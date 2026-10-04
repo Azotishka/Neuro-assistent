@@ -10,6 +10,8 @@ export function detectDeviceProfile() {
   })();
   const isPocoX6Pro = isAndroid && (explicitProfile === "poco-x6-pro" || isPocoX6ProUserAgent(ua));
   const isNativeAndroid = isAndroid && window.__QWEN_NATIVE_ANDROID__ === true;
+  const isTablet = isAndroid && Math.min(screen.width || innerWidth, screen.height || innerHeight) >= 600 && (navigator.maxTouchPoints || 0) >= 2;
+  const isXiaomiPad7Pro = isTablet && /Xiaomi Pad 7 Pro|2307FRA8EU|24018RPACG/i.test(ua);
   const deviceMemoryGB = Number(navigator.deviceMemory || 0);
   const androidConstrained = isAndroid && deviceMemoryGB > 0 && deviceMemoryGB <= 4;
   const dpr = Number(window.devicePixelRatio || 1);
@@ -28,30 +30,37 @@ export function detectDeviceProfile() {
     isAndroid,
     isPocoX6Pro,
     isNativeAndroid,
+    isTablet,
+    isXiaomiPad7Pro,
     deviceMemoryGB,
     androidConstrained,
     standalone,
     reducedMotion,
     compact,
     matches14ProViewport,
-    id: matches14ProViewport ? "iphone14pro" : isIPhone ? "iphone" : isIOS ? "ios" : isPocoX6Pro ? "poco-x6-pro" : isNativeAndroid ? "android-native" : isAndroid ? "android" : "default",
-    label: matches14ProViewport ? "iPhone 14 Pro · оптимизировано" : isIPhone ? "iPhone · мобильный профиль" : isIOS ? "iOS · мобильный профиль" : isPocoX6Pro ? "POCO X6 Pro · 12 ГБ · WebGPU" : isNativeAndroid ? `Android app${deviceMemoryGB ? ` · ~${deviceMemoryGB} ГБ RAM` : ""}` : isAndroid ? "Android · мобильный профиль" : "Стандартный профиль",
+    id: matches14ProViewport ? "iphone14pro" : isIPhone ? "iphone" : isIOS ? "ios" : isXiaomiPad7Pro ? "xiaomi-pad-7-pro" : isTablet ? "android-tablet" : isPocoX6Pro ? "poco-x6-pro" : isNativeAndroid ? "android-native" : isAndroid ? "android" : "default",
+    label: matches14ProViewport ? "iPhone 14 Pro · оптимизировано" : isIPhone ? "iPhone · мобильный профиль" : isIOS ? "iOS · мобильный профиль" : isXiaomiPad7Pro ? "Xiaomi Pad 7 Pro · 8 ГБ · планшет" : isTablet ? "Android · планшет" : isPocoX6Pro ? "POCO X6 Pro · WebGPU" : isNativeAndroid ? `Android app${deviceMemoryGB ? ` · ~${deviceMemoryGB} ГБ RAM` : ""}` : isAndroid ? "Android · мобильный профиль" : "Стандартный профиль",
     autoContext: {
-      mini: isPocoX6Pro ? 1536 : (isIOS || isAndroid) ? 1024 : 2048,
-      lite: isPocoX6Pro ? 1536 : (isIOS || isAndroid) ? 1024 : 2048,
-      stable: isPocoX6Pro ? 1536 : (isIOS || isAndroid) ? 1024 : 2048,
-      fast: isPocoX6Pro ? 1536 : isIOS ? 1024 : (androidConstrained ? 1024 : isAndroid ? 1536 : 2048),
-      max: isPocoX6Pro ? 1280 : 1024,
+      mini: isXiaomiPad7Pro ? 2048 : isPocoX6Pro ? 1536 : (isIOS || isAndroid) ? 1024 : 2048,
+      lite: isXiaomiPad7Pro ? 2048 : isPocoX6Pro ? 1536 : (isIOS || isAndroid) ? 1024 : 2048,
+      stable: isXiaomiPad7Pro ? 2048 : isPocoX6Pro ? 1536 : (isIOS || isAndroid) ? 1024 : 2048,
+      fast: isXiaomiPad7Pro ? 2048 : isPocoX6Pro ? 1536 : isIOS ? 1024 : (androidConstrained ? 1024 : isAndroid ? 1536 : 2048),
+      max: isXiaomiPad7Pro ? 1536 : isPocoX6Pro ? 1280 : 1024,
     },
-    domMessageLimit: isPocoX6Pro ? 40 : isIOS ? 48 : isAndroid ? 64 : 90,
-    typewriterFrameMs: isPocoX6Pro ? 40 : isIOS ? 34 : isAndroid ? 24 : 17,
-    perfRefreshMs: isPocoX6Pro ? 650 : isIOS ? 360 : isAndroid ? 300 : 220,
-    scrollThrottleMs: isPocoX6Pro ? 160 : isIOS ? 130 : isAndroid ? 100 : 70,
-    promptCharsPerToken: isPocoX6Pro ? 2.35 : isIOS ? 2.35 : 2.7,
+    domMessageLimit: isXiaomiPad7Pro ? 90 : isPocoX6Pro ? 40 : isIOS ? 48 : isAndroid ? 64 : 90,
+    typewriterFrameMs: isXiaomiPad7Pro ? 20 : isPocoX6Pro ? 40 : isIOS ? 34 : isAndroid ? 24 : 17,
+    perfRefreshMs: isXiaomiPad7Pro ? 250 : isPocoX6Pro ? 650 : isIOS ? 360 : isAndroid ? 300 : 220,
+    scrollThrottleMs: isXiaomiPad7Pro ? 90 : isPocoX6Pro ? 160 : isIOS ? 130 : isAndroid ? 100 : 70,
+    promptCharsPerToken: isXiaomiPad7Pro ? 2.5 : isPocoX6Pro ? 2.35 : isIOS ? 2.35 : 2.7,
   };
 }
 
 export function effectiveMaxTokens(profile, key, requested, thinking = false) {
+  if (profile?.isXiaomiPad7Pro) {
+    const caps = { mini: 420, lite: 520, stable: 680, fast: 760, max: 620, deepseek: 680 };
+    const cap = caps[key] || 560;
+    return Math.max(128, Math.min(Number(requested) || cap, thinking ? Math.min(cap, 520) : cap));
+  }
   if (profile?.isPocoX6Pro) return pocoMaxTokens(key, thinking, requested);
   if (!profile?.isIOS) return requested;
   const cap = key === "mini"
@@ -72,6 +81,8 @@ export function applyDeviceProfile(profile) {
   document.documentElement.classList.toggle("is-android", !!profile.isAndroid);
   document.documentElement.classList.toggle("is-native-android", !!profile.isNativeAndroid);
   document.documentElement.classList.toggle("is-poco-x6-pro", !!profile.isPocoX6Pro);
+  document.documentElement.classList.toggle("is-tablet", !!profile.isTablet);
+  document.documentElement.classList.toggle("is-xiaomi-pad-7-pro", !!profile.isXiaomiPad7Pro);
   document.documentElement.classList.toggle("poco-simple-mode", !!profile.isPocoX6Pro);
   document.documentElement.classList.toggle("is-standalone", !!profile.standalone);
   document.documentElement.style.setProperty("--ql-vh", `${window.innerHeight * 0.01}px`);

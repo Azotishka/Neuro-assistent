@@ -41,6 +41,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -193,7 +194,7 @@ class AssistantOverlayActivity : ComponentActivity() {
                 }
             }
         }
-        localWeb.loadUrl("https://appassets.androidplatform.net/assets/local/index.html?profile=poco-x6-pro&app=overlay#chat")
+        localWeb.loadUrl("https://appassets.androidplatform.net/assets/local/index.html?app=overlay#chat")
 
         if (intent.getBooleanExtra(MainActivity.EXTRA_START_VOICE, false)) {
             window.decorView.postDelayed({ startListeningWithPermission() }, 350)
@@ -282,7 +283,7 @@ class AssistantOverlayActivity : ComponentActivity() {
                 allowFileAccess = false
                 allowContentAccess = false
                 mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
-                userAgentString += " QwenLocalAndroid PocoX6Pro Overlay"
+                userAgentString += " QwenLocalAndroid NeuroAssistant Overlay TabletAware"
             }
             addJavascriptInterface(LocalOverlayBridge(this@AssistantOverlayActivity), "NeuroOverlay")
             webViewClient = object : WebViewClient() {
@@ -501,6 +502,7 @@ private fun QuickAssistantOverlay(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
+                .widthIn(max = 920.dp)
                 .navigationBarsPadding()
                 .imePadding()
                 .padding(horizontal = 14.dp, vertical = 16.dp)
