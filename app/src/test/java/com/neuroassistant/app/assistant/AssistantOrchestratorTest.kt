@@ -67,8 +67,10 @@ class AssistantOrchestratorTest {
     fun cancellationStopsActiveRequest() = runBlocking {
         val provider = FakeProvider(slow = true)
         val orchestrator = AssistantOrchestrator(provider, MemoryStore())
-        val request = kotlinx.coroutines.async { orchestrator.submit("wait") }
+        val requestId = "cancel-me"
+        val request = kotlinx.coroutines.async { orchestrator.submit("wait", requestId = requestId) }
         delay(25)
-        orchestrator.cancel(request.await().requestId)
+        orchestrator.cancel(requestId)
+        assertEquals("CANCELLED", request.await().errorCode)
     }
 }
