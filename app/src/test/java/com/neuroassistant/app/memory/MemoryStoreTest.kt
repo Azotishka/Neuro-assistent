@@ -18,6 +18,18 @@ class MemoryStoreTest {
     }
 
     @Test
+    fun supportsSearchAndRemovePersistentFacts() {
+        val backend = InMemoryMemoryPersistence()
+        val store = MemoryStore(backend)
+        assertTrue(store.saveFact("name", "Ashot"))
+        assertTrue(store.saveFact("city", "Ekaterinburg"))
+        assertEquals(listOf(MemoryFact("name", "Ashot")), store.searchFacts("ash").toList())
+        assertTrue(store.removeFact("name"))
+        assertTrue(store.searchFacts("ash").isEmpty())
+        assertEquals(listOf(MemoryFact("city", "Ekaterinburg")), store.listFacts())
+    }
+
+    @Test
     fun persistenceFailureDoesNotBreakChatMemory() {
         val backend = object : MemoryPersistence {
             override fun loadFacts() = emptyList<MemoryFact>()
