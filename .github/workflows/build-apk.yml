@@ -1,5 +1,9 @@
 name: Build NeuroAssistant APK
 
+concurrency:
+  group: neuroassistant-apk-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   workflow_dispatch:
   pull_request:
