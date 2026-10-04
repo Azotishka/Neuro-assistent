@@ -12,6 +12,7 @@ import com.neuroassistant.app.tools.ToolRequest
 import com.neuroassistant.app.tools.ToolRouter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.coroutineScope
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -86,9 +87,12 @@ class AssistantOrchestratorTest {
         val provider = FakeProvider(slow = true)
         val orchestrator = AssistantOrchestrator(provider, MemoryStore())
         val requestId = "cancel-me"
-        val request = kotlinx.coroutines.async { orchestrator.submit("wait", requestId = requestId) }
-        delay(25)
-        orchestrator.cancel(requestId)
-        assertEquals("CANCELLED", request.await().errorCode)
+        val result = coroutineScope {
+            val request = async { orchestrator.submit("wait", requestId = requestId) }
+            delay(25)
+            orchestrator.cancel(requestId)
+            request.await()
+        }
+        assertEquals("CANCELLED", result.errorCode)
     }
 }
