@@ -64,6 +64,24 @@ class AssistantOrchestratorTest {
     }
 
     @Test
+    fun reportsProgressThroughToolAndGenerationPhases() = runBlocking {
+        val provider = FakeProvider("done")
+        val tools = ToolRouter()
+        tools.register(ToolDefinition("echo", "Echo")) { "42" }
+        val orchestrator = AssistantOrchestrator(provider, MemoryStore(), tools)
+        val phases = mutableListOf<AssistantPhase>()
+        val result = orchestrator.submit(
+            "use echo",
+            listOf(ToolRequest(toolName = "echo")),
+            onProgress = { phases += it.phase }
+        )
+        assertTrue(result.success)
+        assertTrue(phases.contains(AssistantPhase.TOOL))
+        assertTrue(phases.contains(AssistantPhase.GENERATING))
+        assertEquals(AssistantPhase.COMPLETED, phases.last())
+    }
+
+    @Test
     fun cancellationStopsActiveRequest() = runBlocking {
         val provider = FakeProvider(slow = true)
         val orchestrator = AssistantOrchestrator(provider, MemoryStore())
