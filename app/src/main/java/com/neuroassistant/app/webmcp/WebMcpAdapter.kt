@@ -12,6 +12,7 @@ data class WebMcpTool(
     val inputSchemaJson: String = "{}",
     val requiredArguments: Set<String> = emptySet(),
     val capability: String = "webmcp",
+    val skillId: String? = "web",
 )
 
 class WebMcpAdapter(
@@ -30,6 +31,7 @@ class WebMcpAdapter(
                 inputSchemaJson = tool.inputSchemaJson,
                 requiredArguments = tool.requiredArguments,
                 capability = tool.capability,
+                skillId = tool.skillId,
             ),
             handler,
         )
