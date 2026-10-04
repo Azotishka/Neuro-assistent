@@ -2,6 +2,7 @@ name: Build NeuroAssistant APK
 
 on:
   workflow_dispatch:
+  pull_request:
   push:
     branches: [ "main", "master", "tablet-xiaomi-pad7-pro", "superpowers-tablet-ai-hub" ]
 
