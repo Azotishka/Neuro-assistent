@@ -254,3 +254,105 @@ html.is-poco-x6-pro .heavy-model-toggle{font-size:11px}
 html.is-poco-x6-pro .poco-quick-card{align-items:flex-start; flex-direction:column}
 html.is-poco-x6-pro .poco-quick-card button{width:100%}
 }
+
+
+@media (min-width: 840px) and (max-width: 1119px) {
+  html.is-tablet .desktop-chat-rail {
+    display:flex;
+    position:fixed;
+    left:14px;
+    top:145px;
+    bottom:18px;
+    width:300px;
+    z-index:20;
+    flex-direction:column;
+    border:1px solid var(--soft-line);
+    border-radius:20px;
+    background:var(--surface);
+    padding:10px;
+  }
+  html.is-tablet .app-shell > .intro,
+  html.is-tablet .app-shell > .mobile-home-dashboard,
+  html.is-tablet .app-shell > .models-section,
+  html.is-tablet .app-shell > #statusPanel,
+  html.is-tablet .app-shell > .control-deck,
+  html.is-tablet .app-shell > #chat,
+  html.is-tablet .app-shell > #chatActions,
+  html.is-tablet .app-shell > .mobile-page-section {
+    margin-left:330px;
+    margin-right:auto;
+    width:min(calc(100% - 350px),920px);
+  }
+  html.is-tablet .composer-wrap {
+    left:calc(50% + 150px) !important;
+    width:min(calc(100% - 370px),920px) !important;
+  }
+}
+
+.tablet-tool-rail { display:none; }
+
+@media (min-width: 1200px) {
+  html.is-tablet .tablet-tool-rail {
+    display:flex;
+    position:fixed;
+    right:max(14px,calc((100vw - 1240px)/2));
+    top:145px;
+    bottom:18px;
+    width:230px;
+    z-index:20;
+    flex-direction:column;
+    gap:8px;
+    border:1px solid var(--soft-line);
+    border-radius:20px;
+    background:var(--surface);
+    padding:12px;
+  }
+  html.is-tablet .tool-rail-head {
+    display:grid;
+    gap:4px;
+    padding:4px;
+    margin-bottom:4px;
+  }
+  html.is-tablet .tool-rail-head strong { font-size:15px; }
+  html.is-tablet .tablet-tool-rail button {
+    min-height:74px;
+    border:1px solid var(--soft-line);
+    border-radius:14px;
+    background:transparent;
+    color:var(--ink);
+    padding:10px;
+    display:grid;
+    grid-template-columns:34px 1fr;
+    grid-template-rows:auto auto;
+    column-gap:9px;
+    text-align:left;
+  }
+  html.is-tablet .tablet-tool-rail button b {
+    grid-row:1 / span 2;
+    width:34px;
+    height:34px;
+    display:grid;
+    place-items:center;
+    border:1px solid var(--soft-line);
+    border-radius:10px;
+  }
+  html.is-tablet .tablet-tool-rail button span { font-weight:800; }
+  html.is-tablet .tablet-tool-rail button small { color:var(--muted); font-size:9px; }
+  html.is-tablet .app-shell > .intro,
+  html.is-tablet .app-shell > .mobile-home-dashboard,
+  html.is-tablet .app-shell > .models-section,
+  html.is-tablet .app-shell > #statusPanel,
+  html.is-tablet .app-shell > .control-deck,
+  html.is-tablet .app-shell > #chat,
+  html.is-tablet .app-shell > #chatActions,
+  html.is-tablet .app-shell > .mobile-page-section {
+    margin-left:260px;
+    margin-right:260px;
+    width:min(calc(100% - 540px),920px);
+  }
+  html.is-tablet .composer-wrap {
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    width:min(calc(100% - 540px),920px) !important;
+  }
+}
