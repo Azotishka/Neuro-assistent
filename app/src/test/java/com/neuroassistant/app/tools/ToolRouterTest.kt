@@ -2,6 +2,7 @@ package com.neuroassistant.app.tools
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.coroutineScope
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -47,10 +48,12 @@ class ToolRouterTest {
         val router = ToolRouter()
         router.register(ToolDefinition("slow", "Slow")) { delay(5_000); "late" }
         val request = ToolRequest(toolName = "slow")
-        val job = kotlinx.coroutines.async { router.execute(request) }
-        delay(25)
-        router.cancel(request.requestId)
-        val result = job.await()
+        val result = coroutineScope {
+            val job = async { router.execute(request) }
+            delay(25)
+            router.cancel(request.requestId)
+            job.await()
+        }
         assertEquals("CANCELLED", result.errorCode)
     }
 }
