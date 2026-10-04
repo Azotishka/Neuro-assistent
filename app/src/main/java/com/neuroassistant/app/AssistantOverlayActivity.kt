@@ -80,6 +80,7 @@ import com.neuroassistant.app.ai.LocalDemoAiProvider
 import com.neuroassistant.app.ai.OpenAiCompatibleProvider
 import com.neuroassistant.app.assistant.AssistantOrchestrator
 import com.neuroassistant.app.live.LiveAssistantController
+import com.neuroassistant.app.lifecycle.AssistantLifecycleController
 import com.neuroassistant.app.memory.MemoryStore
 import com.neuroassistant.app.data.SettingsRepository
 import com.neuroassistant.app.model.ChatMessage
@@ -120,6 +121,7 @@ class AssistantOverlayActivity : ComponentActivity() {
     private var localRequestSequence = 0L
     private var localError: String? = null
     private val liveMemory = MemoryStore()
+    private val lifecycleState by lazy { AssistantLifecycleController(liveMemory) }
     private var liveController: LiveAssistantController? = null
     private val localRequests = ConcurrentHashMap<String, CompletableDeferred<LocalOverlayReply>>()
 
@@ -155,8 +157,11 @@ class AssistantOverlayActivity : ComponentActivity() {
             onError = { addAssistant(it) }
         )
 
+        lifecycleState.restoreFrom(savedInstanceState)
         if (messages.isEmpty()) {
-            messages += QuickUiMessage(MessageRole.ASSISTANT, "Я здесь. Можешь сказать вопрос голосом или написать его, не открывая полный чат.")
+            val restored = lifecycleState.snapshot().messages
+            if (restored.isNotEmpty()) restored.forEach { messages += QuickUiMessage(it.role, it.text) }
+            else messages += QuickUiMessage(MessageRole.ASSISTANT, "Я здесь. Можешь сказать вопрос голосом или написать его, не открывая полный чат.")
         }
 
         setupLocalRuntime()
@@ -206,6 +211,11 @@ class AssistantOverlayActivity : ComponentActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        lifecycleState.saveTo(outState)
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -251,6 +261,8 @@ class AssistantOverlayActivity : ComponentActivity() {
         if (command.handled) return command.reply
 
         answerWithLocal(text)?.let {
+            liveMemory.appendMessage(ChatMessage(role = MessageRole.USER, text = text))
+            liveMemory.appendMessage(ChatMessage(role = MessageRole.ASSISTANT, text = it))
             status = "Локально • готово"
             return it
         }
