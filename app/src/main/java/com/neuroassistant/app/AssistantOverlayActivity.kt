@@ -81,7 +81,9 @@ import com.neuroassistant.app.ai.OpenAiCompatibleProvider
 import com.neuroassistant.app.assistant.AssistantOrchestrator
 import com.neuroassistant.app.live.LiveAssistantController
 import com.neuroassistant.app.lifecycle.AssistantLifecycleController
+import com.neuroassistant.app.memory.FileMemoryPersistence
 import com.neuroassistant.app.memory.MemoryStore
+import java.io.File
 import com.neuroassistant.app.data.SettingsRepository
 import com.neuroassistant.app.model.ChatMessage
 import com.neuroassistant.app.model.MessageRole
@@ -120,7 +122,7 @@ class AssistantOverlayActivity : ComponentActivity() {
     private var localCoreReady = false
     private var localRequestSequence = 0L
     private var localError: String? = null
-    private val liveMemory = MemoryStore()
+    private val liveMemory by lazy { MemoryStore(FileMemoryPersistence(File(filesDir, "neuroassistant/memory.db"))) }
     private val lifecycleState by lazy { AssistantLifecycleController(liveMemory) }
     private var liveController: LiveAssistantController? = null
     private val localRequests = ConcurrentHashMap<String, CompletableDeferred<LocalOverlayReply>>()
