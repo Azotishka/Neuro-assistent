@@ -58,7 +58,7 @@ class LocalModelsActivity : ComponentActivity() {
             cacheMode = WebSettings.LOAD_DEFAULT
             allowFileAccess = false; allowContentAccess = false
             mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
-            userAgentString += " QwenLocalAndroid PocoX6Pro"
+            userAgentString += " QwenLocalAndroid NeuroAssistant TabletAware"
         }
         web.webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? = loader.shouldInterceptRequest(request.url)
@@ -141,7 +141,7 @@ class LocalModelsActivity : ComponentActivity() {
         setContentView(FrameLayout(this).apply { addView(web, FrameLayout.LayoutParams(-1, -1)) })
         // Keep the POCO profile explicit: Android WebView often hides the exact model
         // from navigator.userAgent and navigator.deviceMemory.
-        web.loadUrl("https://appassets.androidplatform.net/assets/local/index.html?profile=poco-x6-pro&app=android#chat")
+        web.loadUrl("https://appassets.androidplatform.net/assets/local/index.html?app=android#chat")
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 web.evaluateJavascript("window.NeuroShell?.handleBack() === true") { consumed ->
