@@ -22,14 +22,14 @@ class FileMemoryPersistence(private val file: File) : MemoryPersistence {
     }
 
     @Synchronized
-    fun removeFact(key: String) {
+    override fun deleteFact(key: String) {
         write(loadFacts().filterNot { it.key == key })
     }
 
     private fun write(facts: List<MemoryFact>) {
         file.parentFile?.mkdirs()
         val tmp = File(file.absolutePath + ".tmp")
-        tmp.writeText(facts.joinToString("\n") { "\${escape(it.key)}\t\${escape(it.value)}" }, Charsets.UTF_8)
+        tmp.writeText(facts.joinToString("\n") { escape(it.key) + "\t" + escape(it.value) }, Charsets.UTF_8)
         if (!tmp.renameTo(file)) {
             tmp.copyTo(file, overwrite = true)
             tmp.delete()
