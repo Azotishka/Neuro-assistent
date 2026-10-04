@@ -51,6 +51,7 @@
 
   document.documentElement.dataset.nativeApp = "android";
   const memoryGB = Number(navigator.deviceMemory || 0);
+  if (memoryGB > 0) window.__QWEN_DEVICE_MEMORY_GB__ = memoryGB;
   const firstRun = !localStorage.getItem("qwen:selected");
   if (firstRun) {
     // Android hardware varies far more than iPhone. Start conservatively and let the user opt up.
