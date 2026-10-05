@@ -23,11 +23,13 @@ import com.neuroassistant.app.model.ChatMessage
 import com.neuroassistant.app.model.MessageRole
 import com.neuroassistant.app.system.AndroidActionHandler
 import com.neuroassistant.app.system.AssistantRoleHelper
+import com.neuroassistant.app.studio.StudioIntegration
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 
 class LocalModelsActivity : ComponentActivity() {
+    private val studio by lazy { StudioIntegration(this) }
     private lateinit var web: WebView
     private var pageReady = false
     private var voicePending = false
@@ -137,6 +139,18 @@ class LocalModelsActivity : ComponentActivity() {
                             "role" -> { startActivity(AssistantRoleHelper.requestIntent(this)); JSONObject().put("ok", true) }
                             "background" -> if (requestKeepAlive()) JSONObject().put("enabled", true).put("reply", "Фоновый режим включён. Микрофон не прослушивается.") else JSONObject().put("pending", true).put("reply", "Разреши уведомления — после этого фоновый режим включится.")
                             "stopBackground" -> { stopService(Intent(this, AssistantStandbyService::class.java)); JSONObject().put("reply", "Режим ожидания выключен.") }
+                            "studioStatus" -> studio.summary()
+                            "studioIndexText" -> {
+                                val source = data.optString("source").trim()
+                                val text = data.optString("text")
+                                JSONObject().put("chunks", studio.indexText(source, text)).put("source", source)
+                            }
+                            "studioSearch" -> {
+                                val results = studio.search(data.optString("query"), data.optInt("limit", 6))
+                                JSONObject().put("results", JSONArray().apply { results.forEach { put(JSONObject().put("id",it.id).put("source",it.source).put("text",it.text).put("score",it.score)) } })
+                            }
+                            "studioFetchUrl" -> studio.fetchUrl(data.optString("url"))
+                            "studioClear" -> { studio.clear(); JSONObject().put("ok", true) }
                             else -> JSONObject().put("error", "Неизвестная операция")
                         }
                         answer.put("id", data.optString("id"))
