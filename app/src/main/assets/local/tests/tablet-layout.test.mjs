@@ -5,39 +5,31 @@ import test from "node:test";
 const root = path.resolve(import.meta.dirname, "..");
 const css = fs.readFileSync(path.join(root, "mobile-shell.css"), "utf8");
 const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const device = fs.readFileSync(path.join(root, "device-profile.js"), "utf8");
 
-test("tablet hub defines two-pane layout from 840dp", () => {
-  assert.match(css, /@media\s*\(min-width:\s*840px\)/);
-  assert.match(css, /is-tablet[^}]*desktop-chat-rail/);
-  assert.match(css, /is-tablet[^}]*chat[^}]*margin-left/);
-});
-
-test("large tablet hub exposes a third tool rail", () => {
-  assert.match(css, /@media\s*\(min-width:\s*1200px\)/);
-  assert.match(css, /\.tablet-tool-rail/);
-  assert.match(html, /id="tabletToolRail"/);
-});
-
-
-test("landscape tablet uses a dedicated three-pane workspace", () => {
+test("tablet landscape has three-pane workspace", () => {
   assert.match(css, /@media\s*\(min-width:\s*840px\)\s*and\s*\(orientation:\s*landscape\)/);
-  assert.match(css, /--tablet-left:\s*248px/);
-  assert.match(css, /--tablet-right:\s*232px/);
+  assert.match(css, /--na-panel/);
   assert.match(css, /desktop-chat-rail[\s\S]*tablet-tool-rail/);
-  assert.match(css, /mobile-nav.*display:\s*none\s*!important/);
-  assert.match(css, /composer-wrap[\s\S]*width:\s*min\(calc\(100vw - var\(--tablet-left\)/);
+  assert.match(css, /composer-wrap[\s\S]*position:fixed/);
 });
-
-
-test("landscape tablet override does not depend on runtime device class", () => {
-  const css = read("mobile-shell.css");
-  assert.match(css, /FINAL TABLET OVERRIDE 3\.14/);
-  assert.match(css, /@media \(min-width:840px\) and \(orientation:landscape\)/);
-  assert.match(css, /html \.desktop-chat-rail/);
-  assert.match(css, /html \.tablet-tool-rail/);
+test("tablet portrait keeps a dedicated chat rail", () => {
+  assert.match(css, /@media\s*\(min-width:\s*600px\)\s*and\s*\(orientation:\s*portrait\)/);
+  assert.match(css, /--na-panel:\s*224px/);
+  assert.match(css, /tablet-tool-rail\s*\{\s*display:none/);
 });
-test("shell cache-busts UI assets", () => {
-  const html = read("index.html");
-  assert.match(html, /styles\.css\?v=3\.14\.0/);
-  assert.match(html, /mobile-shell\.css\?v=3\.14\.0/);
+test("tablet rendering uses containment and reduced compositing", () => {
+  assert.match(css, /content-visibility:auto/);
+  assert.match(css, /contain:\s*layout paint style/);
+  assert.match(css, /backdrop-filter:none/);
+});
+test("tablet profile has conservative memory/performance budgets", () => {
+  assert.match(device, /performanceMode/);
+  assert.match(device, /high.*tablet-balanced/);
+  assert.match(device, /maxOutputTokens/);
+});
+test("UI assets are cache-busted to 3.15", () => {
+  assert.match(html, /styles\.css\?v=3\.15\.0/);
+  assert.match(html, /mobile-shell\.css\?v=3\.15\.0/);
+  assert.match(html, /app-compat\.js\?v=3\.15\.0/);
 });
