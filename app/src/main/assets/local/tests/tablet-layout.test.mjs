@@ -17,3 +17,13 @@ test("large tablet hub exposes a third tool rail", () => {
   assert.match(css, /\.tablet-tool-rail/);
   assert.match(html, /id="tabletToolRail"/);
 });
+
+
+test("landscape tablet uses a dedicated three-pane workspace", () => {
+  assert.match(css, /@media\s*\(min-width:\s*840px\)\s*and\s*\(orientation:\s*landscape\)/);
+  assert.match(css, /--tablet-left:\s*248px/);
+  assert.match(css, /--tablet-right:\s*232px/);
+  assert.match(css, /desktop-chat-rail[\s\S]*tablet-tool-rail/);
+  assert.match(css, /mobile-nav.*display:\s*none\s*!important/);
+  assert.match(css, /composer-wrap[\s\S]*width:\s*min\(calc\(100vw - var\(--tablet-left\)/);
+});
