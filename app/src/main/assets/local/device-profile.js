@@ -21,9 +21,9 @@ export function detectDeviceProfile() {
   const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const compact = isIOS && Math.min(innerWidth, innerHeight) <= 430;
-  const contextBudget = isTablet ? (memoryClass === "high" ? 4096 : memoryClass === "standard" || memoryClass === "unknown" ? 3072 : 2048) : 2048;
-  const maxOutputTokens = isTablet ? (memoryClass === "high" ? 896 : memoryClass === "standard" || memoryClass === "unknown" ? 768 : 560) : 560;
-  const capabilities = { tablet: isTablet, wideLayout: isTablet, toolRail: isTablet, localAi: memoryClass !== "constrained", persistentMemory: true, webMcp: true, contextBudget, maxOutputTokens, memoryClass };
+  const contextBudget = isTablet ? (memoryClass === "high" ? 3072 : memoryClass === "standard" || memoryClass === "unknown" ? 2560 : 1792) : 2048;
+  const maxOutputTokens = isTablet ? (memoryClass === "high" ? 768 : memoryClass === "standard" || memoryClass === "unknown" ? 640 : 480) : 560;
+  const capabilities = { tablet: isTablet, wideLayout: isTablet, toolRail: isTablet, localAi: memoryClass !== "constrained", persistentMemory: true, webMcp: true, contextBudget, maxOutputTokens, memoryClass, performanceMode: isTablet ? (memoryClass === "high" ? "tablet-balanced" : "tablet-conservative") : "mobile-balanced" };
   return {
     isIOS, isIPhone, isAndroid, isPocoX6Pro, isNativeAndroid, isTablet, isXiaomiPad7Pro,
     deviceMemoryGB: effectiveMemoryGB, memoryClass, capabilities, androidConstrained, standalone, reducedMotion, compact, matches14ProViewport,
@@ -37,9 +37,9 @@ export function detectDeviceProfile() {
       max: isXiaomiPad7Pro ? 1536 : isPocoX6Pro ? 1280 : 1024,
     },
     domMessageLimit: isXiaomiPad7Pro ? 90 : isPocoX6Pro ? 40 : isIOS ? 48 : isAndroid ? 64 : 90,
-    typewriterFrameMs: isXiaomiPad7Pro ? 20 : isPocoX6Pro ? 40 : isIOS ? 34 : isAndroid ? 24 : 17,
+    typewriterFrameMs: isXiaomiPad7Pro ? 24 : isPocoX6Pro ? 40 : isIOS ? 34 : isAndroid ? 24 : 17,
     perfRefreshMs: isXiaomiPad7Pro ? 250 : isPocoX6Pro ? 650 : isIOS ? 360 : isAndroid ? 300 : 220,
-    scrollThrottleMs: isXiaomiPad7Pro ? 90 : isPocoX6Pro ? 160 : isIOS ? 130 : isAndroid ? 100 : 70,
+    scrollThrottleMs: isXiaomiPad7Pro ? 80 : isPocoX6Pro ? 160 : isIOS ? 130 : isAndroid ? 100 : 70,
     promptCharsPerToken: isXiaomiPad7Pro ? 2.5 : isPocoX6Pro ? 2.35 : isIOS ? 2.35 : 2.7,
   };
 }
