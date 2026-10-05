@@ -208,15 +208,31 @@ export async function initAdvancedFeatures(core) {
     if (tool) { updateRouteChip(tool.tool.toUpperCase()); return { handled: true, directAnswer: tool.answer, label: `Локальный инструмент · ${tool.tool}` }; }
     const score = scoreComplexity(input);
     const device = core.getDeviceProfile?.();
-    let modelKey = device?.isIOS ? (core.isModelCached?.("stable") ? "stable" : "mini") : "fast";
-    // На iPhone авто-режим никогда сам не повышает модель после реальных перезапусков Safari.
-    // Qwen3 1.7B/4B остаются доступны на странице «Модели» и запускаются только вручную.
-    if (!device?.isIOS && !device?.isPocoX6Pro && score >= 4 && core.isModelCached("max") && input.length < core.getContextWindow("max") * 1.55) modelKey = "max";
-    const thinking = state.autoThinking && score >= 3;
-    let mode = "balanced";
-    if (/код|javascript|typescript|python|html|css|sql|api|regex|debug|ошибк/i.test(input)) mode = "code";
-    else if (/придум|креатив|иде[яи]|назван|сценар|дизайн/i.test(input)) mode = "creative";
-    else if (input.length < 110 && score === 0) mode = "brief";
+    const isTablet = !!device?.isTablet;
+    const has = (key) => !!core.isModelCached?.(key);
+    const codeTask = /код|javascript|typescript|python|html|css|sql|api|regex|debug|ошибк|github|android/i.test(input);
+    const creativeTask = /придум|креатив|иде[яи]|назван|сценар|дизайн/i.test(input);
+    const simpleTask = input.length < 110 && score <= 1 && !codeTask && !creativeTask;
+    let mode = codeTask ? "code" : creativeTask ? "creative" : simpleTask ? "brief" : "balanced";
+    let modelKey;
+    if (device?.isIOS) {
+      modelKey = has("stable") ? "stable" : has("mini") ? "mini" : "lite";
+    } else if (codeTask || score >= 3) {
+      if (score >= 5 && has("max") && !device?.isPocoX6Pro && input.length < core.getContextWindow("max") * 1.4) modelKey = "max";
+      else if (has("fast")) modelKey = "fast";
+      else if (has("stable")) modelKey = "stable";
+      else if (has("lite")) modelKey = "lite";
+      else modelKey = "mini";
+    } else if (simpleTask) {
+      if (has("stable")) modelKey = "stable";
+      else if (has("fast")) modelKey = "fast";
+      else if (has("lite")) modelKey = "lite";
+      else modelKey = "mini";
+    } else {
+      modelKey = has("fast") ? "fast" : has("stable") ? "stable" : has("lite") ? "lite" : "mini";
+    }
+    if (isTablet && device?.memoryClass === "high" && score >= 4 && has("fast")) modelKey = "fast";
+    const thinking = state.autoThinking && score >= 4 && !simpleTask;
     updateRouteChip(`${modelKey === "max" ? "МАКС" : modelKey === "fast" ? "БЫСТРАЯ" : modelKey === "stable" ? "СТАБИЛЬНАЯ" : modelKey === "mini" ? "МИНИ" : "ЛАЙТ"}${thinking ? " · РАССУЖДЕНИЕ" : ""}`);
     return { modelKey, thinking, mode };
   }
@@ -226,11 +242,11 @@ export async function initAdvancedFeatures(core) {
     const w = activeWorkspace(), a = activeAssistant();
     el("featureHome").innerHTML = `
       <div class="feature-hero">
-        <div><div class="eyebrow">АКТИВНЫЙ КОНТЕКСТ</div><h4>${escapeHtml(a.name)} × ${escapeHtml(w.name)}</h4><p>Автовыбор определяет локальный инструмент, профиль и режим рассуждения. На iPhone авто-режим использует Qwen2.5 0.5B, если она уже скачана; иначе остаётся на Мини 135M. Мощные Qwen3 запускаются только вручную.</p></div>
+        <div><div class="eyebrow">АКТИВНЫЙ КОНТЕКСТ</div><h4>${escapeHtml(a.name)} × ${escapeHtml(w.name)}</h4><p>Автовыбор сам выбирает подходящую кэшированную модель по задаче. Тяжёлые модели не запускаются без необходимости, а переходы используют уже скачанные веса.</p></div>
         <div class="feature-kpi"><strong>${state.autoRouter ? "АВТО" : "ВРУЧНУЮ"}</strong><span>автовыбор</span></div>
       </div>
       <div class="toggle-grid">
-        <label class="setting-card"><span><strong>Автовыбор режима</strong><small>Инструмент / МИНИ / БЫСТРАЯ / МАКС</small></span><input id="autoRouterToggle" type="checkbox" ${state.autoRouter ? "checked" : ""}></label>
+        <label class="setting-card"><span><strong>Автовыбор режима</strong><small>Инструмент / модель / режим</small></span><input id="autoRouterToggle" type="checkbox" ${state.autoRouter ? "checked" : ""}></label>
         <label class="setting-card"><span><strong>Авторассуждение</strong><small>Для сложных задач</small></span><input id="autoThinkingToggle" type="checkbox" ${state.autoThinking ? "checked" : ""}></label>
         <label class="setting-card"><span><strong>Адаптивная производительность</strong><small>Снижает контекст при просадке</small></span><input id="adaptiveToggle" type="checkbox" ${state.adaptive ? "checked" : ""}></label>
         <button id="incognitoToggle" class="setting-card button-card" type="button"><span><strong>Чат инкогнито</strong><small>Не записывать текущий разговор</small></span><b>${core.getCurrentChat()?.incognito ? "ВКЛ" : "ВЫКЛ"}</b></button>
