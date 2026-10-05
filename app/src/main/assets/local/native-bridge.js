@@ -54,10 +54,12 @@
   if (memoryGB > 0) window.__QWEN_DEVICE_MEMORY_GB__ = memoryGB;
   const firstRun = !localStorage.getItem("qwen:selected");
   if (firstRun) {
-    // Android hardware varies far more than iPhone. Start conservatively and let the user opt up.
+    // Tablet-first defaults: keep 8 GB-class tablets responsive while avoiding an oversized first load.
     const poco = window.__QWEN_DEVICE_PROFILE_OVERRIDE__ === "poco-x6-pro";
-    localStorage.setItem("qwen:selected", poco ? "fast" : memoryGB > 0 && memoryGB <= 4 ? "lite" : "stable");
-    localStorage.setItem("qwen:context", poco ? "1536" : "1024");
+    const tablet = /Android/i.test(ua) && Math.min(screen.width || innerWidth, screen.height || innerHeight) >= 600 && (navigator.maxTouchPoints || 0) >= 2;
+    const selected = poco ? "fast" : memoryGB > 0 && memoryGB <= 4 ? "lite" : "stable";
+    localStorage.setItem("qwen:selected", selected);
+    localStorage.setItem("qwen:context", poco ? "1536" : tablet ? "2048" : "1024");
     localStorage.setItem("qwen:thinking", "0");
     if (poco) localStorage.setItem("qwen:modelTuningV1", JSON.stringify({
       "Qwen3-1.7B-q4f16_1-MLC": { preset: "speed", runtime: "worker", autoRelease: false },
@@ -66,6 +68,7 @@
 
   window.__QWEN_ANDROID_CAPS__ = {
     native: true,
+    tablet: Math.min(screen.width || innerWidth, screen.height || innerHeight) >= 600 && (navigator.maxTouchPoints || 0) >= 2,
     memoryGB,
     webgpu: !!navigator.gpu,
     secureContext: !!window.isSecureContext,
