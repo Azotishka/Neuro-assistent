@@ -27,3 +27,17 @@ test("landscape tablet uses a dedicated three-pane workspace", () => {
   assert.match(css, /mobile-nav.*display:\s*none\s*!important/);
   assert.match(css, /composer-wrap[\s\S]*width:\s*min\(calc\(100vw - var\(--tablet-left\)/);
 });
+
+
+test("landscape tablet override does not depend on runtime device class", () => {
+  const css = read("mobile-shell.css");
+  assert.match(css, /FINAL TABLET OVERRIDE 3\.14/);
+  assert.match(css, /@media \(min-width:840px\) and \(orientation:landscape\)/);
+  assert.match(css, /html \.desktop-chat-rail/);
+  assert.match(css, /html \.tablet-tool-rail/);
+});
+test("shell cache-busts UI assets", () => {
+  const html = read("index.html");
+  assert.match(html, /styles\.css\?v=3\.14\.0/);
+  assert.match(html, /mobile-shell\.css\?v=3\.14\.0/);
+});
