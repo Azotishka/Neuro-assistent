@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta id="themeColor" name="theme-color" content="#f3f0e9" />
+  <meta id="themeColor" name="theme-color" content="#eef3f8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Qwen Local" />
+  <meta name="apple-mobile-web-app-title" content="Neuro Nova Studio" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="./manifest.webmanifest?v=3.10.0" />
+  <link rel="manifest" href="./manifest.webmanifest?v=4.0.0" />
   <link rel="icon" href="./icon.svg" />
   <link rel="apple-touch-icon" href="./icon-180.png" />
-  <title>Qwen Local · POCO X6 Pro</title>
+  <title>Neuro Nova Studio · AI Workspace</title>
   <script>
     (() => {
       const mode = localStorage.getItem("qwen:themeMode") || "system";
@@ -19,25 +19,25 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="./styles.css?v=3.10.0" />
-  <link rel="stylesheet" href="./features.css?v=3.10.0" />
-  <link rel="stylesheet" href="./mobile-shell.css?v=3.10.0" />
+  <link rel="stylesheet" href="./neuro-nova-tokens.css?v=0.18.0" />
+  <link rel="stylesheet" href="./neuro-nova-shell.css?v=0.18.0" />
 </head>
 <body data-page="home">
   <div class="grain" aria-hidden="true"></div>
   <div class="app-shell">
     <header class="topbar">
       <div class="brand">
-        <div class="brand-badge" aria-hidden="true">Q</div>
+        <div class="brand-badge" aria-hidden="true">N</div>
         <div>
-          <div class="eyebrow">ЛОКАЛЬНЫЙ ИИ / POCO X6 PRO</div>
-          <h1>Qwen Local</h1>
+          <div class="eyebrow">NEURO NOVA STUDIO / AI HUB</div>
+          <h1>Neuro Nova Studio</h1>
           <div id="currentChatTitle" class="current-chat-title">Новый чат</div>
         </div>
       </div>
       <div class="top-actions">
         <button id="newChatBtn" class="round-btn" type="button" aria-label="Новый чат" title="Новый чат">＋</button>
         <button id="hubBtn" class="round-btn" type="button" aria-label="Открыть центр" title="Чаты, память и файлы">▦</button>
+        <button id="automationBtn" class="round-btn automation-open" type="button" aria-label="Автоматизации" title="Автоматизации">⚡</button>
         <button id="installBtn" class="round-btn install-btn" type="button" aria-label="Установить приложение" title="Установить на экран Домой">↓</button>
         <button id="themeBtn" class="round-btn theme-btn" type="button" aria-label="Переключить тему" title="Тема"><span id="themeIcon" aria-hidden="true">◐</span></button>
         <button id="statsBtn" class="round-btn" type="button" aria-label="Статистика и настройки" title="Статистика и настройки">↗</button>
@@ -46,7 +46,7 @@
 
     <div id="compatBanner" class="compat-banner hidden" role="status"></div>
 
-    <nav id="desktopNav" class="desktop-nav" aria-label="Разделы Qwen Local">
+    <nav id="desktopNav" class="desktop-nav" aria-label="Разделы Neuro Nova Studio">
       <button type="button" data-route="home"><span>⌂</span>Главная</button>
       <button type="button" data-route="chats"><span>◫</span>Чаты</button>
       <button type="button" data-route="chat"><span>◌</span>Чат</button>
@@ -63,12 +63,21 @@
       <button type="button" class="rail-all-btn" data-route="chats">Все чаты →</button>
     </aside>
 
+    <aside id="tabletToolRail" class="tablet-tool-rail" aria-label="Инструменты AI Hub">
+      <div class="tool-rail-head"><span class="eyebrow">AI HUB</span><strong>Инструменты</strong></div>
+      <button type="button" data-route="tools"><b>⌘</b><span>Инструменты</span><small>Android + WebMCP</small></button>
+      <button type="button" class="automation-open"><b>⚡</b><span>Автоматизации</span><small>Цепочки действий</small></button>
+      <button type="button" data-route="data"><b>▦</b><span>Память</span><small>Факты и файлы</small></button>
+      <button type="button" data-route="models"><b>◇</b><span>Модели</span><small>Local / API</small></button>
+      <button type="button" data-route="settings"><b>⚙</b><span>Настройки</span><small>Профиль устройства</small></button>
+    </aside>
+
     <section class="intro compact-intro">
       <div class="intro-number">02</div>
       <div class="intro-main">
-        <div class="intro-label">ЛОКАЛЬНАЯ ИИ-СИСТЕМА / 3.10</div>
-        <h2>Локальный ИИ.<br>На твоём<br>POCO.</h2>
-        <p>Быстрый локальный ассистент для POCO X6 Pro. Основная модель — Qwen3 1.7B, резерв — Lite 360M. Чаты, память и файлы остаются на устройстве.</p>
+        <div class="intro-label">AI HUB / 0.14</div>
+        <h2>Твой ИИ.<br>Локально.<br>На планшете.</h2>
+        <p>Планшетный AI Hub Neuro Nova Studio: локальные модели, память, инструменты и Live Assistant. Чаты и сохранённые данные остаются на устройстве.</p>
       </div>
       <div class="intro-stamp">
         <span>ПРИВАТНО</span>
@@ -80,7 +89,7 @@
     <section id="mobileHomeDashboard" class="mobile-home-dashboard route-home">
       <div class="home-welcome-grid">
         <article class="quick-start-card home-primary-card">
-          <div><span>БЫСТРЫЙ СТАРТ</span><h3>Qwen3 1.7B уже настроена.</h3><p>Профиль POCO держит одну модель в GPU, отключает лишнее рассуждение и использует Worker для более быстрой генерации.</p></div>
+          <div><span>БЫСТРЫЙ СТАРТ</span><h3>AI Hub готов к работе.</h3><p>Профиль устройства автоматически подбирает лимиты и режим работы, чтобы удерживать скорость и стабильность.</p></div>
           <div class="home-primary-actions"><button type="button" data-route="chat">Открыть чат</button><button type="button" data-route="models" class="secondary-home-action">Модели</button></div>
         </article>
         <article class="home-resume-card">
@@ -569,8 +578,8 @@
     <div class="app-prompt-actions"><button id="appPromptCancel" type="button" class="secondary-btn">Отмена</button><button id="appPromptOk" type="button" class="secondary-btn">Готово</button></div>
   </dialog>
 
-  <script src="./native-bridge.js?v=android1"></script>
-  <script src="./neuro-shell.js?v=0.11.0"></script>
+  <script src="./native-bridge.js?v=android2"></script>
+  <script src="./neuro-shell.js?v=0.12.0"></script>
   <script>
     (() => {
       window.__QWEN_BOOT_STARTED__ = Date.now();
@@ -605,6 +614,6 @@
       setTimeout(() => { if (!window.QwenAppBridge) reportBootFailure("основной JS-бандл не сообщил о готовности"); }, 2500);
     })();
   </script>
-  <script src="./app-compat.js?v=3.10.0"></script>
+  <script src="./app-compat.js?v=4.0.0"></script>
 </body>
 </html>
