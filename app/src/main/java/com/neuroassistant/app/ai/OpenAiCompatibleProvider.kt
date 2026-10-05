@@ -16,6 +16,7 @@ class OpenAiCompatibleProvider(
     private val settings: AssistantSettings
 ) : AiProvider {
     override val displayName: String = settings.model.ifBlank { "OpenAI-compatible" }
+    override val capabilities: AiCapabilities = AiCapabilities(providerId = "openai-compatible", local = false, streaming = false, cancellation = false, toolCalls = false)
 
     override suspend fun reply(messages: List<ChatMessage>): String = withContext(Dispatchers.IO) {
         require(settings.apiKey.isNotBlank()) { "API-ключ не задан. Открой настройки ⚙." }
