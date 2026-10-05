@@ -611,3 +611,147 @@ html.is-poco-x6-pro .poco-quick-card button{width:100%}
     --tablet-right: 258px;
   }
 }
+
+
+/* NeuroAssistant Serious UI v1 — simpler, denser, work-oriented. */
+:root {
+  --na-radius: 12px;
+  --na-border: color-mix(in srgb,var(--ink) 12%,transparent);
+}
+html {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+body {
+  background: var(--paper);
+}
+.grain { display:none !important; }
+.topbar {
+  box-shadow:none !important;
+  border-bottom:1px solid var(--soft-line);
+}
+.brand-badge {
+  box-shadow:none !important;
+  border-radius:10px !important;
+}
+.intro { display:none !important; }
+.compact-intro { display:none !important; }
+.models-section .poco-quick-card,
+.models-section .stable-core-note,
+.models-section .model-freedom-panel,
+.models-section .advanced-model-panel,
+.models-section .heavy-model-toggle { display:none !important; }
+.models-section { padding-top:18px !important; }
+.model-quick-bar {
+  border-radius:var(--na-radius) !important;
+  box-shadow:none !important;
+}
+.model-card, .quick-start-card, .home-resume-card, .home-status-row button, .home-mini-grid button,
+.page-chat-card, .tool-directory-card, .feature-section, .setting-card {
+  border-radius:var(--na-radius) !important;
+  box-shadow:none !important;
+}
+.home-primary-card { min-height:160px !important; }
+.home-welcome-grid { gap:10px !important; }
+.home-mini-grid { gap:8px !important; }
+button, input, select, textarea { font-family:inherit; }
+button { transition:none !important; }
+.feature-dialog, .workspace-dialog, .stats-dialog {
+  border-radius:14px !important;
+  box-shadow:0 20px 60px rgba(0,0,0,.18) !important;
+}
+.automation-builder-grid { display:grid; gap:8px; }
+.automation-steps { display:grid; gap:8px; margin:10px 0 14px; }
+.automation-step {
+  display:grid; grid-template-columns:28px minmax(130px,180px) minmax(0,1fr) 34px;
+  gap:8px; align-items:start; padding:8px;
+  border:1px solid var(--soft-line); border-radius:10px; background:var(--surface);
+}
+.automation-step-index {
+  width:28px; height:28px; display:grid; place-items:center;
+  border-radius:8px; background:var(--ink); color:var(--paper); font-size:11px; font-weight:800;
+}
+.automation-step-fields { display:grid; gap:7px; min-width:0; }
+.automation-step .feature-input, .automation-step .feature-select { min-width:0; }
+.automation-card {
+  display:flex; justify-content:space-between; gap:12px; align-items:center;
+  padding:12px; border:1px solid var(--soft-line); border-radius:10px; background:var(--surface);
+}
+.automation-card-main { min-width:0; display:grid; gap:4px; }
+.automation-card-main strong { font-size:14px; }
+.automation-card-main small { color:var(--muted); }
+.automation-card-main span { font-size:11px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.automation-card-actions { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+.automation-card-actions .feature-btn { min-height:34px; padding:7px 10px; }
+@media (max-width:760px) {
+  .automation-step { grid-template-columns:28px minmax(0,1fr) 34px; }
+  .automation-step-type { grid-column:2; }
+  .automation-step-fields { grid-column:2; }
+  .automation-card { align-items:flex-start; flex-direction:column; }
+  .automation-card-actions { justify-content:flex-start; }
+}
+
+/* Landscape tablet: compact professional workspace. */
+@media (min-width:840px) and (orientation:landscape) {
+  html.is-tablet body { background:var(--paper); }
+  html.is-tablet .topbar {
+    min-height:64px !important; height:64px !important;
+    padding:8px 16px !important;
+  }
+  html.is-tablet .brand-badge { width:40px !important; height:40px !important; border-radius:10px !important; }
+  html.is-tablet .brand h1 { font-size:18px !important; }
+  html.is-tablet .top-actions .round-btn { width:38px !important; height:38px !important; border-radius:10px !important; }
+  html.is-tablet .desktop-nav {
+    top:64px !important; height:42px !important; border-radius:10px !important;
+    background:var(--surface) !important; box-shadow:none !important;
+  }
+  html.is-tablet .desktop-nav button {
+    min-height:34px !important; font-size:10px !important;
+  }
+  html.is-tablet .desktop-chat-rail,
+  html.is-tablet .tablet-tool-rail {
+    top:114px !important; bottom:12px !important;
+    border-radius:12px !important; box-shadow:none !important;
+    background:var(--surface) !important;
+  }
+  html.is-tablet .desktop-chat-rail { width:216px !important; padding:10px !important; }
+  html.is-tablet .tablet-tool-rail { width:200px !important; padding:10px !important; }
+  html.is-tablet {
+    --tablet-left:232px !important;
+    --tablet-right:216px !important;
+    --tablet-topbar:64px !important;
+    --tablet-nav:42px !important;
+  }
+  html.is-tablet .app-shell > .mobile-home-dashboard,
+  html.is-tablet .app-shell > .models-section,
+  html.is-tablet .app-shell > #statusPanel,
+  html.is-tablet .app-shell > .control-deck,
+  html.is-tablet .app-shell > #chat,
+  html.is-tablet .app-shell > #chatActions,
+  html.is-tablet .app-shell > .mobile-page-section {
+    margin-left:244px !important;
+    margin-right:228px !important;
+  }
+  html.is-tablet .models-section { padding:12px 14px !important; }
+  html.is-tablet .model-switcher { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+  html.is-tablet .model-card { min-height:154px !important; padding:12px !important; }
+  html.is-tablet .model-name { font-size:21px !important; }
+  html.is-tablet .home-welcome-grid { grid-template-columns:1.5fr .8fr !important; }
+  html.is-tablet .home-primary-card { min-height:130px !important; }
+  html.is-tablet .home-status-row { gap:8px !important; }
+  html.is-tablet .home-mini-grid { gap:8px !important; }
+  html.is-tablet body[data-page="chat"] #chat { min-height:calc(100dvh - 150px) !important; padding:8px 14px 110px !important; }
+  html.is-tablet .message-stack { max-width:min(82%,760px) !important; }
+  html.is-tablet .composer-wrap {
+    width:min(calc(100vw - 472px),860px) !important;
+    padding:7px 0 10px !important;
+  }
+  html.is-tablet .composer { min-height:52px !important; border-radius:12px !important; }
+  html.is-tablet .composer textarea { min-height:50px !important; padding:13px !important; }
+  html.is-tablet .composer-tools { margin-bottom:4px !important; }
+  html.is-tablet .composer-tools .tool-btn { min-height:28px !important; padding:5px 8px !important; }
+  html.is-tablet .send-btn { min-width:92px !important; }
+  html.is-tablet .feature-dialog-wide {
+    width:min(820px,68vw) !important;
+    border-radius:14px !important;
+  }
+}
