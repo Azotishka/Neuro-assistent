@@ -550,6 +550,7 @@ export async function initAdvancedFeatures(core) {
   }
   aiOS.querySelectorAll(".feature-tab").forEach((b) => b.addEventListener("click", () => selectFeatureTab(b.dataset.featureTab)));
   advancedBtn.addEventListener("click", () => { renderHome(); aiOS.showModal(); });
+  document.querySelectorAll(".automation-open").forEach((button) => button.addEventListener("click", () => { renderFeaturePanel("work"); selectFeatureTab("work"); aiOS.showModal(); setTimeout(() => el("automationName")?.focus(), 60); }));
   routeChip.addEventListener("click", () => { renderHome(); aiOS.showModal(); });
 
   // ---------- assistants ----------
