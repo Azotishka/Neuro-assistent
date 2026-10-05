@@ -356,3 +356,258 @@ html.is-poco-x6-pro .poco-quick-card button{width:100%}
     width:min(calc(100% - 540px),920px) !important;
   }
 }
+
+
+/* ───────────────────────────────────────────────────────────────────────────
+   NeuroAssistant Tablet Landscape v2
+   Landscape is a workspace, not an enlarged phone screen:
+   navigation + chat list + focused workspace + tools.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 840px) and (orientation: landscape) {
+  :root {
+    --tablet-left: 248px;
+    --tablet-right: 232px;
+    --tablet-gutter: 16px;
+    --tablet-topbar: 78px;
+    --tablet-nav: 50px;
+  }
+
+  html.is-tablet body {
+    min-width: 840px;
+    overflow-x: hidden;
+  }
+
+  html.is-tablet .app-shell {
+    width: 100%;
+    max-width: none;
+    padding-bottom: 96px;
+  }
+
+  /* Compact top app bar */
+  html.is-tablet .topbar {
+    min-height: var(--tablet-topbar);
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 60;
+  }
+  html.is-tablet .brand { gap: 12px; }
+  html.is-tablet .brand-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+    box-shadow: 5px 5px 0 color-mix(in srgb,var(--blue) 55%,transparent);
+  }
+  html.is-tablet .brand h1 { font-size: 24px; }
+  html.is-tablet .brand .current-chat-title { font-size: 9px; }
+  html.is-tablet .top-actions { gap: 8px; }
+  html.is-tablet .top-actions .round-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+  }
+
+  /* One compact primary navigation row below the top bar. */
+  html.is-tablet .desktop-nav {
+    display: flex;
+    position: fixed;
+    top: calc(var(--tablet-topbar) + 8px);
+    left: calc(var(--tablet-left) + var(--tablet-gutter));
+    right: calc(var(--tablet-right) + var(--tablet-gutter));
+    width: auto;
+    height: var(--tablet-nav);
+    margin: 0;
+    padding: 4px;
+    border-radius: 16px;
+    z-index: 55;
+    box-shadow: 0 8px 28px color-mix(in srgb,var(--ink) 7%,transparent);
+  }
+  html.is-tablet .desktop-nav button {
+    min-height: 40px;
+    font-size: 11px;
+    border-radius: 12px;
+  }
+  html.is-tablet .desktop-nav button span { font-size: 14px; }
+
+  /* Persistent left chat rail */
+  html.is-tablet .desktop-chat-rail {
+    display: flex;
+    position: fixed;
+    left: var(--tablet-gutter);
+    top: calc(var(--tablet-topbar) + 8px);
+    bottom: 16px;
+    width: calc(var(--tablet-left) - var(--tablet-gutter) * 2);
+    z-index: 50;
+    border-radius: 20px;
+    padding: 12px;
+    box-shadow: 0 8px 28px color-mix(in srgb,var(--ink) 6%,transparent);
+  }
+  html.is-tablet .chat-rail-head strong { font-size: 15px; }
+  html.is-tablet #railChatSearch { min-height: 42px; border-radius: 12px; }
+
+  /* Optional right-side tool rail on wide landscape tablets. */
+  html.is-tablet .tablet-tool-rail {
+    display: flex;
+    position: fixed;
+    right: var(--tablet-gutter);
+    top: calc(var(--tablet-topbar) + 8px);
+    bottom: 16px;
+    width: calc(var(--tablet-right) - var(--tablet-gutter) * 2);
+    z-index: 50;
+    border-radius: 20px;
+    padding: 12px;
+    overflow: auto;
+    box-shadow: 0 8px 28px color-mix(in srgb,var(--ink) 6%,transparent);
+  }
+  html.is-tablet .tablet-tool-rail .tool-rail-head {
+    padding: 4px 4px 10px;
+  }
+  html.is-tablet .tablet-tool-rail button {
+    min-height: 64px;
+    border-radius: 14px;
+  }
+
+  /* Center workspace: never stretch text across the whole tablet. */
+  html.is-tablet .app-shell > .intro,
+  html.is-tablet .app-shell > .mobile-home-dashboard,
+  html.is-tablet .app-shell > .models-section,
+  html.is-tablet .app-shell > #statusPanel,
+  html.is-tablet .app-shell > .control-deck,
+  html.is-tablet .app-shell > #chat,
+  html.is-tablet .app-shell > #chatActions,
+  html.is-tablet .app-shell > .mobile-page-section {
+    box-sizing: border-box;
+    margin-left: calc(var(--tablet-left) + var(--tablet-gutter));
+    margin-right: calc(var(--tablet-right) + var(--tablet-gutter));
+    width: auto;
+    max-width: none;
+  }
+
+  /* Keep route content below the fixed nav row. */
+  html.is-tablet .app-shell > .intro,
+  html.is-tablet .app-shell > .mobile-home-dashboard,
+  html.is-tablet .app-shell > .models-section,
+  html.is-tablet .app-shell > .control-deck {
+    margin-top: calc(var(--tablet-nav) + 24px);
+  }
+
+  html.is-tablet .desktop-nav ~ .intro,
+  html.is-tablet .desktop-nav ~ .models-section,
+  html.is-tablet .desktop-nav ~ .control-deck {
+    margin-top: calc(var(--tablet-nav) + 24px);
+  }
+
+  /* Chat becomes a real tablet workspace. */
+  html.is-tablet body[data-page="chat"] #chat {
+    min-height: calc(100dvh - 190px);
+    padding: 10px 20px 130px;
+  }
+  html.is-tablet body[data-page="chat"] .control-deck {
+    margin-bottom: 10px;
+    padding: 12px 16px;
+    border-radius: 20px;
+  }
+  html.is-tablet body[data-page="chat"] .mode-tabs {
+    margin-top: 10px;
+  }
+  html.is-tablet body[data-page="chat"] .mode-tab {
+    min-height: 42px;
+    font-size: 11px;
+  }
+  html.is-tablet body[data-page="chat"] .context-control {
+    grid-template-columns: 72px 1fr;
+  }
+  html.is-tablet body[data-page="chat"] .context-badges {
+    display: flex;
+    gap: 7px;
+    margin-top: 9px;
+  }
+
+  /* Message column is readable, while the composer spans the useful center. */
+  html.is-tablet .message-stack {
+    max-width: min(78%, 760px);
+  }
+  html.is-tablet .composer-wrap {
+    left: calc(var(--tablet-left) + (100vw - var(--tablet-left) - var(--tablet-right)) / 2) !important;
+    right: auto !important;
+    bottom: 0 !important;
+    transform: translateX(-50%) !important;
+    width: min(calc(100vw - var(--tablet-left) - var(--tablet-right) - 32px), 980px) !important;
+    padding: 10px 0 14px !important;
+    z-index: 58;
+  }
+  html.is-tablet .composer-tools {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 6px;
+  }
+  html.is-tablet .composer-tools .tool-btn {
+    min-height: 32px;
+    padding: 7px 11px;
+    border-radius: 10px;
+    font-size: 9px;
+  }
+  html.is-tablet .composer {
+    min-height: 58px;
+    border-radius: 17px;
+  }
+  html.is-tablet .composer textarea {
+    min-height: 56px;
+    padding: 16px;
+  }
+  html.is-tablet .send-btn {
+    min-width: 108px;
+  }
+
+  /* Model selector: cards use the extra horizontal space instead of a tall stack. */
+  html.is-tablet .models-section {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  html.is-tablet .model-switcher {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 10px;
+  }
+  html.is-tablet .model-card {
+    min-height: 210px;
+    padding: 14px;
+  }
+  html.is-tablet .model-name { font-size: 30px; }
+
+  /* Tablet home: two-column welcome, four compact actions. */
+  html.is-tablet .mobile-home-dashboard {
+    padding: 0 20px 30px;
+  }
+  html.is-tablet .home-welcome-grid {
+    grid-template-columns: minmax(0,1.45fr) minmax(260px,.8fr);
+    gap: 12px;
+  }
+  html.is-tablet .home-status-row { grid-template-columns: repeat(3,1fr); }
+  html.is-tablet .home-mini-grid { grid-template-columns: repeat(4,1fr); }
+
+  /* Never show phone bottom navigation on landscape tablets. */
+  html.is-tablet .mobile-nav { display: none !important; }
+
+  /* Dialogs are side sheets on wide landscape instead of giant centered cards. */
+  html.is-tablet .workspace-dialog,
+  html.is-tablet .stats-dialog {
+    width: min(720px, 62vw);
+    max-height: calc(100dvh - 32px);
+    margin: 16px 16px 16px auto;
+    border-radius: 22px;
+  }
+}
+
+@media (min-width: 1100px) and (orientation: landscape) {
+  html.is-tablet {
+    --tablet-left: 260px;
+    --tablet-right: 248px;
+  }
+}
+
+@media (min-width: 1400px) and (orientation: landscape) {
+  html.is-tablet {
+    --tablet-left: 272px;
+    --tablet-right: 258px;
+  }
+}
