@@ -5,7 +5,7 @@ import { runPython, stopPython } from "./python-runner.js?v=3.10.0";
 import { recognizeImage } from "./ocr.js?v=3.10.0";
 import { normalizeAutomation, validateAutomation, runAutomation, AUTOMATION_STEP_TYPES } from "./automation-engine.js?v=1";
 
-const FEATURE_VERSION = "3.10.0";
+const FEATURE_VERSION = "4.0.0";
 const DEFAULT_WORKSPACE_ID = "workspace-default";
 const el = (id) => document.getElementById(id);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -42,7 +42,7 @@ function stripCodeFence(text) {
 function makeDialog(id, title, body, className = "feature-dialog") {
   const d = document.createElement("dialog");
   d.id = id; d.className = className;
-  d.innerHTML = `<div class="feature-head"><div><div class="eyebrow">QWEN LOCAL ${FEATURE_VERSION}</div><h3>${title}</h3></div><button class="round-btn feature-close" type="button" aria-label="Закрыть">×</button></div>${body}`;
+  d.innerHTML = `<div class="feature-head"><div><div class="eyebrow">NEUROASSISTANT · SYSTEM ${FEATURE_VERSION}</div><h3>${title}</h3></div><button class="round-btn feature-close" type="button" aria-label="Закрыть">×</button></div>${body}`;
   d.querySelector(".feature-close").addEventListener("click", () => d.close());
   document.body.appendChild(d);
   return d;
