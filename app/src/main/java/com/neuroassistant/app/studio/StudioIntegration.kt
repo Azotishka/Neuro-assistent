@@ -88,7 +88,7 @@ class StudioIntegration(context: Context) {
     }
 
     private fun clean(s:String)=s.replace(Regex("\\s+")," ").trim()
-    private fun stripHtml(s:String)=s.replace(Regex("<script[\\s\\S]*?</script>","IGNORE_CASE")," ").replace(Regex("<style[\\s\\S]*?</style>","IGNORE_CASE")," ").replace(Regex("<[^>]+>")," ")
+    private fun stripHtml(s:String)=s.replace(Regex("<script[\\s\\S]*?</script>", RegexOption.IGNORE_CASE)," ").replace(Regex("<style[\\s\\S]*?</style>", RegexOption.IGNORE_CASE)," ").replace(Regex("<[^>]+>")," ")
     private fun chunk(s:String):List<String>{ val out=mutableListOf<String>(); var start=0; while(start<s.length){ val end=minOf(start+chunkSize,s.length); out+=s.substring(start,end).trim(); if(end==s.length) break; start=maxOf(end-chunkOverlap,start+1) }; return out.filter{it.isNotBlank()} }
     private fun tokenize(s:String)=Regex("[\\p{L}\\p{Nd}]{3,}").findAll(s.lowercase(Locale.ROOT)).map{it.value}.toSet()
 }
