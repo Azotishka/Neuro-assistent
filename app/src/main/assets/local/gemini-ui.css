@@ -1,0 +1,137 @@
+/* NeuroAssistant Gemini-like 6.0 — original implementation, not a copy of proprietary assets. */
+:root{
+ --ga-bg:#f7f9fc;--ga-surface:#fff;--ga-text:#202124;--ga-muted:#5f6368;
+ --ga-blue:#1a73e8;--ga-blue2:#8ab4f8;--ga-border:#e4e7ed;--ga-hover:#f1f3f4;
+ --ga-shadow:0 1px 3px rgba(60,64,67,.12),0 4px 14px rgba(60,64,67,.08);
+}
+html[data-theme="dark"]{--ga-bg:#131314;--ga-surface:#1e1f20;--ga-text:#e8eaed;--ga-muted:#bdc1c6;--ga-border:#3c4043;--ga-hover:#292a2d;--ga-shadow:0 2px 10px rgba(0,0,0,.24)}
+body{background:var(--ga-bg)!important;color:var(--ga-text)!important}
+.app-shell{max-width:1500px!important;margin:auto!important}
+.topbar{height:72px!important;background:color-mix(in srgb,var(--ga-bg) 92%,transparent)!important;border-bottom:1px solid var(--ga-border)!important;backdrop-filter:blur(18px)!important}
+.brand-badge{background:linear-gradient(135deg,#4285f4,#8ab4f8,#a142f4)!important;border-radius:50%!important;box-shadow:none!important}
+.eyebrow{letter-spacing:.04em!important;color:var(--ga-muted)!important}
+.brand h1{font-weight:500!important;letter-spacing:-.03em!important}
+.desktop-nav{background:transparent!important;border:0!important}
+.desktop-nav button{border-radius:22px!important;background:transparent!important;color:var(--ga-muted)!important}
+.desktop-nav button:hover,.desktop-nav button.active{background:var(--ga-hover)!important;color:var(--ga-text)!important}
+.desktop-chat-rail,.tablet-tool-rail{background:var(--ga-surface)!important;border:1px solid var(--ga-border)!important;border-radius:24px!important;box-shadow:var(--ga-shadow)!important}
+.chat-rail-head,.tool-rail-head{border-bottom:1px solid var(--ga-border)!important}
+.chat-rail-list button,.tablet-tool-rail button{border-radius:16px!important;background:transparent!important;color:var(--ga-text)!important}
+.chat-rail-list button:hover,.tablet-tool-rail button:hover{background:var(--ga-hover)!important}
+.intro{display:none!important}
+.mobile-home-dashboard{padding-top:34px!important}
+.home-welcome-grid{grid-template-columns:1fr!important;max-width:920px!important;margin:0 auto!important}
+.home-primary-card{min-height:280px!important;padding:38px!important;border:0!important;border-radius:30px!important;background:linear-gradient(135deg,#eef3ff,#f8f1ff 52%,#eaf8ff)!important;box-shadow:none!important}
+html[data-theme="dark"] .home-primary-card{background:linear-gradient(135deg,#1d2638,#252033 52%,#162b36)!important}
+.home-primary-card h3{font-size:clamp(38px,6vw,66px)!important;font-weight:500!important;letter-spacing:-.07em!important}
+.home-primary-card p{font-size:16px!important;max-width:700px!important}
+.home-primary-actions button{border-radius:24px!important;padding:0 20px!important;background:var(--ga-text)!important;color:var(--ga-bg)!important;box-shadow:none!important}
+.home-primary-actions .secondary-home-action{background:transparent!important;border:1px solid var(--ga-border)!important}
+.home-resume-card{display:none!important}
+.home-status-row{max-width:920px!important;margin:14px auto 0!important}
+.home-status-row button,.home-mini-grid button,.model-card,.model-freedom-panel,.advanced-model-panel,.status-panel,.control-deck,.feature-section{box-shadow:none!important;border-color:var(--ga-border)!important;background:var(--ga-surface)!important;border-radius:20px!important}
+.home-status-row strong{font-weight:500!important}
+.models-section{max-width:920px!important;margin:0 auto!important}
+.section-head h3{font-size:26px!important;font-weight:500!important}
+.model-switcher{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.model-card{min-height:180px!important}
+.model-card::before{display:none!important}
+.model-card.active{box-shadow:0 0 0 2px var(--ga-blue)!important;border-color:var(--ga-blue)!important}
+.model-name{font-size:25px!important;font-weight:500!important}
+.model-choice{color:var(--ga-blue)!important}
+#chat{max-width:920px!important;margin-left:auto!important;margin-right:auto!important}
+.hero{border:0!important;box-shadow:none!important;background:transparent!important;padding:44px 8px!important}
+.hero-symbol{background:linear-gradient(135deg,#4285f4,#a142f4)!important;border-radius:50%!important}
+.hero h2{font-weight:500!important;font-size:clamp(36px,6vw,64px)!important}
+.message,.message-bubble{border:0!important;box-shadow:none!important;border-radius:22px!important;background:var(--ga-surface)!important}
+.composer-wrap{max-width:920px!important;margin:auto!important}
+.composer{border:1px solid var(--ga-border)!important;border-radius:28px!important;background:var(--ga-surface)!important;box-shadow:var(--ga-shadow)!important}
+.composer textarea{background:transparent!important}
+.send-btn{border-radius:50%!important;background:var(--ga-text)!important;color:var(--ga-bg)!important}
+.feature-dialog,.workspace-dialog,.stats-dialog,.feature-dialog-wide{border:1px solid var(--ga-border)!important;border-radius:28px!important;box-shadow:0 18px 60px rgba(0,0,0,.22)!important}
+@media(max-width:839px){.topbar{height:64px!important}.home-primary-card{padding:26px!important;min-height:250px!important}.home-status-row{grid-template-columns:1fr!important}.model-switcher{grid-template-columns:1fr!important}.models-section{padding:16px!important}.hero{padding:28px 8px!important}}
+@media(min-width:840px) and (orientation:landscape){.home-welcome-grid{grid-template-columns:1fr!important}.models-section{max-width:none!important}}
+
+
+/* 6.1 — route isolation + Gemini-style workspace pages. */
+#mobileHomeDashboard,#chatsPage,#mobileLibraryPage,#mobileToolsPage,#mobileSettingsPage,.models-section,#statusPanel,.control-deck,#chat,#chatActions,.composer-wrap{display:none}
+body[data-page="home"] #mobileHomeDashboard{display:block!important}
+body[data-page="chats"] #chatsPage{display:block!important}
+body[data-page="data"] #mobileLibraryPage{display:block!important}
+body[data-page="tools"] #mobileToolsPage{display:block!important}
+body[data-page="settings"] #mobileSettingsPage{display:block!important}
+body[data-page="chat"] #chat,body[data-page="chat"] #chatActions,body[data-page="chat"] .composer-wrap,body[data-page="chat"] #statusPanel,body[data-page="chat"] .control-deck{display:block!important}
+body[data-page="models"] .models-section,body[data-page="models"] #statusPanel,body[data-page="models"] .control-deck{display:block!important}
+
+.mobile-page-head{max-width:920px!important;margin:0 auto 24px!important;padding:0 4px!important}
+.mobile-page-head>span{display:inline-flex!important;color:var(--ga-blue)!important;font-size:10px!important;font-weight:700!important;letter-spacing:.12em!important}
+.mobile-page-head h2{margin:8px 0 10px!important;font-size:clamp(36px,5vw,58px)!important;line-height:.98!important;letter-spacing:-.055em!important;font-weight:500!important}
+.mobile-page-head p{margin:0!important;max-width:720px!important;color:var(--ga-muted)!important;font-size:15px!important;line-height:1.55!important}
+
+#chatsPage,#mobileLibraryPage,#mobileToolsPage,#mobileSettingsPage,.models-section,#statusPanel,.control-deck,#chat{min-height:calc(100dvh - 88px)!important;padding-top:24px!important}
+.chats-page{max-width:920px!important;margin:0 auto!important}
+.chat-manager-toolbar{display:flex!important;gap:10px!important;align-items:center!important;margin-bottom:12px!important}
+.chat-manager-search{flex:1!important;min-width:0!important;height:50px!important;display:flex!important;align-items:center!important;gap:9px!important;padding:0 15px!important;border:1px solid var(--ga-border)!important;border-radius:16px!important;background:var(--ga-surface)!important;box-shadow:var(--ga-shadow)!important}
+.chat-manager-search>span{color:var(--ga-muted)!important;font-size:18px!important}
+.chat-manager-search input{width:100%!important;height:100%!important;border:0!important;outline:0!important;background:transparent!important;color:var(--ga-text)!important;font-size:14px!important}
+.primary-page-btn{height:50px!important;padding:0 18px!important;border:0!important;border-radius:16px!important;background:var(--ga-text)!important;color:var(--ga-bg)!important;font-weight:600!important;white-space:nowrap!important}
+.chat-manager-filters{display:flex!important;gap:7px!important;flex-wrap:wrap!important;margin:0 0 15px!important}
+.chat-manager-filters button{height:36px!important;padding:0 14px!important;border:1px solid var(--ga-border)!important;border-radius:999px!important;background:transparent!important;color:var(--ga-muted)!important;font-size:12px!important}
+.chat-manager-filters button.active{background:var(--ga-hover)!important;color:var(--ga-text)!important;border-color:transparent!important}
+.chat-manager-summary{display:flex!important;gap:16px!important;color:var(--ga-muted)!important;font-size:12px!important;margin:0 2px 10px!important}
+.page-chat-list{display:grid!important;gap:9px!important}
+.page-chat-card{display:flex!important;align-items:stretch!important;min-height:105px!important;border:1px solid var(--ga-border)!important;border-radius:18px!important;background:var(--ga-surface)!important;box-shadow:0 1px 2px rgba(60,64,67,.05)!important;overflow:hidden!important}
+.page-chat-card.current{border-color:color-mix(in srgb,var(--ga-blue) 45%,var(--ga-border))!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--ga-blue) 10%,transparent)!important}
+.page-chat-open{flex:1!important;min-width:0!important;border:0!important;background:transparent!important;color:var(--ga-text)!important;text-align:left!important;padding:17px 18px!important}
+.page-chat-card-top{display:flex!important;align-items:center!important;gap:12px!important}
+.page-chat-card-top strong{font-size:15px!important;font-weight:600!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.page-chat-card-top small{margin-left:auto!important;color:var(--ga-muted)!important;font-size:11px!important;white-space:nowrap!important}
+.page-chat-open p{margin:8px 0 0!important;color:var(--ga-muted)!important;font-size:13px!important;line-height:1.4!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.page-chat-actions{display:flex!important;align-items:center!important;gap:2px!important;padding:0 9px!important;border-left:1px solid var(--ga-border)!important}
+.page-chat-actions button{width:34px!important;height:34px!important;border:0!important;border-radius:10px!important;background:transparent!important;color:var(--ga-muted)!important}
+.page-chat-actions button:hover{background:var(--ga-hover)!important;color:var(--ga-text)!important}
+.chat-show-more,.empty-state.large-empty{min-height:72px!important;display:grid!important;place-items:center!important;border:1px dashed var(--ga-border)!important;border-radius:18px!important;background:transparent!important;color:var(--ga-muted)!important}
+
+.mobile-action-grid,.mobile-action-list,.tool-directory-grid,.settings-device-summary,.data-page-summary{max-width:920px!important;margin-left:auto!important;margin-right:auto!important}
+.mobile-action-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+.mobile-action-grid button{min-height:125px!important;padding:18px!important;text-align:left!important;border:1px solid var(--ga-border)!important;border-radius:20px!important;background:var(--ga-surface)!important;color:var(--ga-text)!important;box-shadow:var(--ga-shadow)!important}
+.mobile-action-grid button b{display:grid!important;place-items:center!important;width:38px!important;height:38px!important;border-radius:12px!important;background:var(--ga-hover)!important;margin-bottom:18px!important}
+.mobile-action-grid button strong{display:block!important;font-size:16px!important}
+.mobile-action-grid button span{display:block!important;margin-top:5px!important;color:var(--ga-muted)!important;font-size:12px!important}
+.data-page-summary,.settings-device-summary{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:9px!important;margin-bottom:12px!important}
+.data-page-summary>div,.settings-device-summary>div{border:1px solid var(--ga-border)!important;border-radius:18px!important;padding:18px!important;background:var(--ga-surface)!important}
+.data-page-summary small,.settings-device-summary small{display:block!important;color:var(--ga-muted)!important;font-size:10px!important}
+.data-page-summary strong,.settings-device-summary strong{display:block!important;margin-top:7px!important;font-size:25px!important;font-weight:500!important}
+.tool-search{display:flex!important;max-width:920px!important;height:50px!important;margin:0 auto 12px!important;padding:0 15px!important;align-items:center!important;border:1px solid var(--ga-border)!important;border-radius:16px!important;background:var(--ga-surface)!important}
+.tool-search input{flex:1!important;border:0!important;outline:0!important;background:transparent!important;color:var(--ga-text)!important}
+.tool-category-chips{max-width:920px!important;margin:0 auto 18px!important;display:flex!important;gap:7px!important;flex-wrap:wrap!important}
+.tool-category-chips button{height:34px!important;padding:0 13px!important;border:1px solid var(--ga-border)!important;border-radius:999px!important;background:transparent!important;color:var(--ga-muted)!important}
+.tool-category-chips button.active{background:var(--ga-hover)!important;color:var(--ga-text)!important;border-color:transparent!important}
+.tool-directory-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}
+.tool-directory-card{position:relative!important;min-height:135px!important}
+.tool-directory-open{width:100%!important;height:100%!important;padding:18px!important;border:0!important;background:transparent!important;color:var(--ga-text)!important;text-align:left!important}
+.tool-directory-icon{display:grid!important;place-items:center!important;width:36px!important;height:36px!important;border-radius:11px!important;background:var(--ga-hover)!important;color:var(--ga-blue)!important}
+.tool-directory-open strong{display:block!important;margin-top:14px!important;font-size:15px!important}
+.tool-directory-open small{display:block!important;margin-top:5px!important;color:var(--ga-muted)!important;line-height:1.4!important}
+.tool-star{position:absolute!important;right:9px!important;top:9px!important;z-index:2!important;border:0!important;background:transparent!important;color:var(--ga-muted)!important}
+.safe-mode-card{max-width:920px!important;margin:0 auto 12px!important;padding:18px!important;border:1px solid var(--ga-border)!important;border-radius:20px!important;background:linear-gradient(135deg,#eef3ff,#f8f1ff)!important}
+.safe-mode-card strong{display:block!important;margin-top:6px!important;font-size:17px!important}
+.safe-mode-card button{margin-top:14px!important;min-height:40px!important;padding:0 14px!important;border:0!important;border-radius:12px!important;background:var(--ga-text)!important;color:var(--ga-bg)!important}
+.mobile-action-list{display:grid!important;gap:7px!important}
+.mobile-action-list button{width:100%!important;min-height:58px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 17px!important;border:1px solid var(--ga-border)!important;border-radius:15px!important;background:var(--ga-surface)!important;color:var(--ga-text)!important;text-align:left!important}
+
+@media (max-width:839px){
+ #chatsPage,#mobileLibraryPage,#mobileToolsPage,#mobileSettingsPage,.models-section,#statusPanel,.control-deck,#chat{padding:18px 14px 100px!important}
+ .chat-manager-toolbar{align-items:stretch!important;flex-direction:column!important}
+ .primary-page-btn{width:100%!important}
+ .page-chat-card{min-height:0!important}
+ .page-chat-card-top{align-items:flex-start!important;flex-direction:column!important;gap:4px!important}
+ .page-chat-card-top small{margin-left:0!important}
+ .page-chat-actions{border-left:0!important;border-top:1px solid var(--ga-border)!important;padding:6px 10px!important}
+ .mobile-action-grid,.data-page-summary,.settings-device-summary,.tool-directory-grid{grid-template-columns:1fr!important}
+}
+@media (min-width:840px) and (orientation:landscape){
+ #chatsPage,#mobileLibraryPage,#mobileToolsPage,#mobileSettingsPage,.models-section,#statusPanel,.control-deck,#chat{margin-left:calc(var(--na-panel) + 30px)!important;margin-right:calc(var(--na-tools) + 30px)!important}
+ #chatsPage,.models-section,#statusPanel,.control-deck,#chat{max-width:none!important}
+ .chats-page,.mobile-page-head,.mobile-action-grid,.mobile-action-list,.tool-search,.tool-category-chips,.tool-directory-grid,.settings-device-summary,.data-page-summary{max-width:1100px!important}
+}

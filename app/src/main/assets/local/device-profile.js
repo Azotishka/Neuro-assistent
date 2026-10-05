@@ -5,39 +5,28 @@ export function detectDeviceProfile() {
   const isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const isIPhone = /iPhone/i.test(ua);
   const isAndroid = /Android/i.test(ua);
-  const explicitProfile = (() => {
-    try { return window.__QWEN_DEVICE_PROFILE_OVERRIDE__ || new URLSearchParams(location.search).get("profile") || ""; } catch { return ""; }
-  })();
+  const explicitProfile = (() => { try { return window.__QWEN_DEVICE_PROFILE_OVERRIDE__ || new URLSearchParams(location.search).get("profile") || ""; } catch { return ""; } })();
   const isPocoX6Pro = isAndroid && (explicitProfile === "poco-x6-pro" || isPocoX6ProUserAgent(ua));
   const isNativeAndroid = isAndroid && window.__QWEN_NATIVE_ANDROID__ === true;
   const isTablet = isAndroid && Math.min(screen.width || innerWidth, screen.height || innerHeight) >= 600 && (navigator.maxTouchPoints || 0) >= 2;
   const isXiaomiPad7Pro = isTablet && /Xiaomi Pad 7 Pro|2307FRA8EU|24018RPACG/i.test(ua);
-  const deviceMemoryGB = Number(navigator.deviceMemory || 0);
-  const androidConstrained = isAndroid && deviceMemoryGB > 0 && deviceMemoryGB <= 4;
+  const deviceMemoryGB = Number(navigator.deviceMemory || window.__QWEN_DEVICE_MEMORY_GB__ || 0);
+  const effectiveMemoryGB = deviceMemoryGB || (isXiaomiPad7Pro ? 8 : 0);
+  const memoryClass = effectiveMemoryGB >= 8 ? "high" : effectiveMemoryGB >= 6 ? "standard" : effectiveMemoryGB > 0 ? "constrained" : "unknown";
+  const androidConstrained = isAndroid && memoryClass === "constrained";
   const dpr = Number(window.devicePixelRatio || 1);
   const shortSide = Math.min(screen.width || innerWidth, screen.height || innerHeight);
   const longSide = Math.max(screen.width || innerWidth, screen.height || innerHeight);
-  // Safari intentionally does not expose the exact iPhone model. 393×852 @3x matches the
-  // normal display-mode viewport family used by iPhone 14 Pro, so this is a tuning profile,
-  // not a hardware identity claim.
   const matches14ProViewport = isIPhone && Math.abs(shortSide - 393) <= 4 && Math.abs(longSide - 852) <= 8 && dpr >= 2.8;
   const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const compact = isIOS && Math.min(innerWidth, innerHeight) <= 430;
+  const contextBudget = isTablet ? (memoryClass === "high" ? 3072 : memoryClass === "standard" || memoryClass === "unknown" ? 2560 : 1792) : 2048;
+  const maxOutputTokens = isTablet ? (memoryClass === "high" ? 768 : memoryClass === "standard" || memoryClass === "unknown" ? 640 : 480) : 560;
+  const capabilities = { tablet: isTablet, wideLayout: isTablet, toolRail: isTablet, localAi: memoryClass !== "constrained", persistentMemory: true, webMcp: true, contextBudget, maxOutputTokens, memoryClass, performanceMode: isTablet ? (memoryClass === "high" ? "tablet-balanced" : "tablet-conservative") : "mobile-balanced" };
   return {
-    isIOS,
-    isIPhone,
-    isAndroid,
-    isPocoX6Pro,
-    isNativeAndroid,
-    isTablet,
-    isXiaomiPad7Pro,
-    deviceMemoryGB,
-    androidConstrained,
-    standalone,
-    reducedMotion,
-    compact,
-    matches14ProViewport,
+    isIOS, isIPhone, isAndroid, isPocoX6Pro, isNativeAndroid, isTablet, isXiaomiPad7Pro,
+    deviceMemoryGB: effectiveMemoryGB, memoryClass, capabilities, androidConstrained, standalone, reducedMotion, compact, matches14ProViewport,
     id: matches14ProViewport ? "iphone14pro" : isIPhone ? "iphone" : isIOS ? "ios" : isXiaomiPad7Pro ? "xiaomi-pad-7-pro" : isTablet ? "android-tablet" : isPocoX6Pro ? "poco-x6-pro" : isNativeAndroid ? "android-native" : isAndroid ? "android" : "default",
     label: matches14ProViewport ? "iPhone 14 Pro · оптимизировано" : isIPhone ? "iPhone · мобильный профиль" : isIOS ? "iOS · мобильный профиль" : isXiaomiPad7Pro ? "Xiaomi Pad 7 Pro · 8 ГБ · планшет" : isTablet ? "Android · планшет" : isPocoX6Pro ? "POCO X6 Pro · WebGPU" : isNativeAndroid ? `Android app${deviceMemoryGB ? ` · ~${deviceMemoryGB} ГБ RAM` : ""}` : isAndroid ? "Android · мобильный профиль" : "Стандартный профиль",
     autoContext: {
@@ -48,9 +37,9 @@ export function detectDeviceProfile() {
       max: isXiaomiPad7Pro ? 1536 : isPocoX6Pro ? 1280 : 1024,
     },
     domMessageLimit: isXiaomiPad7Pro ? 90 : isPocoX6Pro ? 40 : isIOS ? 48 : isAndroid ? 64 : 90,
-    typewriterFrameMs: isXiaomiPad7Pro ? 20 : isPocoX6Pro ? 40 : isIOS ? 34 : isAndroid ? 24 : 17,
+    typewriterFrameMs: isXiaomiPad7Pro ? 24 : isPocoX6Pro ? 40 : isIOS ? 34 : isAndroid ? 24 : 17,
     perfRefreshMs: isXiaomiPad7Pro ? 250 : isPocoX6Pro ? 650 : isIOS ? 360 : isAndroid ? 300 : 220,
-    scrollThrottleMs: isXiaomiPad7Pro ? 90 : isPocoX6Pro ? 160 : isIOS ? 130 : isAndroid ? 100 : 70,
+    scrollThrottleMs: isXiaomiPad7Pro ? 80 : isPocoX6Pro ? 160 : isIOS ? 130 : isAndroid ? 100 : 70,
     promptCharsPerToken: isXiaomiPad7Pro ? 2.5 : isPocoX6Pro ? 2.35 : isIOS ? 2.35 : 2.7,
   };
 }
@@ -63,15 +52,7 @@ export function effectiveMaxTokens(profile, key, requested, thinking = false) {
   }
   if (profile?.isPocoX6Pro) return pocoMaxTokens(key, thinking, requested);
   if (!profile?.isIOS) return requested;
-  const cap = key === "mini"
-    ? (thinking ? 180 : 240)
-    : key === "lite"
-      ? (thinking ? 220 : 300)
-    : key === "stable"
-      ? (thinking ? 240 : 320)
-    : key === "max"
-      ? (thinking ? 260 : 340)
-      : (thinking ? 320 : 420);
+  const cap = key === "mini" ? (thinking ? 180 : 240) : key === "lite" ? (thinking ? 220 : 300) : key === "stable" ? (thinking ? 240 : 320) : key === "max" ? (thinking ? 260 : 340) : (thinking ? 320 : 420);
   return Math.max(128, Math.min(Number(requested) || cap, cap));
 }
 
