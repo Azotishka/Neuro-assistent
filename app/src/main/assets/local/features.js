@@ -177,9 +177,9 @@ export async function initAdvancedFeatures(core) {
       if (device?.isIOS && key === "fast" && core.getContextSetting() === "2048" && perf.tokensPerSecond < 3.2) {
         await core.setContext("1536");
         core.showToast("Адаптивный режим iPhone: контекст снижен до 1.5K для стабильности", 2800);
-      } else if (key === "fast" && core.getContextSetting() === "4096" && perf.tokensPerSecond < 3) {
-        await core.setContext("2048");
-        core.showToast("Адаптивный режим: контекст снижен до 2K для стабильности", 2800);
+      } else if (device?.isTablet && core.getContextSetting() === "4096" && perf.tokensPerSecond < 3.5) {
+        await core.setContext("3072");
+        core.showToast("Адаптивный режим планшета: контекст снижен до 3K для стабильности", 2800);
       }
     },
   };
