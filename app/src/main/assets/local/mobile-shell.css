@@ -529,3 +529,52 @@ textarea:focus, input:focus, select:focus {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior:auto !important; animation:none !important; transition:none !important; }
 }
+
+
+/* TABLET OPTIMIZATION 4.0 — Xiaomi Pad 7 Pro / large Android tablets */
+@media (min-width:600px) and (orientation:portrait) {
+  :root { --na-panel:224px; --na-tools:0px; }
+  .topbar { position:sticky !important; top:0 !important; z-index:100 !important; }
+  .desktop-chat-rail {
+    display:flex !important; position:fixed !important; left:10px !important; top:74px !important; bottom:10px !important;
+    width:var(--na-panel) !important; z-index:60 !important; flex-direction:column !important; padding:10px !important;
+  }
+  .chat-rail-list { flex:1 !important; min-height:0 !important; overflow:auto !important; }
+  .tablet-tool-rail { display:none !important; }
+  .app-shell > .mobile-home-dashboard, .app-shell > .models-section, .app-shell > #statusPanel,
+  .app-shell > .control-deck, .app-shell > #chat, .app-shell > #chatActions,
+  .app-shell > .mobile-page-section, .app-shell > .route-page {
+    margin-left:calc(var(--na-panel) + 22px) !important; margin-right:12px !important;
+    width:auto !important; max-width:none !important;
+  }
+  .mobile-home-dashboard, .models-section, .control-deck, #chat, #statusPanel { margin-top:10px !important; }
+  .model-switcher { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  .home-welcome-grid { grid-template-columns:1fr !important; }
+  .home-mini-grid { grid-template-columns:repeat(4,1fr) !important; }
+  .mobile-nav { display:none !important; }
+  .composer-wrap { left:calc(var(--na-panel) + 22px) !important; right:12px !important; width:auto !important; transform:none !important; }
+}
+@media (min-width:840px) {
+  /* Reduce WebView paint/compositing cost on tablet without changing interaction. */
+  .desktop-chat-rail, .tablet-tool-rail, .composer, .feature-dialog, .workspace-dialog, .stats-dialog {
+    contain: layout paint style !important;
+  }
+  .chat-rail-list, .tablet-tool-rail, .feature-dialog, .workspace-dialog, .stats-dialog {
+    overscroll-behavior: contain !important; scrollbar-gutter: stable !important;
+  }
+  .mobile-page-section, .route-page, .feature-section, .setting-card, .model-manage-card, .leader-row {
+    content-visibility:auto !important; contain-intrinsic-size:1px 180px !important;
+  }
+  .topbar { -webkit-backdrop-filter:none !important; backdrop-filter:none !important; }
+  .composer { box-shadow:0 5px 20px rgba(15,23,42,.07) !important; }
+  button, input, textarea, select { touch-action:manipulation; }
+}
+@media (min-width:840px) and (max-width:1199px) {
+  :root { --na-panel:224px; --na-tools:190px; }
+  .tablet-tool-rail { font-size:11px !important; }
+  .tablet-tool-rail button { min-height:42px !important; }
+}
+@media (min-width:1200px) {
+  .desktop-chat-rail, .tablet-tool-rail { contain:strict !important; }
+  .model-card { min-height:150px !important; }
+}
