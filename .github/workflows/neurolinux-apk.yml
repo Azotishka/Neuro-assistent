@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'neurolinux-source.zip.b64'
+      - 'neurolinux/**'
       - '.github/workflows/neurolinux-apk.yml'
   workflow_dispatch:
 
@@ -18,13 +18,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Decode and unpack source bundle
-        run: |
-          base64 --decode neurolinux-source.zip.b64 > /tmp/neurolinux-source.zip
-          unzip -t /tmp/neurolinux-source.zip
-          mkdir -p neurolinux-src
-          unzip -q /tmp/neurolinux-source.zip -d neurolinux-src
-          test -f neurolinux-src/NeuroLinuxOS/app/src/main/java/org/neurolinux/desktop/MainActivity.java
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -39,12 +32,12 @@ jobs:
         with:
           gradle-version: '8.9'
       - name: Build APK
-        working-directory: neurolinux-src/NeuroLinuxOS
+        working-directory: neurolinux
         run: gradle --no-daemon assembleDebug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: NeuroLinuxOS-debug-apk
-          path: neurolinux-src/NeuroLinuxOS/app/build/outputs/apk/debug/app-debug.apk
+          path: neurolinux/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 30
