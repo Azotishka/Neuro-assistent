@@ -27,7 +27,7 @@ The script `enable-local-ai.sh` installs [llama.cpp](https://github.com/ggml-org
    ~/.local/bin/neuro-ai
    ```
 
-5. In Firefox inside the same Linux desktop, open `http://127.0.0.1:8080`. The OpenAI-compatible endpoint is `http://127.0.0.1:8080/v1`.
+5. Open the chat interface file [`ai-chat.html`](https://github.com/Azotishka/Neuro-assistent/blob/main/neurolinux/ai-chat.html) in Firefox inside the Linux desktop. The OpenAI-compatible endpoint is `http://127.0.0.1:8080/v1`. If the file is opened directly from GitHub's HTML preview, download the raw file first. The chat UI has browser-local memory, paste-in document notes, chat export and new-chat controls; it does not train model weights.
 
 The setup downloads roughly 1 GB of model weights, plus source/build files; allow several GB of free space and time for compilation. CPU inference may be slow on a tablet. The script limits context to 2048 tokens and uses two CPU threads to reduce memory/heat pressure. Stop the server with Ctrl+C.
 
