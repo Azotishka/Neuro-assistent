@@ -32,6 +32,8 @@ public class MainActivity extends Activity {
         "pkg update -y && pkg upgrade -y && pkg install -y proot-distro x11-repo && pkg update -y && pkg install -y termux-x11-nightly && proot-distro install debian";
     private static final String DESKTOP_COMMAND =
         "proot-distro login debian -- bash -lc 'apt update && DEBIAN_FRONTEND=noninteractive apt install -y xfce4 xfce4-terminal thunar mousepad dbus-x11 git python3 python3-pip nodejs npm build-essential curl wget nano'";
+    private static final String CODE_SERVER_COMMAND =
+        "proot-distro login debian -- bash -lc 'apt update && apt install -y curl ca-certificates && curl -fsSL https://code-server.dev/install.sh | sh && mkdir -p ~/.config/code-server && printf \\\"bind-addr: 127.0.0.1:8080\\\\nauth: none\\\\ncert: false\\\\n\\\" > ~/.config/code-server/config.yaml'";
     private static final String LAUNCHER_COMMAND =
         "mkdir -p ~/bin\n" +
         "cat > ~/bin/neuro-linux-start <<'NEURO_EOF'\n" +
@@ -119,7 +121,10 @@ public class MainActivity extends Activity {
         commandCard(page, "01", "Развернуть Debian ARM64", "Обновляет пакеты, устанавливает PRoot и компоненты X11, затем загружает Debian. Первый шаг требует интернета.", BASE_COMMAND);
         commandCard(page, "02", "Установить рабочий стол и инструменты", "Устанавливает XFCE, файловый менеджер, редактор, Python, Node.js, Git и компилятор. Загрузка займёт время.", DESKTOP_COMMAND);
         commandCard(page, "03", "Создать команду запуска", "Создаёт скрипт для запуска X11 и рабочего стола XFCE.", LAUNCHER_COMMAND);
-        commandCard(page, "04", "Запустить NeuroLinux Desktop", "Когда три шага выше выполнены, выполни эту команду в Termux.", "~/bin/neuro-linux-start");
+        commandCard(page, "04", "Установить веб-редактор кода", "Дополнительно: устанавливает code-server в Debian. После установки запускай его отдельной командой и открывай редактор в браузере по адресу localhost:8080.", CODE_SERVER_COMMAND);
+        commandCard(page, "05", "Запустить NeuroLinux Desktop", "Когда три шага выше выполнены, выполни эту команду в Termux. Для XFCE нужен установленный Termux:X11.", "~/bin/neuro-linux-start");
+        commandCard(page, "06", "Запустить редактор кода", "В Debian выполни команду и открой localhost:8080 в браузере Android.", "proot-distro login debian -- bash -lc 'code-server --bind-addr 127.0.0.1:8080'");
+
 
         LinearLayout limits = card(CARD);
         limits.setPadding(dp(16), dp(16), dp(16), dp(16));
@@ -134,7 +139,7 @@ public class MainActivity extends Activity {
         Button open = button("Открыть Termux", ACCENT, BG);
         open.setOnClickListener(v -> launchTermux());
         page.addView(open, fullWidth());
-        TextView footer = text("NeuroLinux OS 0.1  ·  Debian ARM64 + PRoot + XFCE", 12, MUTED, false);
+        TextView footer = text("NeuroLinux OS 0.2  ·  Debian ARM64 + PRoot + XFCE + code-server", 12, MUTED, false);
         footer.setGravity(Gravity.CENTER);
         LinearLayout.LayoutParams flp = new LinearLayout.LayoutParams(-1, -2);
         flp.topMargin = dp(20);
