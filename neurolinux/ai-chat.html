@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>NeuroAI — локальный помощник</title>
+<style>
+:root{color-scheme:dark;--bg:#0a1018;--panel:#121d29;--line:#26384a;--text:#f2f6fb;--muted:#9cafc1;--accent:#66e3ce}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,-apple-system,sans-serif;height:100dvh;display:flex;flex-direction:column}
+header{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px} .logo{background:var(--accent);color:#071014;border-radius:12px;padding:10px;font-weight:900}
+h1{font-size:17px;margin:0}small,.muted{color:var(--muted)}header small{font-size:12px}
+main{width:100%;max-width:850px;margin:0 auto;flex:1;min-height:0;display:flex;flex-direction:column;padding:12px;gap:10px}
+#status{font-size:12px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;color:var(--muted)}
+#chat{flex:1;min-height:120px;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:3px}
+.msg{max-width:92%;padding:12px 14px;border-radius:15px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.45}.user{align-self:flex-end;background:#173b3b}.assistant{align-self:flex-start;background:var(--panel);border:1px solid var(--line)}.msg p{margin:0}
+.controls{display:grid;grid-template-columns:1fr auto;gap:8px}textarea,input,button{font:inherit;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:12px}textarea{resize:vertical;min-height:54px;max-height:160px;width:100%}button{cursor:pointer}button.primary{background:var(--accent);color:#071014;border-color:transparent;font-weight:800}.toolbar{display:flex;flex-wrap:wrap;gap:7px}.toolbar button{font-size:13px;padding:8px 10px}.drawer{border:1px solid var(--line);border-radius:12px;padding:10px;background:#0e1722}.drawer[hidden]{display:none}.drawer textarea{margin:6px 0;min-height:100px}.foot{font-size:11px;color:var(--muted);text-align:center;padding-bottom:env(safe-area-inset-bottom)}
+@media(min-width:700px){main{padding:18px}.msg{max-width:80%}}
+</style></head>
+<body>
+<header><div class="logo">N</div><div><h1>NeuroAI</h1><small>Локальная модель · без отправки чатов в облако</small></div></header>
+<main>
+<div id="status">Проверка локальной модели…</div>
+<div class="toolbar"><button id="memoryBtn">Память: включена</button><button id="docsBtn">Заметки и документы</button><button id="exportBtn">Экспорт чата</button><button id="clearBtn">Новый чат</button></div>
+<section class="drawer" id="memoryDrawer" hidden><b>Память помощника</b><p class="muted">Короткие факты, которые добавишь сюда, будут подмешиваться в будущие запросы на этом устройстве.</p><textarea id="memory" placeholder="Например: отвечай по-русски, проект называется…"></textarea><button id="saveMemory">Сохранить память</button></section>
+<section class="drawer" id="docsDrawer" hidden><b>Локальные заметки / текст документов</b><p class="muted">Вставь текст. Для каждого вопроса в запрос попадёт небольшой фрагмент заметок. Ничего не загружается на сервер.</p><textarea id="docs" placeholder="Вставь текст конспекта, инструкции или документа…"></textarea><button id="saveDocs">Сохранить заметки</button></section>
+<div id="chat" aria-live="polite"></div>
+<form id="form"><div class="controls"><textarea id="prompt" placeholder="Напиши сообщение…" required></textarea><button class="primary" id="send" type="submit">Отправить</button></div></form>
+<div class="foot">Память и заметки хранятся в браузере. Ответы генерируются локальной моделью.</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const API='http://127.0.0.1:8080/v1/chat/completions';
+let history=[];let memoryEnabled=true;
+$('memory').value=localStorage.getItem('neuroai-memory')||'';
+$('docs').value=localStorage.getItem('neuroai-docs')||'';
+function bubble(role,text){const el=document.createElement('div');el.className='msg '+(role==='user'?'user':'assistant');el.textContent=text;$('chat').append(el);$('chat').scrollTop=$('chat').scrollHeight;return el}
+async function check(){try{const r=await fetch('http://127.0.0.1:8080/v1/models');if(!r.ok)throw Error('HTTP '+r.status);const j=await r.json();$('status').textContent='Модель подключена · '+(j.data?.[0]?.id||'llama.cpp');}catch(e){$('status').textContent='Модель не отвечает. Сначала запусти в Linux-терминале: ~/.local/bin/neuro-ai';}}
+$('form').addEventListener('submit',async e=>{e.preventDefault();const text=$('prompt').value.trim();if(!text)return;$('prompt').value='';bubble('user',text);$('send').disabled=true;$('status').textContent='Модель думает…';
+let system='Ты NeuroAI — полезный помощник. Отвечай на русском, честно обозначай неопределённость. Не утверждай, что обучаешь свои веса.';
+if(memoryEnabled&&$('memory').value.trim())system+='\n\nПАМЯТЬ ПОЛЬЗОВАТЕЛЯ (локальная):\n'+$('memory').value.trim().slice(0,5000);
+if($('docs').value.trim()){const d=$('docs').value.trim();const q=text.toLowerCase().split(/\W+/).filter(x=>x.length>3);const paras=d.split(/\n\s*\n/);const ranked=paras.map((p,i)=>({p,i,n:q.reduce((n,w)=>n+(p.toLowerCase().includes(w)?1:0),0)})).sort((a,b)=>b.n-a.n).slice(0,4).filter(x=>x.n>0);const context=(ranked.length?ranked.map(x=>x.p):[d.slice(0,3500)]).join('\n\n').slice(0,5000);system+='\n\nКОНТЕКСТ ИЗ ЛОКАЛЬНЫХ ЗАМЕТОК (используй только если релевантно):\n'+context;}
+history.push({role:'user',content:text});const out=bubble('assistant','…');
+try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'local-model',messages:[{role:'system',content:system},...history.slice(-12)],temperature:0.7,max_tokens:700,stream:false})});if(!r.ok)throw Error('API вернул HTTP '+r.status);const j=await r.json();const answer=j.choices?.[0]?.message?.content||'Модель вернула пустой ответ.';out.textContent=answer;history.push({role:'assistant',content:answer});$('status').textContent='Готово · локальная генерация';}catch(err){out.textContent='Не удалось получить ответ: '+err.message+'\nПроверь, что сервер запущен и браузер разрешает доступ к localhost.';history.pop();$('status').textContent='Ошибка соединения';}finally{$('send').disabled=false;$('prompt').focus();}});
+$('memoryBtn').onclick=()=>{$('memoryDrawer').hidden=!$('memoryDrawer').hidden};
+$('docsBtn').onclick=()=>{$('docsDrawer').hidden=!$('docsDrawer').hidden};
+$('saveMemory').onclick=()=>{localStorage.setItem('neuroai-memory',$('memory').value);bubble('assistant','Память сохранена в локальном хранилище браузера.');};
+$('saveDocs').onclick=()=>{localStorage.setItem('neuroai-docs',$('docs').value);bubble('assistant','Заметки сохранены локально. Для приватности не вставляй пароли или секретные ключи.');};
+$('clearBtn').onclick=()=>{history=[];$('chat').replaceChildren();bubble('assistant','Новый чат начат. Сохранённая память и заметки доступны, если включить их.');};
+$('exportBtn').onclick=()=>{const text=history.map(x=>(x.role==='user'?'Ты':'NeuroAI')+':\n'+x.content).join('\n\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));a.download='neuroai-chat.txt';a.click();URL.revokeObjectURL(a.href)};
+bubble('assistant','Привет! Я NeuroAI. После запуска локальной модели я смогу отвечать без облака. Можно включить локальную память и добавить текст документов.');
+check();
+</script></body></html>
