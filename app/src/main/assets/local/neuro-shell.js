@@ -55,6 +55,7 @@
     async indexText(source,text){ const r=await call('studioIndexText',{source,text}); if(r.error) throw new Error(errorText(r)); return r; },
     async search(query,limit=6){ const r=await call('studioSearch',{query,limit}); if(r.error) throw new Error(errorText(r)); return r.results || []; },
     async fetchUrl(url){ const r=await call('studioFetchUrl',{url}); if(r.error) throw new Error(errorText(r)); return r; },
+    async searchWeb(query,limit=8){ const r=await call('studioSearchWeb',{query,limit}); if(r.error) throw new Error(errorText(r)); return r.results || []; },
     async clear(){ const r=await call('studioClear'); if(r.error) throw new Error(errorText(r)); return r; }
   };
   window.NeuroShell = {
