@@ -83,7 +83,8 @@ class DesktopActivity : ComponentActivity() {
             typeface = android.graphics.Typeface.MONOSPACE
             setTextColor(Color.rgb(226, 232, 240))
             setPadding(dp(12), dp(8), dp(12), dp(16))
-            text = "Первый запуск установит XFCE, VNC и noVNC в выбранный Linux-дистрибутив.\n" +
+            text = "Первый запуск установит XFCE, Firefox ESR, редактор кода, VNC и noVNC.\n" +
+                "Для локального ИИ есть отдельная инструкция в репозитории.\n" +
                 "Нужны интернет и свободное место. Не закрывай экран во время установки.\n\n"
         }
         logScroll = ScrollView(this).apply {
@@ -266,8 +267,8 @@ if ! apt-get update; then
   echo "$FAILED_MARKER"
   exit 0
 fi
-echo "[2/4] Установка XFCE, VNC и noVNC (может занять несколько минут)…"
-if ! apt-get install -y xfce4 xfce4-terminal tigervnc-standalone-server dbus-x11 novnc websockify procps; then
+echo "[2/4] Установка XFCE, Firefox ESR, инструментов разработки и VNC (может занять несколько минут)…"
+if ! apt-get install -y xfce4 xfce4-terminal thunar mousepad firefox-esr git curl wget ca-certificates python3 python3-venv python3-pip build-essential cmake pkg-config libopenblas-dev tigervnc-standalone-server dbus-x11 novnc websockify procps; then
   echo "Не удалось установить графическую среду."
   echo "$FAILED_MARKER"
   exit 0
