@@ -123,14 +123,14 @@ jobs:
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-        ) {
+          ) {
             item {
                 CustomImageInstallCard("""
           replacement = """        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-        ) {
+          ) {
             item {
                 NeuroLinuxHomeCard(
                     installedCount = distros.count { it.isInstalled },
@@ -169,8 +169,8 @@ jobs:
           s = s.replace(anchor, replacement, 1)
 
           marker = """// ---------------------------------------------------------------------------
-// Custom OCI install card
-// ---------------------------------------------------------------------------"""
+          // Custom OCI install card
+          // ---------------------------------------------------------------------------"""
           home = r'''// ---------------------------------------------------------------------------
           // NeuroLinux home / workspace card
           // ---------------------------------------------------------------------------
@@ -274,7 +274,7 @@ jobs:
               }
           }
           
-'''
+          '''
           if marker not in s:
               raise SystemExit("Could not locate custom card marker")
           s = s.replace(marker, home + marker, 1)
