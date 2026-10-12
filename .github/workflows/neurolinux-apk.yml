@@ -64,7 +64,7 @@ jobs:
           gradle = root / "app/build.gradle.kts"
           s = gradle.read_text()
           s = s.replace('applicationId = "id.or.oo.pr"', 'applicationId = "org.neurolinux.desktop"')
-          s = s.replace('versionName = "1.0.0"', 'versionName = "0.4.0"')
+          s = s.replace('versionName = "1.0.0"', 'versionName = "0.5.0"')
           gradle.write_text(s)
 
           strings = root / "app/src/main/res/values/strings.xml"
@@ -117,6 +117,23 @@ jobs:
           }
           for old, new in replacements.items():
               s = s.replace(old, new)
+
+          # Add a desktop launcher beside the normal terminal button.
+          old_call = '                    onLogin = {\n                        if (loadingDistro == null) {\n                            val intent = Intent(context, TerminalActivity::class.java)\n                            intent.putExtra("distro", distro.alias)\n                            context.startActivity(intent)\n                        }\n                    },\n                    onRemove = {'
+          new_call = '                    onLogin = {\n                        if (loadingDistro == null) {\n                            val intent = Intent(context, TerminalActivity::class.java)\n                            intent.putExtra("distro", distro.alias)\n                            context.startActivity(intent)\n                        }\n                    },\n                    onDesktop = {\n                        if (loadingDistro == null) {\n                            val intent = Intent(context, DesktopActivity::class.java)\n                            intent.putExtra("distro", distro.alias)\n                            context.startActivity(intent)\n                        }\n                    },\n                    onRemove = {'
+          if old_call not in s:
+              raise SystemExit("Could not find DistroCard onLogin callback")
+          s = s.replace(old_call, new_call, 1)
+          old_sig = '    onLogin: () -> Unit,\n    onRemove: () -> Unit,'
+          new_sig = '    onLogin: () -> Unit,\n    onDesktop: () -> Unit,\n    onRemove: () -> Unit,'
+          if old_sig not in s:
+              raise SystemExit("Could not find DistroCard callback signature")
+          s = s.replace(old_sig, new_sig, 1)
+          old_actions = '                    // Secondary actions: test + remove in overflow menu\n                    Box {'
+          new_actions = '                    IconButton(onClick = onDesktop) {\n                        Text("🖥", style = MaterialTheme.typography.titleMedium)\n                    }\n                    // Secondary actions: test + remove in overflow menu\n                    Box {'
+          if old_actions not in s:
+              raise SystemExit("Could not find DistroCard action row")
+          s = s.replace(old_actions, new_actions, 1)
 
           # Add a branded launcher/dashboard above the distribution manager.
           anchor = '            item {\n                CustomImageInstallCard('
@@ -175,7 +192,7 @@ jobs:
                           }
                       }
                       Text(
-                          "Выбери дистрибутив ниже, чтобы установить Linux или открыть терминал. Графический рабочий стол XFCE — следующий этап разработки.",
+                          "Для рабочего стола установи Debian или Ubuntu, затем нажми 🖥 у дистрибутива. При первом запуске XFCE загрузит графические пакеты.",
                           style = MaterialTheme.typography.bodySmall,
                           color = Color(0xFFCBD5E1)
                       )
@@ -187,6 +204,27 @@ jobs:
               raise SystemExit("Could not locate custom card marker")
           s = s.replace(marker, home + marker, 1)
           main.write_text(s)
+
+          main.write_text(s)
+
+          # Embed the desktop activity and register it with Android.
+          desktop_source = Path("neurolinux/DesktopActivity.kt")
+          if not desktop_source.is_file():
+              raise SystemExit("Missing neurolinux/DesktopActivity.kt")
+          desktop_target = root / "app/src/main/java/id/or/oo/pr/DesktopActivity.kt"
+          desktop_target.write_text(desktop_source.read_text())
+          manifest = root / "app/src/main/AndroidManifest.xml"
+          m = manifest.read_text()
+          if 'android:usesCleartextTraffic="true"' not in m:
+              app_attr = 'android:extractNativeLibs="true">'
+              app_attr_new = 'android:extractNativeLibs="true"\n        android:usesCleartextTraffic="true">'
+              if app_attr not in m:
+                  raise SystemExit("Could not find Android application manifest attributes")
+              m = m.replace(app_attr, app_attr_new, 1)
+          if 'android:name=".DesktopActivity"' not in m:
+              activity = '        <activity\n            android:name=".DesktopActivity"\n            android:exported="false"\n            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"\n            android:windowSoftInputMode="adjustResize" />\n'
+              m = m.replace('    </application>', activity + '    </application>', 1)
+          manifest.write_text(m)
           PY
 
       - name: Build standalone APK
@@ -207,7 +245,7 @@ jobs:
       - name: Upload NeuroLinux APK
         uses: actions/upload-artifact@v4
         with:
-          name: NeuroLinuxOS-0.4-standalone-arm64
+          name: NeuroLinuxOS-0.5-standalone-arm64
           path: upstream-pr/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 30
@@ -215,12 +253,12 @@ jobs:
       - name: Publish installable APK release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: neurolinux-os-0.4.0-build-${{ github.run_number }}
-          name: NeuroLinux OS 0.4.0 (build ${{ github.run_number }})
+          tag_name: neurolinux-os-0.5.0-build-${{ github.run_number }}
+          name: NeuroLinux OS 0.5.0 (build ${{ github.run_number }})
           body: |
             Standalone ARM64 Android APK with embedded rootless Linux user-space runtime and terminal.
             No Termux or root required. On first launch, download a Linux distribution in the app.
-            This build includes the redesigned Russian home dashboard and standalone Linux terminal. XFCE graphical desktop is not included yet.
+            Includes the redesigned Russian dashboard and an embedded XFCE desktop for Debian/Ubuntu through noVNC. First launch installs GUI packages into the selected Linux rootfs. VNC and WebSocket listeners use localhost only.
             Source engine: https://github.com/oonid/pr
           files: upstream-pr/android/app/build/outputs/apk/debug/app-debug.apk
           fail_on_unmatched_files: true
