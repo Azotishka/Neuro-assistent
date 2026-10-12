@@ -61,6 +61,33 @@ class StudioIntegration(context: Context) {
         } finally { connection.disconnect() }
     }
 
+
+    fun searchWeb(query:String, limit:Int=8):JSONObject {
+        val q=query.trim()
+        require(q.length in 2..240) { "Введи запрос от 2 до 240 символов." }
+        val encoded=java.net.URLEncoder.encode(q,Charsets.UTF_8.name())
+        val url=URL("https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=$encoded&format=json&utf8=1&srlimit=${limit.coerceIn(1,10)}")
+        val connection=(url.openConnection() as HttpURLConnection).apply {
+            connectTimeout=8000; readTimeout=12000; instanceFollowRedirects=false
+            requestMethod="GET"; setRequestProperty("User-Agent","NeuroNovaStudio/0.19 (Android; research assistant)")
+        }
+        return try {
+            val code=connection.responseCode
+            require(code in 200..299) { "Поиск вернул HTTP $code" }
+            val body=connection.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText().take(180_000) }
+            val results=JSONObject(body).optJSONObject("query")?.optJSONArray("search") ?: JSONArray()
+            val out=JSONArray()
+            for(i in 0 until results.length()) {
+                val item=results.optJSONObject(i) ?: continue
+                val title=item.optString("title")
+                val pageUrl="https://en.wikipedia.org/wiki/"+java.net.URLEncoder.encode(title.replace(' ','_'),Charsets.UTF_8.name()).replace("+","%20")
+                val snippet=stripHtml(item.optString("snippet")).take(900)
+                out.put(JSONObject().put("title",title).put("url",pageUrl).put("snippet",snippet))
+            }
+            JSONObject().put("query",q).put("provider","Wikipedia").put("results",out)
+        } finally { connection.disconnect() }
+    }
+
     fun summary():JSONObject=JSONObject().put("chunks",load().size).put("sources",JSONArray(load().map{it.source}.distinct())).put("maxDocuments",maxDocuments)
 
     @Synchronized fun clear(){prefs.edit().remove("chunks").apply()}
