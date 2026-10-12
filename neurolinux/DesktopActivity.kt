@@ -270,8 +270,43 @@ if ! apt-get install -y xfce4 xfce4-terminal tigervnc-standalone-server dbus-x11
   exit 0
 fi
 echo "[3/4] Настройка графического сеанса…"
-mkdir -p "$HOME/.vnc"
+mkdir -p "${'/.vnc"
 cat > "$HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
 #!/bin/sh
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
@@ -294,6 +329,12041 @@ nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/t
 WEB_PID=$!
 sleep 2
 if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc"
+cat > "${'/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "$HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'"
+chmod 700 "$XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+chmod 700 "${'"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "$HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "$WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}WEB_PID" 2>/dev/null; then
   echo "$READY_MARKER"
 else
   cat /tmp/neurolinux-websockify.log
