@@ -119,51 +119,8 @@ jobs:
               s = s.replace(old, new)
 
           # Add a branded launcher/dashboard above the distribution manager.
-          anchor = """        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-          ) {
-            item {
-                CustomImageInstallCard("""
-          replacement = """        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-          ) {
-            item {
-                NeuroLinuxHomeCard(
-                    installedCount = distros.count { it.isInstalled },
-                    onOpenTerminal = {
-                        val installed = distros.firstOrNull { it.isInstalled }
-                        if (installed != null && loadingDistro == null) {
-                            val intent = Intent(context, TerminalActivity::class.java)
-                            intent.putExtra("distro", installed.alias)
-                            context.startActivity(intent)
-                        }
-                    },
-                    onInstallDebian = {
-                        val debian = distros.firstOrNull { it.alias == "debian" }
-                        if (debian != null && !debian.isInstalled && loadingDistro == null) {
-                            loadingDistro = debian.alias
-                            operationLabel = "Установка"
-                            operationDistroName = "Debian Stable"
-                            showOutput = true
-                            outputLines = listOf("Подготовка Debian…")
-                            scope.launch {
-                                runDistroCommand(
-                                    app,
-                                    listOf("install", debian.installSource, "--override-alias", debian.alias)
-                                ) { line -> outputLines = outputLines + line }
-                                loadingDistro = null
-                                refreshDistros()
-                            }
-                        }
-                    }
-                )
-            }
-            item {
-                CustomImageInstallCard("""
+          anchor = '            item {\n                CustomImageInstallCard('
+          replacement = '            item {\n                NeuroLinuxHomeCard(installedCount = distros.count { it.isInstalled })\n            }\n            item {\n                CustomImageInstallCard('
           if anchor not in s:
               raise SystemExit("Could not locate LazyColumn insertion point")
           s = s.replace(anchor, replacement, 1)
