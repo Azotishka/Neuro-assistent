@@ -106,7 +106,7 @@ class StudioIntegration(context: Context) {
     private fun validateUrl(raw:String):URI {
         val uri=URI(raw.trim())
         require(uri.scheme.equals("https",true)){"Разрешён только HTTPS"}
-        require(uri.userInfo==null && uri.query==null && uri.fragment==null){"URL содержит запрещённые компоненты"}
+        require(uri.userInfo==null && uri.fragment==null){"URL содержит запрещённые компоненты"}
         val host=uri.host?.lowercase(Locale.ROOT) ?: error("Некорректный host")
         require(host!="localhost" && host!="127.0.0.1" && !host.startsWith("10.") && !host.startsWith("192.168.") && !host.startsWith("169.254.")){"Локальные адреса запрещены"}
         val addresses=InetAddress.getAllByName(host)
