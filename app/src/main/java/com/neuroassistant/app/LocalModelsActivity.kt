@@ -150,6 +150,7 @@ class LocalModelsActivity : ComponentActivity() {
                                 JSONObject().put("results", JSONArray().apply { results.forEach { put(JSONObject().put("id",it.id).put("source",it.source).put("text",it.text).put("score",it.score)) } })
                             }
                             "studioFetchUrl" -> studio.fetchUrl(data.optString("url"))
+                            "studioSearchWeb" -> studio.searchWeb(data.optString("query"), data.optInt("limit", 8))
                             "studioClear" -> { studio.clear(); JSONObject().put("ok", true) }
                             else -> JSONObject().put("error", "Неизвестная операция")
                         }
