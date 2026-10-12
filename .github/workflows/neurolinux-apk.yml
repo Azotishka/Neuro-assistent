@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -31,8 +31,8 @@ jobs:
 
       - name: Install Android build components
         run: |
-          sdkmanager --install "platforms;android-36" "build-tools;36.0.0" "cmake;3.22.1" "ndk;27.2.12479018"
           yes | sdkmanager --licenses
+          sdkmanager --install "platforms;android-36" "build-tools;36.0.0" "cmake;3.22.1" "ndk;27.2.12479018"
 
       - name: Fetch standalone rootless Linux engine
         run: |
@@ -127,3 +127,17 @@ jobs:
           path: upstream-pr/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish installable APK release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: neurolinux-os-0.3.0-build-${{ github.run_number }}
+          name: NeuroLinux OS 0.3.0 (build ${{ github.run_number }})
+          body: |
+            Standalone ARM64 Android APK with embedded rootless Linux user-space runtime and terminal.
+            No Termux or root required. On first launch, download a Linux distribution in the app.
+            The graphical XFCE desktop is not included in this build.
+            Source engine: https://github.com/oonid/pr
+          files: upstream-pr/android/app/build/outputs/apk/debug/app-debug.apk
+          fail_on_unmatched_files: true
+
