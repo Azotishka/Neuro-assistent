@@ -64,7 +64,7 @@ jobs:
           gradle = root / "app/build.gradle.kts"
           s = gradle.read_text()
           s = s.replace('applicationId = "id.or.oo.pr"', 'applicationId = "org.neurolinux.desktop"')
-          s = s.replace('versionName = "1.0.0"', 'versionName = "0.3.0"')
+          s = s.replace('versionName = "1.0.0"', 'versionName = "0.4.0"')
           gradle.write_text(s)
 
           strings = root / "app/src/main/res/values/strings.xml"
@@ -115,6 +115,167 @@ jobs:
           }
           for old, new in replacements.items():
               s = s.replace(old, new)
+
+          # Add a branded launcher/dashboard above the distribution manager.
+          anchor = """        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            item {
+                CustomImageInstallCard("""
+          replacement = """        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            item {
+                NeuroLinuxHomeCard(
+                    installedCount = distros.count { it.isInstalled },
+                    onOpenTerminal = {
+                        val installed = distros.firstOrNull { it.isInstalled }
+                        if (installed != null && loadingDistro == null) {
+                            val intent = Intent(context, TerminalActivity::class.java)
+                            intent.putExtra("distro", installed.alias)
+                            context.startActivity(intent)
+                        }
+                    },
+                    onInstallDebian = {
+                        val debian = distros.firstOrNull { it.alias == "debian" }
+                        if (debian != null && !debian.isInstalled && loadingDistro == null) {
+                            loadingDistro = debian.alias
+                            operationLabel = "Установка"
+                            operationDistroName = "Debian Stable"
+                            showOutput = true
+                            outputLines = listOf("Подготовка Debian…")
+                            scope.launch {
+                                runDistroCommand(
+                                    app,
+                                    listOf("install", debian.installSource, "--override-alias", debian.alias)
+                                ) { line -> outputLines = outputLines + line }
+                                loadingDistro = null
+                                refreshDistros()
+                            }
+                        }
+                    }
+                )
+            }
+            item {
+                CustomImageInstallCard("""
+          if anchor not in s:
+              raise SystemExit("Could not locate LazyColumn insertion point")
+          s = s.replace(anchor, replacement, 1)
+
+          marker = """// ---------------------------------------------------------------------------
+// Custom OCI install card
+// ---------------------------------------------------------------------------"""
+          home = r'''// ---------------------------------------------------------------------------
+// NeuroLinux home / workspace card
+// ---------------------------------------------------------------------------
+
+@Composable
+fun NeuroLinuxHomeCard(
+    installedCount: Int,
+    onOpenTerminal: () -> Unit,
+    onInstallDebian: () -> Unit,
+) {
+    ElevatedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = Color(0xFF111827),
+            contentColor = Color(0xFFF8FAFC)
+        ),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 5.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Surface(
+                    shape = MaterialTheme.shapes.large,
+                    color = Color(0xFF123C3A),
+                    modifier = Modifier.size(52.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text("N", color = Color(0xFF5EEAD4), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+                    }
+                }
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("NEUROLINUX OS", style = MaterialTheme.typography.labelMedium, color = Color(0xFF5EEAD4), fontWeight = FontWeight.Bold)
+                    Text("Рабочее пространство", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    Text("Linux прямо в приложении · без root и Termux", style = MaterialTheme.typography.bodySmall, color = Color(0xFFCBD5E1))
+                }
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Surface(
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.medium,
+                    color = Color(0xFF1F2937)
+                ) {
+                    Column(Modifier.padding(12.dp)) {
+                        Text("$installedCount", style = MaterialTheme.typography.headlineSmall, color = Color(0xFF5EEAD4), fontWeight = FontWeight.Bold)
+                        Text("Систем установлено", style = MaterialTheme.typography.labelSmall, color = Color(0xFFE2E8F0))
+                    }
+                }
+                Surface(
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.medium,
+                    color = Color(0xFF1F2937)
+                ) {
+                    Column(Modifier.padding(12.dp)) {
+                        Text("ARM64", style = MaterialTheme.typography.titleLarge, color = Color(0xFF5EEAD4), fontWeight = FontWeight.Bold)
+                        Text("Для планшетов Android", style = MaterialTheme.typography.labelSmall, color = Color(0xFFE2E8F0))
+                    }
+                }
+            }
+
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = onOpenTerminal,
+                    enabled = installedCount > 0,
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF14B8A6), contentColor = Color(0xFF042F2E))
+                ) {
+                    Icon(Icons.Default.PlayArrow, contentDescription = null)
+                    Spacer(Modifier.width(6.dp))
+                    Text("Открыть Linux")
+                }
+                OutlinedButton(
+                    onClick = onInstallDebian,
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFCCFBF1))
+                ) {
+                    Icon(Icons.Default.Download, contentDescription = null)
+                    Spacer(Modifier.width(6.dp))
+                    Text("Установить Debian")
+                }
+            }
+
+            Text(
+                "Графический рабочий стол XFCE пока не включён. Сейчас доступна полноценная консоль Linux; установленные приложения запускаются в ней.",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFFCBD5E1)
+            )
+        }
+    }
+}
+
+'''
+          if marker not in s:
+              raise SystemExit("Could not locate custom card marker")
+          s = s.replace(marker, home + marker, 1)
           main.write_text(s)
           PY
 
@@ -136,7 +297,7 @@ jobs:
       - name: Upload NeuroLinux APK
         uses: actions/upload-artifact@v4
         with:
-          name: NeuroLinuxOS-0.3-standalone-arm64
+          name: NeuroLinuxOS-0.4-standalone-arm64
           path: upstream-pr/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 30
@@ -144,12 +305,12 @@ jobs:
       - name: Publish installable APK release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: neurolinux-os-0.3.0-build-${{ github.run_number }}
-          name: NeuroLinux OS 0.3.0 (build ${{ github.run_number }})
+          tag_name: neurolinux-os-0.4.0-build-${{ github.run_number }}
+          name: NeuroLinux OS 0.4.0 (build ${{ github.run_number }})
           body: |
             Standalone ARM64 Android APK with embedded rootless Linux user-space runtime and terminal.
             No Termux or root required. On first launch, download a Linux distribution in the app.
-            The graphical XFCE desktop is not included in this build.
+            This build includes the redesigned Russian home dashboard and standalone Linux terminal. XFCE graphical desktop is not included yet.
             Source engine: https://github.com/oonid/pr
           files: upstream-pr/android/app/build/outputs/apk/debug/app-debug.apk
           fail_on_unmatched_files: true
