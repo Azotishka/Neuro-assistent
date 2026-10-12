@@ -44,7 +44,10 @@ jobs:
 
       - name: Fetch standalone rootless Linux engine
         run: |
-          git clone --depth 1 --recurse-submodules https://github.com/oonid/pr.git upstream-pr
+          git clone --depth 1 https://github.com/oonid/pr.git upstream-pr
+          # Only this submodule is needed by the Android Gradle build. Avoid unrelated
+          # git@github.com and git:// submodules used for upstream native source builds.
+          git -C upstream-pr submodule update --init --depth 1 vendor/termlib
           test -f upstream-pr/android/proot-engine/src/main/jniLibs/arm64-v8a/libproot.so
           test -f upstream-pr/android/proot-engine/src/main/jniLibs/arm64-v8a/libpr-cli.so
           test -f upstream-pr/android/app/src/main/java/id/or/oo/pr/MainActivity.kt
