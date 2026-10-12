@@ -159,7 +159,7 @@ class DesktopActivity : ComponentActivity() {
             captured = outputBuffer.toString()
         }
 
-        if (captured.contains(READY_MARKER) && !desktopStarted) {
+        if (containsMarker(captured, READY_MARKER) && !desktopStarted) {
             desktopStarted = true
             runOnUiThread {
                 statusView.text = "XFCE запущен · сенсорное управление и клавиатура доступны"
@@ -172,7 +172,7 @@ class DesktopActivity : ComponentActivity() {
             return
         }
 
-        if (captured.contains(UNSUPPORTED_MARKER)) {
+        if (containsMarker(captured, UNSUPPORTED_MARKER)) {
             runOnUiThread {
                 statusView.text = "Для рабочего стола нужен Debian или Ubuntu."
                 updateLog(captured)
@@ -180,7 +180,7 @@ class DesktopActivity : ComponentActivity() {
             return
         }
 
-        if (captured.contains(FAILED_MARKER)) {
+        if (containsMarker(captured, FAILED_MARKER)) {
             runOnUiThread {
                 statusView.text = "Запуск не завершён. Подробности ниже."
                 updateLog(captured)
@@ -192,6 +192,9 @@ class DesktopActivity : ComponentActivity() {
             if (!desktopStarted) updateLog(captured)
         }
     }
+
+    private fun containsMarker(raw: String, marker: String): Boolean =
+        raw.lineSequence().any { it.trim() == marker }
 
     private fun appendLog(text: String) {
         synchronized(outputLock) {
