@@ -78,6 +78,12 @@ import androidx.webkit.WebViewAssetLoader
 import androidx.lifecycle.lifecycleScope
 import com.neuroassistant.app.ai.LocalDemoAiProvider
 import com.neuroassistant.app.ai.OpenAiCompatibleProvider
+import com.neuroassistant.app.assistant.AssistantOrchestrator
+import com.neuroassistant.app.live.LiveAssistantController
+import com.neuroassistant.app.lifecycle.AssistantLifecycleController
+import com.neuroassistant.app.memory.FileMemoryPersistence
+import com.neuroassistant.app.memory.MemoryStore
+import java.io.File
 import com.neuroassistant.app.data.SettingsRepository
 import com.neuroassistant.app.model.ChatMessage
 import com.neuroassistant.app.model.MessageRole
@@ -116,6 +122,9 @@ class AssistantOverlayActivity : ComponentActivity() {
     private var localCoreReady = false
     private var localRequestSequence = 0L
     private var localError: String? = null
+    private val liveMemory by lazy { MemoryStore(FileMemoryPersistence(File(filesDir, "neuroassistant/memory.db"))) }
+    private val lifecycleState by lazy { AssistantLifecycleController(liveMemory) }
+    private var liveController: LiveAssistantController? = null
     private val localRequests = ConcurrentHashMap<String, CompletableDeferred<LocalOverlayReply>>()
 
     private val micPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { allowed ->
@@ -150,8 +159,11 @@ class AssistantOverlayActivity : ComponentActivity() {
             onError = { addAssistant(it) }
         )
 
+        lifecycleState.restoreFrom(savedInstanceState)
         if (messages.isEmpty()) {
-            messages += QuickUiMessage(MessageRole.ASSISTANT, "Я здесь. Можешь сказать вопрос голосом или написать его, не открывая полный чат.")
+            val restored = lifecycleState.snapshot().messages
+            if (restored.isNotEmpty()) restored.forEach { messages += QuickUiMessage(it.role, it.text) }
+            else messages += QuickUiMessage(MessageRole.ASSISTANT, "Я здесь. Можешь сказать вопрос голосом или написать его, не открывая полный чат.")
         }
 
         setupLocalRuntime()
@@ -201,6 +213,11 @@ class AssistantOverlayActivity : ComponentActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        lifecycleState.saveTo(outState)
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -246,6 +263,8 @@ class AssistantOverlayActivity : ComponentActivity() {
         if (command.handled) return command.reply
 
         answerWithLocal(text)?.let {
+            liveMemory.appendMessage(ChatMessage(role = MessageRole.USER, text = text))
+            liveMemory.appendMessage(ChatMessage(role = MessageRole.ASSISTANT, text = it))
             status = "Локально • готово"
             return it
         }
@@ -257,9 +276,17 @@ class AssistantOverlayActivity : ComponentActivity() {
             status = "Локальная модель недоступна"
             LocalDemoAiProvider()
         }
-        return provider.reply(
-            messages.takeLast(16).map { ChatMessage(role = it.role, text = it.text.take(9000)) }
+        val controller = LiveAssistantController(
+            AssistantOrchestrator(
+                provider = provider,
+                memory = liveMemory
+            )
         )
+        liveController?.shutdown()
+        liveController = controller
+        val result = controller.submit(text)
+        if (!result.success) throw IllegalStateException(result.errorCode ?: "Не удалось получить ответ")
+        return result.text
     }
 
     /**
@@ -452,6 +479,7 @@ class AssistantOverlayActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
+        liveController?.shutdown()
         runCatching { voiceInput.destroy() }
         runCatching { tts?.shutdown() }
         localRequests.values.forEach { it.cancel() }

@@ -23,13 +23,14 @@ const python = await moduleBody("python-runner.js");
 const ocr = await moduleBody("ocr.js");
 const markdown = await moduleBody("markdown.js");
 const poco = await moduleBody("poco-performance.js");
+const automation = await moduleBody("automation-engine.js");
 const device = await moduleBody("device-profile.js");
 const features = await moduleBody("features.js");
 const app = await moduleBody("app.js");
 const shell = await moduleBody("mobile-shell.js");
 
 const output = [
-  "/* Qwen Local 3.10.0 — generated classic compatibility bundle. */",
+  "/* Qwen Local 3.11.0 — generated classic compatibility bundle. */",
   "/* Source of truth: modular files in this package. */",
   "(() => { window.__QWEN_CLASSIC_BUNDLE__ = true; })();",
   ui,
@@ -41,12 +42,14 @@ const output = [
   wrap("markdown", markdown, "", ["renderMarkdown"]),
   wrap("poco", poco, "", ["getPocoDefaults", "isPocoX6ProUserAgent", "pocoMaxTokens", "POCO_PROFILE_VERSION"]),
   wrap("device_profile", device, "const { isPocoX6ProUserAgent, pocoMaxTokens } = __qwen_poco;", ["detectDeviceProfile", "effectiveMaxTokens", "applyDeviceProfile"]),
+  wrap("automation", automation, "", ["normalizeAutomation", "validateAutomation", "runAutomation", "AUTOMATION_STEP_TYPES", "AUTOMATION_TRIGGERS"]),
   wrap("features", features, [
     "const { getAll, getOne, putOne, putMany, deleteOne, exportDatabase, makeId } = __qwen_db;",
     "const { tryToolRoute, calculateExpression, prettyNumber, convertUnits, formatJson, testRegex, csvSummary, scoreComplexity, escapeHtml } = __qwen_tools;",
     "const { createVault, unlockVault, encryptValue, decryptValue } = __qwen_vault;",
     "const { runPython, stopPython } = __qwen_python_runner;",
     "const { recognizeImage } = __qwen_ocr;",
+    "const { normalizeAutomation, validateAutomation, runAutomation, AUTOMATION_STEP_TYPES, AUTOMATION_TRIGGERS } = __qwen_automation;",
   ].join("\n"), ["initAdvancedFeatures"]),
   wrap("app", app, [
     "const { openLocalDB, getAll, getOne, putOne, deleteOne, makeId } = __qwen_db;",
