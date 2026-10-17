@@ -11,7 +11,7 @@ const research = read("../neuro-nova-research.js");
 const studio = read("../../../java/com/neuroassistant/app/studio/StudioIntegration.kt");
 
 test("app shell loads versioned styles and learning modules", () => {
-  assert.match(html, /neuro-nova-shell\\.css\\?v=0\\.25\\.0/);
+  assert.match(html, /neuro-nova-shell\.css\?v=0\.25\.0/);
   assert.match(html, /neuro-nova-research\.js\?v=0\.25\.0/);
   assert.match(html, /neuro-nova-snake\.js\?v=0\.25\.0/);
 });
