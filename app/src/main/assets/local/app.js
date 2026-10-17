@@ -1,10 +1,10 @@
-import { openLocalDB, getAll, getOne, putOne, deleteOne, makeId } from "./db.js?v=3.10.0";
-import { initAdvancedFeatures } from "./features.js?v=3.10.0";
-import { detectDeviceProfile, effectiveMaxTokens, applyDeviceProfile } from "./device-profile.js?v=3.10.0";
+import { openLocalDB, getAll, getOne, putOne, deleteOne, makeId } from "./db.js?v=3.12.0";
+import { initAdvancedFeatures } from "./features.js?v=3.12.0";
+import { detectDeviceProfile, effectiveMaxTokens, applyDeviceProfile } from "./device-profile.js?v=3.12.0";
 import { getPocoDefaults } from "./poco-performance.js?v=1";
-import { renderMarkdown } from "./markdown.js?v=3.10.0";
+import { renderMarkdown } from "./markdown.js?v=3.12.0";
 
-const APP_VERSION = "3.11.0";
+const APP_VERSION = "3.12.0";
 const NATIVE_APP = window.__QWEN_NATIVE_ANDROID__ === true || window.Capacitor?.isNativePlatform?.() === true;
 const LOCAL_PREVIEW = !NATIVE_APP && (location.protocol === "file:" || ["localhost", "127.0.0.1", "::1"].includes(location.hostname));
 if (LOCAL_PREVIEW) document.documentElement.dataset.localPreview = "1";
@@ -570,7 +570,7 @@ async function createRuntimeEngine(webllm, modelSpec, context, progressCallback,
   const engineConfig = { initProgressCallback: trackedProgress, logLevel: DEVICE.isPocoX6Pro ? "ERROR" : "INFO", appConfig: getAppConfigForModel(webllm, modelSpec) };
   const chatOptions = { context_window_size: context };
   if (mode === "worker") {
-    const localWorker = new Worker("./worker.js?v=3.10.0", { type: "module" });
+    const localWorker = new Worker("./worker.js?v=3.12.0", { type: "module" });
     pendingWorkers.add(localWorker);
     let watchdog = null;
     const stalled = new Promise((_, reject) => {
