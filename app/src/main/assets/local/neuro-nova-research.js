@@ -22,7 +22,7 @@
     const dlg=document.createElement('dialog');dlg.id='nnResearchPanel';
     dlg.innerHTML=`<div class="nnr-head"><div><div class="eyebrow">NEURO NOVA · RESEARCH</div><h2>Поиск и база знаний</h2></div><button class="round-btn" id="nnrClose" type="button" aria-label="Закрыть">×</button></div>
       <div class="nnr-body">
-        <p class="nnr-note">Поиск проверяет Wikipedia на русском и английском. Можно импортировать до 10 HTTPS-ссылок за один запуск. Страницы индексируются в локальную базу знаний и добавляются в контекст по релевантности; это расширяет доступные знания, но не переобучает веса языковой модели.</p>
+        <p class="nnr-note">Поиск объединяет Wikipedia на русском и английском с научными публикациями OpenAlex. Можно импортировать до 10 HTTPS-ссылок за один запуск. Страницы индексируются в локальную базу знаний и добавляются в контекст по релевантности; это расширяет доступные знания, но не переобучает веса языковой модели.</p>
         <form id="nnrSearchForm"><label for="nnrQuery">Найти в интернете</label><div class="nnr-row"><input id="nnrQuery" class="nnr-input" placeholder="Тема, вопрос или термин" minlength="2" maxlength="240" required><button class="nnr-btn" type="submit">Искать</button></div></form>
         <label for="nnrUrl">Изучить прямые ссылки (по одной в строке, до 10)</label><div class="nnr-row"><textarea id="nnrUrl" class="nnr-textarea" rows="3" placeholder="https://example.org/article&#10;https://ru.wikipedia.org/wiki/..." ></textarea></div><div class="nnr-row"><button class="nnr-btn nnr-secondary" id="nnrImport" type="button">Импортировать и индексировать</button></div>
         <div class="nnr-row"><input id="nnrLocalQuery" class="nnr-input" placeholder="Поиск по сохранённым знаниям"><button class="nnr-btn nnr-secondary" id="nnrLocalSearch" type="button">В базе</button></div>
@@ -43,7 +43,7 @@
     open.addEventListener('click',()=>{dlg.showModal();dlg.querySelector('#nnrQuery').focus()});
     dlg.querySelector('#nnrClose').addEventListener('click',()=>dlg.close());
     dlg.querySelector('#nnrSearchForm').addEventListener('submit',async e=>{
-      e.preventDefault();results.replaceChildren();setStatus('Ищу в Wikipedia…');
+      e.preventDefault();results.replaceChildren();setStatus('Ищу в Wikipedia и научных источниках…');
       try{requireBridge();const items=await window.NeuroStudio.searchWeb(dlg.querySelector('#nnrQuery').value,8);
         if(!items.length){setStatus('Ничего не найдено. Попробуй более короткий запрос.');return}
         setStatus('Найдено: '+items.length+'. Выбери источник, чтобы добавить его в базу знаний.');
