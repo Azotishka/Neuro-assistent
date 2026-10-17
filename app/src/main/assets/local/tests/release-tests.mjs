@@ -26,7 +26,7 @@ test("key web assets parse as JavaScript", () => {
 });
 
 test("service worker points at the current release assets", () => {
-  assert.match(read("sw.js"), /qwen-local-shell-v29-neuro-nova/);
+  assert.match(read("sw.js"), /qwen-local-shell-v30-neuro-nova/);
   assert.match(read("sw.js"), /app-compat\.js\?v=3\.12\.0/);
 });
 
