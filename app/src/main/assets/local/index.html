@@ -11,7 +11,7 @@
   <link rel="manifest" href="./manifest.webmanifest?v=4.0.0" />
   <link rel="icon" href="./icon.svg" />
   <link rel="apple-touch-icon" href="./icon-180.png" />
-  <title>Neuro Nova AI Lab · Android Workspace</title>
+  <title>Neuro Nova AI Lab · AI Workspace</title>
   <script>
     (() => {
       const mode = localStorage.getItem("qwen:themeMode") || "system";
@@ -19,8 +19,8 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <link rel="stylesheet" href="./neuro-nova-tokens.css?v=0.22.0" />
-  <link rel="stylesheet" href="./neuro-nova-shell.css?v=0.22.0" />
+  <link rel="stylesheet" href="./neuro-nova-tokens.css?v=0.23.0" />
+  <link rel="stylesheet" href="./neuro-nova-shell.css?v=0.23.0" />
 </head>
 <body data-page="home">
   <div class="grain" aria-hidden="true"></div>
@@ -29,8 +29,8 @@
       <div class="brand">
         <div class="brand-badge" aria-hidden="true">N</div>
         <div>
-          <div class="eyebrow">NEURO NOVA STUDIO / AI HUB</div>
-          <h1>Neuro Nova Studio</h1>
+          <div class="eyebrow">NEURO NOVA AI LAB / AI WORKSPACE</div>
+          <h1>Neuro Nova AI Lab</h1>
           <div id="currentChatTitle" class="current-chat-title">Новый чат</div>
         </div>
       </div>
@@ -46,7 +46,7 @@
 
     <div id="compatBanner" class="compat-banner hidden" role="status"></div>
 
-    <nav id="desktopNav" class="desktop-nav" aria-label="Разделы Neuro Nova Studio">
+    <nav id="desktopNav" class="desktop-nav" aria-label="Разделы Neuro Nova AI Lab">
       <button type="button" data-route="home"><span>⌂</span>Главная</button>
       <button type="button" data-route="chats"><span>◫</span>Чаты</button>
       <button type="button" data-route="chat"><span>◌</span>Чат</button>
@@ -77,7 +77,7 @@
       <div class="intro-main">
         <div class="intro-label">AI HUB / 0.14</div>
         <h2>Твой ИИ.<br>Локально.<br>На планшете.</h2>
-        <p>Планшетный AI Hub Neuro Nova Studio: локальные модели, память, инструменты и Live Assistant. Чаты и сохранённые данные остаются на устройстве.</p>
+        <p>Планшетный AI Hub Neuro Nova AI Lab: локальные модели, память, инструменты и Live Assistant. Чаты и сохранённые данные остаются на устройстве.</p>
       </div>
       <div class="intro-stamp">
         <span>ПРИВАТНО</span>
@@ -580,9 +580,9 @@
 
   <script src="./native-bridge.js?v=android2"></script>
   <script src="./neuro-shell.js?v=0.12.0"></script>
-  <script src="./neuro-nova-shell.js?v=0.22.0"></script>
-  <script src="./neuro-nova-research.js?v=0.22.0"></script>
-  <script src="./neuro-nova-snake.js?v=0.22.0"></script>
+  <script src="./neuro-nova-shell.js?v=0.23.0"></script>
+  <script src="./neuro-nova-research.js?v=0.23.0"></script>
+  <script src="./neuro-nova-snake.js?v=0.23.0"></script>
   <script>
     (() => {
       window.__QWEN_BOOT_STARTED__ = Date.now();
