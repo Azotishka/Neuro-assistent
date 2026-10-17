@@ -85,7 +85,7 @@ class StudioIntegration(context: Context) {
             val url=URL("https://$lang.wikipedia.org/w/api.php?action=query&list=search&srsearch=$encoded&format=json&utf8=1&srlimit=${((limit.coerceIn(1,10)+1)/2)}")
             val connection=(url.openConnection() as HttpURLConnection).apply {
                 connectTimeout=7000; readTimeout=9000; instanceFollowRedirects=false
-                requestMethod="GET"; setRequestProperty("User-Agent","NeuroNovaStudio/0.24 (Android; research assistant)")
+                requestMethod="GET"; setRequestProperty("User-Agent","NeuroNovaAILabXPlus/0.25 (Android; research assistant)")
             }
             try {
                 val code=connection.responseCode
