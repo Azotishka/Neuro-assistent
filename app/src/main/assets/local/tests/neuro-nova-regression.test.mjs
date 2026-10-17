@@ -73,4 +73,5 @@ test("research searches both encyclopedia and open scholarly metadata", () => {
   assert.match(studio, /api\.openalex\.org\/works/);
   assert.match(studio, /Wikipedia RU\/EN \+ OpenAlex/);
   assert.match(research, /OpenAlex/);
+  assert.match(research, /научными публикациями OpenAlex/);
 });
