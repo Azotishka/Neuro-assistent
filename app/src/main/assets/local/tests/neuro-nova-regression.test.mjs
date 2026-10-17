@@ -55,7 +55,7 @@ test("internet search supports Russian and English and blocks local targets", ()
 
 
 test("tablet breakpoint keeps navigation and active panels in separate grid columns", () => {
-  const tablet = css.slice(css.lastIndexOf("@media(max-width:820px)"));
+  const tablet = css.slice(css.lastIndexOf("/* 0.25.0: tablet-specific grid isolation"));
   assert.match(tablet, /grid-template-columns:\s*(?:190|200|210)px\s+minmax\(0,1fr\)/);
   assert.match(tablet, /#statusPanel[^}]*grid-column:\s*2/);
   assert.match(tablet, /\.control-deck[^}]*grid-column:\s*2/);
