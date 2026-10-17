@@ -1,7 +1,9 @@
-const SHELL = "qwen-local-shell-v28-poco";
+const SHELL = "neuro-nova-shell-v29-ai-lab";
 const APP_ASSETS = [
   "./", "./index.html",
-  "./app-compat.js?v=3.10.0", "./native-bridge.js?v=android2",
+  "./app-compat.js?v=3.11.0", "./native-bridge.js?v=android2",
+  "./neuro-nova-tokens.css?v=0.24.0", "./neuro-nova-shell.css?v=0.24.0",
+  "./neuro-nova-shell.js?v=0.24.0", "./neuro-nova-research.js?v=0.24.0", "./neuro-nova-snake.js?v=0.24.0",
   "./styles.css?v=3.10.0", "./features.css?v=3.10.0", "./mobile-shell.css?v=3.10.0",
   "./worker.js?v=3.10.0", "./py-worker.js?v=3.10.0",
   "./manifest.webmanifest?v=3.10.0",
