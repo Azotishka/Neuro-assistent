@@ -1,4 +1,4 @@
-const SHELL = "neuro-nova-shell-v29-ai-lab";
+const SHELL = "qwen-local-shell-v29-neuro-nova";
 const APP_ASSETS = [
   "./", "./index.html",
   "./app-compat.js?v=3.11.0", "./native-bridge.js?v=android2",
