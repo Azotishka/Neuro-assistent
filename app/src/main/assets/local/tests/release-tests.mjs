@@ -12,7 +12,7 @@ test("classic bundle is generated from the POCO source", () => {
   const index = read("index.html");
   const bundle = read("app-compat.js");
   assert.match(index, /app-compat\.js\?v=3\.11\.0/);
-  assert.match(index, /neuro-shell\.js\?v=0\.11\.0/);
+  assert.match(index, /neuro-shell\.js\?v=0\.12\.0/);
   assert.match(bundle, /__qwen_poco/);
   assert.match(bundle, /pocoSpeedPresetBtn/);
   assert.match(bundle, /powerPreference:\s*["']high-performance["']/);
@@ -27,7 +27,7 @@ test("key web assets parse as JavaScript", () => {
 
 test("service worker points at the current release assets", () => {
   assert.match(read("sw.js"), /qwen-local-shell-v29-neuro-nova/);
-  assert.match(read("sw.js"), /app-compat\.js\?v=3\.10\.0/);
+  assert.match(read("sw.js"), /app-compat\.js\?v=3\.11\.0/);
 });
 
 test("Android live controls have a background animation and audio settings", () => {
