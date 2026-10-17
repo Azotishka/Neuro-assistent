@@ -4,12 +4,12 @@ import { detectDeviceProfile, effectiveMaxTokens, applyDeviceProfile } from "./d
 import { getPocoDefaults } from "./poco-performance.js?v=1";
 import { renderMarkdown } from "./markdown.js?v=3.10.0";
 
-const APP_VERSION = "3.10.0";
+const APP_VERSION = "3.11.0";
 const NATIVE_APP = window.__QWEN_NATIVE_ANDROID__ === true || window.Capacitor?.isNativePlatform?.() === true;
 const LOCAL_PREVIEW = !NATIVE_APP && (location.protocol === "file:" || ["localhost", "127.0.0.1", "::1"].includes(location.hostname));
 if (LOCAL_PREVIEW) document.documentElement.dataset.localPreview = "1";
 if (NATIVE_APP) document.documentElement.dataset.nativeApp = window.__QWEN_NATIVE_PLATFORM__ || "native";
-const WEBLLM_VERSION = "0.2.82";
+const WEBLLM_VERSION = "0.2.86";
 let webllmModulePromise = null;
 function getWebLLM() {
   if (!webllmModulePromise) {
