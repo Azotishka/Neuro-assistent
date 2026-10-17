@@ -1,4 +1,4 @@
-name: Build Neuro Nova Studio APK
+name: Build Neuro Nova AI Lab X Plus APK
 
 concurrency:
   group: neuroassistant-apk-${{ github.workflow }}-${{ github.head_ref || github.ref }}
@@ -89,5 +89,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: NeuroNovaAILab-v0.24-ai-runtime-snake-headless-ui-audit-apk
+          name: NeuroNovaAILabXPlus-v0.25-ai-runtime-snake-headless-ui-audit-apk
           path: app/build/outputs/apk/debug/app-debug.apk
