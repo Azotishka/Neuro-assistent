@@ -64,7 +64,7 @@ test("tablet breakpoint keeps navigation and active panels in separate grid colu
 
 test("headless snake training caps each main-thread batch and yields between batches", () => {
   assert.match(snake, /nnsBatch[^\n]{0,120}max="5000"/);
-  assert.match(snake, /Math\.min\(5000,Math\.max\(100,Number\(\$\('nnsBatch'\)\.value\)\)\)/);
+  assert.match(snake, /Math\.min\(5000,Math\.max\(100,Number\(\$\('nnsBatch'\)\.value\)\|\|1000\)\)/);
   assert.match(snake, /setTimeout\(\(\)=>tickHeadless\(token\),0\)/);
 });
 
