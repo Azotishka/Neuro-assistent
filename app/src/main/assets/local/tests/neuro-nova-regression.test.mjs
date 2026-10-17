@@ -52,3 +52,18 @@ test("internet search supports Russian and English and blocks local targets", ()
   assert.match(studio, /maxChunks=360/);
   assert.match(studio, /maxSources=40/);
 });
+
+
+test("tablet breakpoint keeps navigation and active panels in separate grid columns", () => {
+  const tablet = css.slice(css.indexOf("@media(max-width:820px)"), css.indexOf("@media(max-width:700px)"));
+  assert.match(tablet, /grid-template-columns:\s*(?:190|200|210)px\s+minmax\(0,1fr\)/);
+  assert.match(tablet, /#statusPanel[^}]*grid-column:\s*2/);
+  assert.match(tablet, /\.control-deck[^}]*grid-column:\s*2/);
+  assert.doesNotMatch(tablet, /#statusPanel,\.app-shell>\.control-deck\{grid-column:auto/);
+});
+
+test("headless snake training caps each main-thread batch and yields between batches", () => {
+  assert.match(snake, /nnsBatch[^\n]{0,120}max="5000"/);
+  assert.match(snake, /Math\.min\(5000,Math\.max\(100,Number\(\$\('nnsBatch'\)\.value\)\)\)/);
+  assert.match(snake, /setTimeout\(\(\)=>tickHeadless\(token\),0\)/);
+});
