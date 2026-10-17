@@ -247,3 +247,43 @@ body[data-page="chat"] .app-shell>.composer-wrap{grid-row:6}
  body[data-page="models"] .app-shell>#statusPanel,body[data-page="models"] .app-shell>.control-deck{display:block!important}
  body[data-page="chat"] .app-shell>#statusPanel,body[data-page="chat"] .app-shell>.control-deck{display:block!important}
 }
+
+/* 0.25.0: tablet-specific grid isolation (701–820 CSS px). */
+@media (min-width:701px) and (max-width:820px) {
+  .app-shell {
+    display:grid;
+    grid-template-columns:200px minmax(0,1fr);
+    grid-template-rows:68px minmax(0,1fr) auto auto auto auto;
+    grid-auto-flow:row;
+    align-content:stretch;
+    min-height:100dvh;
+  }
+  .app-shell>.topbar {grid-column:1/-1!important;grid-row:1!important;min-width:0}
+  .app-shell>#desktopNav {display:flex!important;grid-column:1!important;grid-row:2/7!important;min-width:0;min-height:0;overflow-y:auto}
+  .app-shell>#tabletToolRail {display:none!important}
+  .app-shell>.mobile-home-dashboard,
+  .app-shell>.models-section,
+  .app-shell>#statusPanel,
+  .app-shell>.control-deck,
+  .app-shell>#chat,
+  .app-shell>#chatActions,
+  .app-shell>.composer-wrap,
+  .app-shell>#chatsPage,
+  .app-shell>#mobileLibraryPage,
+  .app-shell>#mobileToolsPage,
+  .app-shell>#mobileSettingsPage {grid-column:2!important;min-width:0;max-width:100%}
+  body[data-page="home"] .app-shell>#mobileHomeDashboard {grid-row:2!important}
+  body[data-page="models"] .app-shell>.models-section {grid-row:2!important}
+  body[data-page="models"] .app-shell>#statusPanel {grid-row:3!important}
+  body[data-page="models"] .app-shell>.control-deck {grid-row:4!important}
+  body[data-page="chat"] .app-shell>#statusPanel {grid-row:2!important}
+  body[data-page="chat"] .app-shell>.control-deck {grid-row:3!important}
+  body[data-page="chat"] .app-shell>#chat {grid-row:4!important;min-height:260px}
+  body[data-page="chat"] .app-shell>#chatActions:not(.hidden) {grid-row:5!important}
+  body[data-page="chat"] .app-shell>.composer-wrap {grid-row:6!important}
+  body[data-page="chats"] .app-shell>#chatsPage,
+  body[data-page="data"] .app-shell>#mobileLibraryPage,
+  body[data-page="tools"] .app-shell>#mobileToolsPage,
+  body[data-page="settings"] .app-shell>#mobileSettingsPage {grid-row:2!important}
+  .app-shell>#statusPanel,.app-shell>.control-deck {grid-column:2!important;min-width:0}
+}
