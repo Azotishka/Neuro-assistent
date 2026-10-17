@@ -16,7 +16,8 @@ data class StudioChunk(val id:String,val source:String,val text:String,val score
 
 class StudioIntegration(context: Context) {
     private val prefs=context.getSharedPreferences("neuro_studio_rag", Context.MODE_PRIVATE)
-    private val maxDocuments=80
+    private val maxSources=40
+    private val maxChunks=360
     private val maxChars=180_000
     private val chunkSize=1200
     private val chunkOverlap=160
@@ -29,7 +30,15 @@ class StudioIntegration(context: Context) {
         val chunks=chunk(clean).mapIndexed { i,s -> StudioChunk("${source.hashCode()}-$i",source,s) }
         val current=load().filterNot { it.source==source }.toMutableList()
         current += chunks
-        while(current.size>maxDocuments) current.removeAt(0)
+        // Keep complete source groups where possible instead of silently leaving orphaned fragments.
+        while(current.map { it.source }.distinct().size>maxSources) {
+            val oldest=current.firstOrNull()?.source ?: break
+            current.removeAll { it.source==oldest }
+        }
+        while(current.size>maxChunks) {
+            val oldest=current.firstOrNull()?.source ?: break
+            if(oldest==source) current.removeAt(0) else current.removeAll { it.source==oldest }
+        }
         save(current)
         return chunks.size
     }
@@ -100,7 +109,7 @@ class StudioIntegration(context: Context) {
         return JSONObject().put("query",q).put("provider","Wikipedia RU/EN").put("results",out)
     }
 
-    fun summary():JSONObject=JSONObject().put("chunks",load().size).put("sources",JSONArray(load().map{it.source}.distinct())).put("maxDocuments",maxDocuments)
+    fun summary():JSONObject=JSONObject().put("chunks",load().size).put("sources",JSONArray(load().map{it.source}.distinct())).put("maxDocuments",maxSources).put("maxChunks",maxChunks)
 
     @Synchronized fun clear(){prefs.edit().remove("chunks").apply()}
 
