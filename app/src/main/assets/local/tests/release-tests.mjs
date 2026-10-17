@@ -11,7 +11,7 @@ const read = (name) => fs.readFileSync(path.join(root, name), "utf8");
 test("classic bundle is generated from the POCO source", () => {
   const index = read("index.html");
   const bundle = read("app-compat.js");
-  assert.match(index, /app-compat\.js\?v=3\.10\.0/);
+  assert.match(index, /app-compat\.js\?v=3\.11\.0/);
   assert.match(index, /neuro-shell\.js\?v=0\.11\.0/);
   assert.match(bundle, /__qwen_poco/);
   assert.match(bundle, /pocoSpeedPresetBtn/);
