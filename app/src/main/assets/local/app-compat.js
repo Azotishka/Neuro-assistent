@@ -1,4 +1,4 @@
-/* Qwen Local 3.10.0 — generated classic compatibility bundle. */
+/* Qwen Local 3.11.0 — generated classic compatibility bundle. */
 
 /* Source of truth: modular files in this package. */
 
@@ -889,7 +889,7 @@ const { recognizeImage } = __qwen_ocr;
 
 
 
-const FEATURE_VERSION = "3.10.0";
+const FEATURE_VERSION = "4.0.0";
 const DEFAULT_WORKSPACE_ID = "workspace-default";
 const el = (id) => document.getElementById(id);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -926,7 +926,7 @@ function stripCodeFence(text) {
 function makeDialog(id, title, body, className = "feature-dialog") {
   const d = document.createElement("dialog");
   d.id = id; d.className = className;
-  d.innerHTML = `<div class="feature-head"><div><div class="eyebrow">QWEN LOCAL ${FEATURE_VERSION}</div><h3>${title}</h3></div><button class="round-btn feature-close" type="button" aria-label="Закрыть">×</button></div>${body}`;
+  d.innerHTML = `<div class="feature-head"><div><div class="eyebrow">NEUROASSISTANT · SYSTEM ${FEATURE_VERSION}</div><h3>${title}</h3></div><button class="round-btn feature-close" type="button" aria-label="Закрыть">×</button></div>${body}`;
   d.querySelector(".feature-close").addEventListener("click", () => d.close());
   document.body.appendChild(d);
   return d;
@@ -951,6 +951,11 @@ async function initAdvancedFeatures(core) {
   const safeUtilityKey = (requested = "fast") => isIOS ? (core.isModelCached?.("stable") ? "stable" : "mini") : requested;
 
   let assistants = [], workspaces = [], notes = [], tasks = [], favorites = [], benchmarks = [], revisions = [];
+  let automations = (() => { try { const rows = JSON.parse(localStorage.getItem("neuro:automations") || "[]"); return Array.isArray(rows) ? rows : []; } catch { return []; } })();
+  let automationDraftSteps = [{ id: "step-1", type: "prompt", value: "Сделай краткий план по запросу: {{input}}", modelKey: "", delayMs: 0 }];
+  const automationTimers = new Map();
+  const automationRuns = new Map();
+
 
   async function ensureDefaults() {
     workspaces = await getAll("workspaces");
@@ -1057,9 +1062,9 @@ async function initAdvancedFeatures(core) {
       if (device?.isIOS && key === "fast" && core.getContextSetting() === "2048" && perf.tokensPerSecond < 3.2) {
         await core.setContext("1536");
         core.showToast("Адаптивный режим iPhone: контекст снижен до 1.5K для стабильности", 2800);
-      } else if (key === "fast" && core.getContextSetting() === "4096" && perf.tokensPerSecond < 3) {
-        await core.setContext("2048");
-        core.showToast("Адаптивный режим: контекст снижен до 2K для стабильности", 2800);
+      } else if (device?.isTablet && key === "fast" && core.getContextSetting() === "4096" && perf.tokensPerSecond < 3.5) {
+        await core.setContext("3072");
+        core.showToast("Адаптивный режим планшета: контекст снижен до 3K для стабильности", 2800);
       }
     },
   };
@@ -1088,15 +1093,18 @@ async function initAdvancedFeatures(core) {
     if (tool) { updateRouteChip(tool.tool.toUpperCase()); return { handled: true, directAnswer: tool.answer, label: `Локальный инструмент · ${tool.tool}` }; }
     const score = scoreComplexity(input);
     const device = core.getDeviceProfile?.();
-    let modelKey = device?.isIOS ? (core.isModelCached?.("stable") ? "stable" : "mini") : "fast";
-    // На iPhone авто-режим никогда сам не повышает модель после реальных перезапусков Safari.
-    // Qwen3 1.7B/4B остаются доступны на странице «Модели» и запускаются только вручную.
-    if (!device?.isIOS && !device?.isPocoX6Pro && score >= 4 && core.isModelCached("max") && input.length < core.getContextWindow("max") * 1.55) modelKey = "max";
-    const thinking = state.autoThinking && score >= 3;
-    let mode = "balanced";
-    if (/код|javascript|typescript|python|html|css|sql|api|regex|debug|ошибк/i.test(input)) mode = "code";
-    else if (/придум|креатив|иде[яи]|назван|сценар|дизайн/i.test(input)) mode = "creative";
-    else if (input.length < 110 && score === 0) mode = "brief";
+    const has = (key) => !!core.isModelCached?.(key);
+    const codeTask = /код|javascript|typescript|python|html|css|sql|api|regex|debug|ошибк|github|android/i.test(input);
+    const creativeTask = /придум|креатив|иде[яи]|назван|сценар|дизайн/i.test(input);
+    const simpleTask = input.length < 110 && score <= 1 && !codeTask && !creativeTask;
+    let mode = codeTask ? "code" : creativeTask ? "creative" : simpleTask ? "brief" : "balanced";
+    let modelKey;
+    if (device?.isIOS) modelKey = has("stable") ? "stable" : has("mini") ? "mini" : "lite";
+    else if (codeTask || score >= 3) modelKey = score >= 5 && has("max") && !device?.isPocoX6Pro && input.length < core.getContextWindow("max") * 1.4 ? "max" : has("fast") ? "fast" : has("stable") ? "stable" : has("lite") ? "lite" : "mini";
+    else if (simpleTask) modelKey = has("stable") ? "stable" : has("fast") ? "fast" : has("lite") ? "lite" : "mini";
+    else modelKey = has("fast") ? "fast" : has("stable") ? "stable" : has("lite") ? "lite" : "mini";
+    if (device?.isTablet && device?.memoryClass === "high" && score >= 4 && has("fast")) modelKey = "fast";
+    const thinking = state.autoThinking && score >= 4 && !simpleTask;
     updateRouteChip(`${modelKey === "max" ? "МАКС" : modelKey === "fast" ? "БЫСТРАЯ" : modelKey === "stable" ? "СТАБИЛЬНАЯ" : modelKey === "mini" ? "МИНИ" : "ЛАЙТ"}${thinking ? " · РАССУЖДЕНИЕ" : ""}`);
     return { modelKey, thinking, mode };
   }
@@ -1198,9 +1206,91 @@ async function initAdvancedFeatures(core) {
     el("ideJs")?.addEventListener("input", (e) => localStorage.setItem("qwen:ideJs", e.target.value));
   }
 
+
+  const AUTOMATION_STEP_TYPES = { prompt: "ИИ-запрос", model: "Сменить модель", memory: "Сохранить в память", delay: "Пауза" };
+  function normalizeAutomation(input = {}) {
+    const now = Date.now();
+    return {
+      id: String(input.id || `automation-${now}-${Math.random().toString(36).slice(2,8)}`),
+      name: String(input.name || "Новая автоматизация").trim().slice(0,80) || "Новая автоматизация",
+      description: String(input.description || "").trim().slice(0,240),
+      enabled: input.enabled !== false,
+      trigger: ["manual","startup","interval"].includes(input.trigger) ? input.trigger : "manual",
+      intervalMs: Math.max(60000, Math.min(86400000, Number(input.intervalMs) || 3600000)),
+      steps: Array.isArray(input.steps) ? input.steps.slice(0,24).map((s,i)=>({ id:String(s?.id||`step-${i+1}`), type:Object.hasOwn(AUTOMATION_STEP_TYPES,s?.type)?s.type:"prompt", value:String(s?.value??"").slice(0,12000), modelKey:String(s?.modelKey||""), delayMs:Math.max(0,Math.min(300000,Number(s?.delayMs)||0)) })) : [],
+      createdAt:Number(input.createdAt)||now, updatedAt:now, lastRunAt:Number(input.lastRunAt)||0, lastResult:String(input.lastResult||"").slice(0,500)
+    };
+  }
+  function validateAutomation(a) {
+    if (!a?.name?.trim()) return {valid:false,error:"Укажи название."};
+    if (!a.steps?.length) return {valid:false,error:"Добавь хотя бы один шаг."};
+    for (const [i,s] of a.steps.entries()) {
+      if (!AUTOMATION_STEP_TYPES[s.type]) return {valid:false,error:`Шаг ${i+1}: неизвестный тип.`};
+      if (s.type === "prompt" && !String(s.value||"").trim()) return {valid:false,error:`Шаг ${i+1}: нужен ИИ-запрос.`};
+      if (s.type === "memory" && !String(s.value||"").trim()) return {valid:false,error:`Шаг ${i+1}: нужен текст памяти.`};
+      if (s.type === "model" && !String(s.modelKey||"").trim()) return {valid:false,error:`Шаг ${i+1}: выбери модель.`};
+    }
+    return {valid:true};
+  }
+  function interpolateAutomation(text, ctx) {
+    return String(text||"").replace(/\\{\\{\\s*input\\s*\\}\\}/gi,String(ctx.input||"")).replace(/\\{\\{\\s*last\\s*\\}\\}/gi,String(ctx.last||"")).replace(/\\{\\{\\s*model\\s*\\}\\}/gi,String(ctx.model||""));
+  }
+  async function executeAutomation(a, input = "") {
+    const check=validateAutomation(a); if(!check.valid) throw new Error(check.error);
+    const ctx={input:String(input||""),last:"",model:""};
+    for(const [i,s] of a.steps.entries()){
+      if(s.type==="model"){ if(core.MODELS[s.modelKey]) await core.selectModel(s.modelKey); ctx.model=s.modelKey; }
+      else if(s.type==="delay"){ await new Promise(r=>setTimeout(r,s.delayMs)); }
+      else if(s.type==="memory"){ const v=interpolateAutomation(s.value,ctx); await core.rememberText(v); ctx.last=v; }
+      else if(s.type==="prompt"){
+        const key=ctx.model&&core.MODELS[ctx.model]?ctx.model:core.getSelectedKey();
+        core.showToast(`Автоматизация: шаг ${i+1}/${a.steps.length}`,900);
+        const res=await core.runCompletion({key,requestMessages:[{role:"system",content:"Ты исполнитель локальной автоматизации NeuroAssistant. Выполни шаг точно, кратко и без лишних пояснений."},{role:"user",content:interpolateAutomation(s.value,ctx)}],maxTokens:640,temperature:.5,topP:.85,thinking:false,statusText:"Автоматизация • выполняю шаг…"});
+        ctx.last=String(res.text||"");
+      }
+    }
+    return ctx.last;
+  }
+  function saveAutomations() { try { localStorage.setItem("neuro:automations",JSON.stringify(automations)); } catch {} }
+  async function runSavedAutomation(id) {
+    const a=automations.find(x=>x.id===id); if(!a||automationRuns.has(id)) return;
+    automationRuns.set(id,true);
+    try { const out=await executeAutomation(a); a.lastRunAt=Date.now(); a.lastResult=out.slice(0,500)||"Выполнено"; a.updatedAt=Date.now(); saveAutomations(); renderAutomationList(); core.showToast(`«${a.name}» завершена`,1800); }
+    catch(e){ a.lastRunAt=Date.now(); a.lastResult=`Ошибка: ${String(e?.message||e).slice(0,220)}`; saveAutomations(); renderAutomationList(); core.showToast(a.lastResult,3500); }
+    finally { automationRuns.delete(id); }
+  }
+  function renderAutomationSteps() {
+    const host=el("automationSteps"); if(!host) return;
+    host.innerHTML=automationDraftSteps.map((s,i)=>`<div class="automation-step" data-step-index="${i}"><div class="automation-step-index">${i+1}</div><select class="feature-select automation-step-type">${Object.entries(AUTOMATION_STEP_TYPES).map(([k,v])=>`<option value="${k}" ${s.type===k?"selected":""}>${v}</option>`).join("")}</select><div class="automation-step-fields"><input class="feature-input automation-step-value" value="${escapeHtml(s.value||"")}" placeholder="Текст шага. {{input}} / {{last}}"><select class="feature-select automation-step-model" ${s.type==="model"?"":"hidden"}><option value="">Автовыбор</option>${Object.entries(core.MODELS).filter(([k])=>!k.startsWith("catalog:")).map(([k,m])=>`<option value="${escapeHtml(k)}" ${k===s.modelKey?"selected":""}>${escapeHtml(m.label||k)}</option>`).join("")}</select><input class="feature-input automation-step-delay" type="number" min="0" max="300000" step="1000" value="${Number(s.delayMs)||0}" placeholder="Пауза, мс" ${s.type==="delay"?"":"hidden"}></div><button type="button" class="mini-action danger-mini automation-remove">×</button></div>`).join("");
+    host.querySelectorAll(".automation-step-type").forEach(x=>x.addEventListener("change",e=>{const i=+e.target.closest(".automation-step").dataset.stepIndex;automationDraftSteps[i].type=e.target.value;renderAutomationSteps();}));
+    host.querySelectorAll(".automation-step-value").forEach(x=>x.addEventListener("input",e=>automationDraftSteps[+e.target.closest(".automation-step").dataset.stepIndex].value=e.target.value));
+    host.querySelectorAll(".automation-step-model").forEach(x=>x.addEventListener("change",e=>automationDraftSteps[+e.target.closest(".automation-step").dataset.stepIndex].modelKey=e.target.value));
+    host.querySelectorAll(".automation-step-delay").forEach(x=>x.addEventListener("input",e=>automationDraftSteps[+e.target.closest(".automation-step").dataset.stepIndex].delayMs=+e.target.value||0));
+    host.querySelectorAll(".automation-remove").forEach(x=>x.addEventListener("click",()=>{automationDraftSteps.splice(+x.closest(".automation-step").dataset.stepIndex,1);renderAutomationSteps();}));
+  }
+  function renderAutomationList() {
+    const host=el("automationList"); if(!host)return;
+    host.innerHTML=automations.length?automations.map(a=>`<div class="automation-card"><div class="automation-card-main"><strong>${escapeHtml(a.name)}</strong><small>${a.steps.length} шагов · ${a.trigger==="interval"?`каждые ${Math.round(a.intervalMs/60000)} мин`:a.trigger==="startup"?"при запуске":"вручную"}</small><span>${escapeHtml(a.lastResult||"Ещё не запускалась")}</span></div><div class="automation-card-actions"><button type="button" class="feature-btn automation-run" data-id="${escapeHtml(a.id)}">▶ Запустить</button><button type="button" class="feature-btn automation-toggle" data-id="${escapeHtml(a.id)}">${a.enabled?"Выкл.":"Вкл."}</button><button type="button" class="feature-btn danger-feature automation-delete" data-id="${escapeHtml(a.id)}">Удалить</button></div></div>`).join(""):'<div class="empty-state">Автоматизаций пока нет.</div>';
+    host.querySelectorAll(".automation-run").forEach(b=>b.addEventListener("click",()=>runSavedAutomation(b.dataset.id)));
+    host.querySelectorAll(".automation-toggle").forEach(b=>b.addEventListener("click",()=>{const a=automations.find(x=>x.id===b.dataset.id);if(a){a.enabled=!a.enabled;saveAutomations();scheduleAutomations();renderAutomationList();}}));
+    host.querySelectorAll(".automation-delete").forEach(b=>b.addEventListener("click",()=>{automations=automations.filter(x=>x.id!==b.dataset.id);saveAutomations();scheduleAutomations();renderAutomationList();}));
+  }
+  function scheduleAutomations() {
+    for(const [id,cancel] of automationTimers){cancel();automationTimers.delete(id);}
+    for(const a of automations){if(!a.enabled)continue;if(a.trigger==="startup")setTimeout(()=>runSavedAutomation(a.id),1200);if(a.trigger==="interval"){const t=setInterval(()=>runSavedAutomation(a.id),a.intervalMs);automationTimers.set(a.id,()=>clearInterval(t));}}
+  }
+  function renderAutomationBuilder() {
+    const host=el("automationBuilder");if(!host)return;
+    host.innerHTML=`<div class="automation-builder-grid"><input id="automationName" class="feature-input" placeholder="Название, например: Утренняя сводка"><input id="automationDescription" class="feature-input" placeholder="Что делает автоматизация"><div class="inline-fields"><select id="automationTrigger" class="feature-select"><option value="manual">Вручную</option><option value="startup">При запуске</option><option value="interval">По интервалу</option></select><input id="automationInterval" class="feature-input" type="number" min="1" max="1440" value="60" placeholder="Минуты"></div></div><div class="feature-section-head"><div><div class="eyebrow">ЦЕПОЧКА</div><h4>Шаги</h4></div><button id="automationAddStep" class="feature-btn">＋ Шаг</button></div><div id="automationSteps" class="automation-steps"></div><div class="feature-actions-row"><button id="automationSave" class="feature-btn primary-feature">Сохранить</button><button id="automationRunDraft" class="feature-btn">Сохранить и запустить</button></div>`;
+    renderAutomationSteps();el("automationTrigger").addEventListener("change",()=>el("automationInterval").disabled=el("automationTrigger").value!=="interval");el("automationInterval").disabled=true;
+    el("automationAddStep").addEventListener("click",()=>{automationDraftSteps.push({id:`step-${Date.now()}`,type:"prompt",value:"",modelKey:"",delayMs:0});renderAutomationSteps();});
+    const collect=()=>normalizeAutomation({name:el("automationName").value,description:el("automationDescription").value,trigger:el("automationTrigger").value,intervalMs:+el("automationInterval").value*60000,steps:automationDraftSteps});
+    el("automationSave").addEventListener("click",()=>{const a=collect(),v=validateAutomation(a);if(!v.valid)return core.showToast(v.error,2800);automations=[a,...automations.filter(x=>x.id!==a.id)].slice(0,30);saveAutomations();scheduleAutomations();renderAutomationList();core.showToast("Автоматизация сохранена",1600);});
+    el("automationRunDraft").addEventListener("click",async()=>{const a=collect(),v=validateAutomation(a);if(!v.valid)return core.showToast(v.error,2800);automations=[a,...automations.filter(x=>x.id!==a.id)].slice(0,30);saveAutomations();scheduleAutomations();renderAutomationList();await runSavedAutomation(a.id);});
+  }
   function renderWorkPanel() {
     el("featureWork").innerHTML = `
-      <section class="feature-section"><div class="feature-section-head"><div><div class="eyebrow">ПРОСТРАНСТВА</div><h4>Проекты и контексты</h4></div><button id="newWorkspaceBtn" class="feature-btn">＋ Пространство</button></div><div id="workspaceList" class="feature-list"></div></section>
+      <section class="feature-section automation-feature"><div class="feature-section-head"><div><div class="eyebrow">AUTOMATION STUDIO</div><h4>Целые цепочки действий</h4></div><span class="cap-pill ok">ЛОКАЛЬНО</span></div><p class="feature-muted">Собери цепочку: ИИ → смена модели → память → пауза. {{input}} — вход, {{last}} — предыдущий результат.</p><div id="automationBuilder"></div><div id="automationList" class="feature-list"></div></section><section class="feature-section"><div class="feature-section-head"><div><div class="eyebrow">ПРОСТРАНСТВА</div><h4>Проекты и контексты</h4></div><button id="newWorkspaceBtn" class="feature-btn">＋ Пространство</button></div><div id="workspaceList" class="feature-list"></div></section>
       <div class="tool-grid">
         <section class="feature-section"><div class="feature-section-head"><div><div class="eyebrow">ЗАМЕТКИ</div><h4>Локальные заметки</h4></div><div class="feature-actions-row"><button id="aiNoteBtn" class="feature-btn">Заметка с ИИ</button><button id="newNoteBtn" class="feature-btn">＋</button></div></div><div id="noteEditor" class="hidden"><input id="noteTitle" class="feature-input" placeholder="Название"/><textarea id="noteBody" class="feature-textarea" rows="6" placeholder="Текст заметки"></textarea><button id="saveNoteBtn" class="feature-btn primary-feature">Сохранить</button></div><div id="noteList" class="feature-list"></div></section>
         <section class="feature-section"><div class="feature-section-head"><div><div class="eyebrow">ЗАДАЧИ</div><h4>Локальный список дел</h4></div><button id="extractTasksBtn" class="feature-btn">ИИ → задачи</button></div><div class="inline-fields"><input id="taskInput" class="feature-input" placeholder="Новая задача"/><button id="addTaskBtn" class="feature-btn">＋</button></div><div id="taskList" class="feature-list"></div></section>
@@ -1209,7 +1299,7 @@ async function initAdvancedFeatures(core) {
       <section class="feature-section"><div class="feature-section-head"><div><div class="eyebrow">ИСТОРИЯ ВЕРСИЙ</div><h4>Старые версии ответов</h4></div></div><div id="revisionList" class="feature-list"></div></section>
       <section class="feature-section"><div class="feature-section-head"><div><div class="eyebrow">ПАКЕТ ПРОЕКТА</div><h4>Экспорт / импорт локального пространства</h4></div></div><p class="feature-muted">Экспортирует чаты, память, файлы, ассистентов, заметки, задачи, избранное и результаты бенчмарков. Веса моделей не входят.</p><div class="feature-actions-row"><button id="packExport" class="feature-btn primary-feature">Экспорт JSON</button><button id="packImport" class="feature-btn">Импорт JSON</button><input id="packFile" type="file" accept="application/json,.json" class="hidden"/></div></section>
     `;
-    bindWork(); renderWorkspaces(); renderNotes(); renderTasks(); renderFavorites(); renderRevisions();
+    bindWork(); renderAutomationBuilder(); renderAutomationList(); renderWorkspaces(); renderNotes(); renderTasks(); renderFavorites(); renderRevisions(); scheduleAutomations();
   }
 
   function renderMediaPanel() {
@@ -1265,6 +1355,7 @@ async function initAdvancedFeatures(core) {
   }
   aiOS.querySelectorAll(".feature-tab").forEach((b) => b.addEventListener("click", () => selectFeatureTab(b.dataset.featureTab)));
   advancedBtn.addEventListener("click", () => { renderHome(); aiOS.showModal(); });
+  document.querySelectorAll(".automation-open").forEach((button) => button.addEventListener("click", () => { renderFeaturePanel("work"); selectFeatureTab("work"); aiOS.showModal(); setTimeout(() => el("automationName")?.focus(), 60); }));
   routeChip.addEventListener("click", () => { renderHome(); aiOS.showModal(); });
 
   // ---------- assistants ----------
@@ -1789,6 +1880,7 @@ async function initAdvancedFeatures(core) {
   // ---------- command palette ----------
   const commands = [
     ["/главная", "Перейти на главную", () => { palette.close(); window.QwenNavigation?.navigate?.("home"); }],
+    ["/автоматизации", "Открыть Automation Studio", () => { palette.close(); aiOS.showModal(); selectFeatureTab("work"); setTimeout(()=>el("automationName")?.focus(),50); }],
     ["/чаты", "Открыть менеджер чатов", () => { palette.close(); window.QwenNavigation?.navigate?.("chats"); }],
     ["/модели", "Открыть модели", () => { palette.close(); window.QwenNavigation?.navigate?.("models"); }],
     ["/инструменты", "Открыть центр инструментов", () => { palette.close(); window.QwenNavigation?.navigate?.("tools"); }],
@@ -1808,7 +1900,7 @@ async function initAdvancedFeatures(core) {
     ["/офлайн", "Готовность офлайн", () => { palette.close(); aiOS.showModal(); selectFeatureTab("system"); setTimeout(()=>el("readinessBtn")?.click(),50); }],
   ];
   const commandAliases = new Map([
-    ["/home", "/главная"], ["/chats", "/чаты"], ["/models", "/модели"], ["/tools", "/инструменты"],
+    ["/home", "/главная"], ["/automation", "/автоматизации"], ["/автоматизация", "/автоматизации"], ["/chats", "/чаты"], ["/models", "/модели"], ["/tools", "/инструменты"],
     ["/battle", "/сравнить"], ["/turbo", "/турбо"], ["/memory", "/память"], ["/files", "/файлы"],
     ["/python", "/питон"], ["/ide", "/иде"], ["/study", "/учёба"], ["/benchmark", "/тест"],
     ["/vault", "/сейф"], ["/search", "/поиск"], ["/incognito", "/инкогнито"], ["/voice", "/голос"],
