@@ -77,12 +77,14 @@ class StudioIntegration(context: Context) {
         val encoded=java.net.URLEncoder.encode(q,Charsets.UTF_8.name())
         // Search in the user's likely language first, then supplement with English results.
         val preferred=if(q.any { it in '\u0400'..'\u04FF' }) listOf("ru","en") else listOf("en","ru")
+        val maxResults=limit.coerceIn(1,10)
+        val wikiTarget=if(maxResults<3) maxResults else maxOf(1,(maxResults*2)/3)
         val out=JSONArray()
         val seen=mutableSetOf<String>()
         val errors=mutableListOf<String>()
         for(lang in preferred) {
-            if(out.length() >= limit.coerceIn(1,10)) break
-            val url=URL("https://$lang.wikipedia.org/w/api.php?action=query&list=search&srsearch=$encoded&format=json&utf8=1&srlimit=${((limit.coerceIn(1,10)+1)/2)}")
+            if(out.length() >= wikiTarget) break
+            val url=URL("https://$lang.wikipedia.org/w/api.php?action=query&list=search&srsearch=$encoded&format=json&utf8=1&srlimit=${maxOf(1,(wikiTarget+1)/2)}")
             val connection=(url.openConnection() as HttpURLConnection).apply {
                 connectTimeout=7000; readTimeout=9000; instanceFollowRedirects=false
                 requestMethod="GET"; setRequestProperty("User-Agent","NeuroNovaAILabXPlus/0.25 (Android; research assistant)")
@@ -93,20 +95,55 @@ class StudioIntegration(context: Context) {
                 val body=connection.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText().take(180_000) }
                 val results=JSONObject(body).optJSONObject("query")?.optJSONArray("search") ?: JSONArray()
                 for(i in 0 until results.length()) {
-                    if(out.length() >= limit.coerceIn(1,10)) break
+                    if(out.length() >= wikiTarget) break
                     val item=results.optJSONObject(i) ?: continue
                     val title=item.optString("title")
                     val pageUrl="https://$lang.wikipedia.org/wiki/"+java.net.URLEncoder.encode(title.replace(' ','_'),Charsets.UTF_8.name()).replace("+","%20")
                     if(!seen.add(pageUrl)) continue
                     val snippet=stripHtml(item.optString("snippet")).take(900)
-                    out.put(JSONObject().put("title",title).put("url",pageUrl).put("snippet",snippet).put("language",lang))
+                    out.put(JSONObject().put("title",title).put("url",pageUrl).put("snippet",snippet).put("language",lang).put("provider","Wikipedia"))
                 }
             } catch(e:Exception) {
                 errors += "$lang: ${e.message?.take(100) ?: "ошибка сети"}"
             } finally { connection.disconnect() }
         }
+        if(out.length()<maxResults) {
+            val openAlexUrl=URL("https://api.openalex.org/works?search=$encoded&per-page=${maxResults-out.length()}")
+            val connection=(openAlexUrl.openConnection() as HttpURLConnection).apply {
+                connectTimeout=7000; readTimeout=9000; instanceFollowRedirects=true
+                requestMethod="GET"; setRequestProperty("User-Agent","NeuroNovaAILabXPlus/0.25 (Android; research assistant)")
+            }
+            try {
+                val code=connection.responseCode
+                require(code in 200..299) { "OpenAlex: HTTP $code" }
+                val body=connection.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText().take(500_000) }
+                val results=JSONObject(body).optJSONArray("results") ?: JSONArray()
+                for(i in 0 until results.length()) {
+                    if(out.length()>=maxResults) break
+                    val item=results.optJSONObject(i) ?: continue
+                    val title=item.optString("title").trim()
+                    val doi=item.optString("doi").trim()
+                    val landing=item.optJSONObject("primary_location")?.optString("landing_page_url").orEmpty().trim()
+                    val id=item.optString("id").trim()
+                    val resultUrl=when {
+                        doi.startsWith("https://",true) -> doi
+                        landing.startsWith("https://",true) -> landing
+                        id.startsWith("https://",true) -> id
+                        else -> ""
+                    }
+                    if(title.isBlank() || resultUrl.isBlank() || !seen.add(resultUrl)) continue
+                    val year=item.optInt("publication_year",0).takeIf { it>0 }?.toString().orEmpty()
+                    val authors=item.optJSONArray("authorships")
+                    val firstAuthor=authors?.optJSONObject(0)?.optJSONObject("author")?.optString("display_name").orEmpty()
+                    val detail=listOf(firstAuthor,year).filter { it.isNotBlank() }.joinToString(" · ")
+                    out.put(JSONObject().put("title",title).put("url",resultUrl).put("snippet",detail.ifBlank { "Научная публикация из OpenAlex." }).put("language","global").put("provider","OpenAlex"))
+                }
+            } catch(e:Exception) {
+                errors += "OpenAlex: ${e.message?.take(100) ?: "ошибка сети"}"
+            } finally { connection.disconnect() }
+        }
         require(out.length()>0) { "Поиск недоступен. ${errors.joinToString("; ")}" }
-        return JSONObject().put("query",q).put("provider","Wikipedia RU/EN").put("results",out)
+        return JSONObject().put("query",q).put("provider","Wikipedia RU/EN + OpenAlex").put("results",out)
     }
 
     fun summary():JSONObject=JSONObject().put("chunks",load().size).put("sources",JSONArray(load().map{it.source}.distinct())).put("maxDocuments",maxSources).put("maxChunks",maxChunks)
