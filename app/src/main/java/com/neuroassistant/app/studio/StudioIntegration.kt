@@ -66,26 +66,38 @@ class StudioIntegration(context: Context) {
         val q=query.trim()
         require(q.length in 2..240) { "Введи запрос от 2 до 240 символов." }
         val encoded=java.net.URLEncoder.encode(q,Charsets.UTF_8.name())
-        val url=URL("https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=$encoded&format=json&utf8=1&srlimit=${limit.coerceIn(1,10)}")
-        val connection=(url.openConnection() as HttpURLConnection).apply {
-            connectTimeout=8000; readTimeout=12000; instanceFollowRedirects=false
-            requestMethod="GET"; setRequestProperty("User-Agent","NeuroNovaStudio/0.19 (Android; research assistant)")
-        }
-        return try {
-            val code=connection.responseCode
-            require(code in 200..299) { "Поиск вернул HTTP $code" }
-            val body=connection.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText().take(180_000) }
-            val results=JSONObject(body).optJSONObject("query")?.optJSONArray("search") ?: JSONArray()
-            val out=JSONArray()
-            for(i in 0 until results.length()) {
-                val item=results.optJSONObject(i) ?: continue
-                val title=item.optString("title")
-                val pageUrl="https://en.wikipedia.org/wiki/"+java.net.URLEncoder.encode(title.replace(' ','_'),Charsets.UTF_8.name()).replace("+","%20")
-                val snippet=stripHtml(item.optString("snippet")).take(900)
-                out.put(JSONObject().put("title",title).put("url",pageUrl).put("snippet",snippet))
+        // Search in the user's likely language first, then supplement with English results.
+        val preferred=if(q.any { it in '\u0400'..'\u04FF' }) listOf("ru","en") else listOf("en","ru")
+        val out=JSONArray()
+        val seen=mutableSetOf<String>()
+        val errors=mutableListOf<String>()
+        for(lang in preferred) {
+            if(out.length() >= limit.coerceIn(1,10)) break
+            val url=URL("https://$lang.wikipedia.org/w/api.php?action=query&list=search&srsearch=$encoded&format=json&utf8=1&srlimit=${limit.coerceIn(1,10)}")
+            val connection=(url.openConnection() as HttpURLConnection).apply {
+                connectTimeout=7000; readTimeout=9000; instanceFollowRedirects=false
+                requestMethod="GET"; setRequestProperty("User-Agent","NeuroNovaStudio/0.24 (Android; research assistant)")
             }
-            JSONObject().put("query",q).put("provider","Wikipedia").put("results",out)
-        } finally { connection.disconnect() }
+            try {
+                val code=connection.responseCode
+                require(code in 200..299) { "$lang Wikipedia: HTTP $code" }
+                val body=connection.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText().take(180_000) }
+                val results=JSONObject(body).optJSONObject("query")?.optJSONArray("search") ?: JSONArray()
+                for(i in 0 until results.length()) {
+                    if(out.length() >= limit.coerceIn(1,10)) break
+                    val item=results.optJSONObject(i) ?: continue
+                    val title=item.optString("title")
+                    val pageUrl="https://$lang.wikipedia.org/wiki/"+java.net.URLEncoder.encode(title.replace(' ','_'),Charsets.UTF_8.name()).replace("+","%20")
+                    if(!seen.add(pageUrl)) continue
+                    val snippet=stripHtml(item.optString("snippet")).take(900)
+                    out.put(JSONObject().put("title",title).put("url",pageUrl).put("snippet",snippet).put("language",lang))
+                }
+            } catch(e:Exception) {
+                errors += "$lang: ${e.message?.take(100) ?: "ошибка сети"}"
+            } finally { connection.disconnect() }
+        }
+        require(out.length()>0) { "Поиск недоступен. ${errors.joinToString("; ")}" }
+        return JSONObject().put("query",q).put("provider","Wikipedia RU/EN").put("results",out)
     }
 
     fun summary():JSONObject=JSONObject().put("chunks",load().size).put("sources",JSONArray(load().map{it.source}.distinct())).put("maxDocuments",maxDocuments)
