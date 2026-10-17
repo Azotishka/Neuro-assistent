@@ -81,5 +81,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: NeuroNovaAILab-v0.23-responsive-ui-repair-apk
+          name: NeuroNovaAILab-v0.24-ai-runtime-snake-headless-ui-audit-apk
           path: app/build/outputs/apk/debug/app-debug.apk
