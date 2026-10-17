@@ -73,7 +73,7 @@ class StudioIntegration(context: Context) {
         val errors=mutableListOf<String>()
         for(lang in preferred) {
             if(out.length() >= limit.coerceIn(1,10)) break
-            val url=URL("https://$lang.wikipedia.org/w/api.php?action=query&list=search&srsearch=$encoded&format=json&utf8=1&srlimit=${limit.coerceIn(1,10)}")
+            val url=URL("https://$lang.wikipedia.org/w/api.php?action=query&list=search&srsearch=$encoded&format=json&utf8=1&srlimit=${((limit.coerceIn(1,10)+1)/2)}")
             val connection=(url.openConnection() as HttpURLConnection).apply {
                 connectTimeout=7000; readTimeout=9000; instanceFollowRedirects=false
                 requestMethod="GET"; setRequestProperty("User-Agent","NeuroNovaStudio/0.24 (Android; research assistant)")
@@ -122,7 +122,7 @@ class StudioIntegration(context: Context) {
         val host=uri.host?.lowercase(Locale.ROOT) ?: error("Некорректный host")
         require(host!="localhost" && host!="127.0.0.1" && !host.startsWith("10.") && !host.startsWith("192.168.") && !host.startsWith("169.254.")){"Локальные адреса запрещены"}
         val addresses=InetAddress.getAllByName(host)
-        require(addresses.isNotEmpty() && addresses.all { !it.isAnyLocalAddress && !it.isLoopbackAddress && !it.isLinkLocalAddress }){"Адрес указывает на локальную сеть"}
+        require(addresses.isNotEmpty() && addresses.all { !it.isAnyLocalAddress && !it.isLoopbackAddress && !it.isLinkLocalAddress && !it.isSiteLocalAddress && !it.isMulticastAddress }){"Адрес указывает на локальную сеть"}
         return uri
     }
 
