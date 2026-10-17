@@ -67,3 +67,10 @@ test("headless snake training caps each main-thread batch and yields between bat
   assert.match(snake, /Math\.min\(5000,Math\.max\(100,Number\(\$\('nnsBatch'\)\.value\)\)\)/);
   assert.match(snake, /setTimeout\(\(\)=>tickHeadless\(token\),0\)/);
 });
+
+
+test("research searches both encyclopedia and open scholarly metadata", () => {
+  assert.match(studio, /api\.openalex\.org\/works/);
+  assert.match(studio, /Wikipedia RU\/EN \+ OpenAlex/);
+  assert.match(research, /OpenAlex/);
+});
