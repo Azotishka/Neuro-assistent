@@ -126,8 +126,8 @@ class StudioIntegration(context: Context) {
                     val landing=item.optJSONObject("primary_location")?.optString("landing_page_url").orEmpty().trim()
                     val id=item.optString("id").trim()
                     val resultUrl=when {
-                        doi.startsWith("https://",true) -> doi
                         landing.startsWith("https://",true) -> landing
+                        doi.startsWith("https://",true) -> doi
                         id.startsWith("https://",true) -> id
                         else -> ""
                     }
