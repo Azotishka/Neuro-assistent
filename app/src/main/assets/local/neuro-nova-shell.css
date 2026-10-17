@@ -172,3 +172,78 @@ body[data-page="settings"] .app-shell>#mobileSettingsPage{display:block!importan
  .app-shell .send-btn{padding:0 10px;font-size:12px}
 }
 @media(prefers-reduced-motion:reduce){.app-shell *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+
+/* 0.24.0 regression guard: one active page, one scroll container, no leaked model controls. */
+.app-shell{grid-auto-rows:min-content;align-content:start}
+.app-shell>.topbar{grid-row:1!important}
+.app-shell>#desktopNav{grid-row:2!important}
+.app-shell>#tabletToolRail{grid-row:2!important}
+body[data-page="home"] .app-shell>.models-section,
+body[data-page="home"] .app-shell>#statusPanel,
+body[data-page="home"] .app-shell>.control-deck,
+body[data-page="home"] .app-shell>#chat,
+body[data-page="home"] .app-shell>#chatActions,
+body[data-page="home"] .app-shell>.composer-wrap,
+body[data-page="home"] .app-shell>#chatsPage,
+body[data-page="home"] .app-shell>#mobileLibraryPage,
+body[data-page="home"] .app-shell>#mobileToolsPage,
+body[data-page="home"] .app-shell>#mobileSettingsPage{display:none!important}
+body[data-page="models"] .app-shell>#mobileHomeDashboard,
+body[data-page="models"] .app-shell>#chat,
+body[data-page="models"] .app-shell>#chatActions,
+body[data-page="models"] .app-shell>.composer-wrap,
+body[data-page="models"] .app-shell>#chatsPage,
+body[data-page="models"] .app-shell>#mobileLibraryPage,
+body[data-page="models"] .app-shell>#mobileToolsPage,
+body[data-page="models"] .app-shell>#mobileSettingsPage{display:none!important}
+body[data-page="chat"] .app-shell>#mobileHomeDashboard,
+body[data-page="chat"] .app-shell>.models-section,
+body[data-page="chat"] .app-shell>#chatsPage,
+body[data-page="chat"] .app-shell>#mobileLibraryPage,
+body[data-page="chat"] .app-shell>#mobileToolsPage,
+body[data-page="chat"] .app-shell>#mobileSettingsPage{display:none!important}
+body[data-page="chats"] .app-shell>#mobileHomeDashboard,
+body[data-page="chats"] .app-shell>.models-section,
+body[data-page="chats"] .app-shell>#statusPanel,
+body[data-page="chats"] .app-shell>.control-deck,
+body[data-page="chats"] .app-shell>#chat,
+body[data-page="chats"] .app-shell>#chatActions,
+body[data-page="chats"] .app-shell>.composer-wrap{display:none!important}
+body[data-page="data"] .app-shell>#mobileHomeDashboard,
+body[data-page="data"] .app-shell>.models-section,
+body[data-page="data"] .app-shell>#statusPanel,
+body[data-page="data"] .app-shell>.control-deck,
+body[data-page="data"] .app-shell>#chat,
+body[data-page="data"] .app-shell>#chatActions,
+body[data-page="data"] .app-shell>.composer-wrap{display:none!important}
+body[data-page="tools"] .app-shell>#mobileHomeDashboard,
+body[data-page="tools"] .app-shell>.models-section,
+body[data-page="tools"] .app-shell>#statusPanel,
+body[data-page="tools"] .app-shell>.control-deck,
+body[data-page="tools"] .app-shell>#chat,
+body[data-page="tools"] .app-shell>#chatActions,
+body[data-page="tools"] .app-shell>.composer-wrap{display:none!important}
+body[data-page="settings"] .app-shell>#mobileHomeDashboard,
+body[data-page="settings"] .app-shell>.models-section,
+body[data-page="settings"] .app-shell>#statusPanel,
+body[data-page="settings"] .app-shell>.control-deck,
+body[data-page="settings"] .app-shell>#chat,
+body[data-page="settings"] .app-shell>#chatActions,
+body[data-page="settings"] .app-shell>.composer-wrap{display:none!important}
+.app-shell>#statusPanel,.app-shell>.control-deck{grid-column:2;grid-row:auto;align-self:start;min-width:0}
+.app-shell>.models-section,.app-shell>#mobileHomeDashboard,.app-shell>#chatsPage,.app-shell>#mobileLibraryPage,.app-shell>#mobileToolsPage,.app-shell>#mobileSettingsPage{grid-column:2;grid-row:2;align-self:start;min-width:0}
+body[data-page="models"] .app-shell>#statusPanel{grid-row:3}
+body[data-page="models"] .app-shell>.control-deck{grid-row:4}
+body[data-page="chat"] .app-shell>#statusPanel{grid-row:2}
+body[data-page="chat"] .app-shell>.control-deck{grid-row:3}
+body[data-page="chat"] .app-shell>#chat{grid-row:4;min-height:320px}
+body[data-page="chat"] .app-shell>#chatActions:not(.hidden){grid-row:5}
+body[data-page="chat"] .app-shell>.composer-wrap{grid-row:6}
+@media(max-width:820px){
+ .app-shell{grid-auto-rows:auto;align-content:stretch}
+ .app-shell>#statusPanel,.app-shell>.control-deck{grid-column:auto;grid-row:auto!important}
+ .app-shell>.models-section,.app-shell>#mobileHomeDashboard,.app-shell>#chatsPage,.app-shell>#mobileLibraryPage,.app-shell>#mobileToolsPage,.app-shell>#mobileSettingsPage{grid-column:auto;grid-row:auto!important}
+ body[data-page="models"] .app-shell>#statusPanel,body[data-page="models"] .app-shell>.control-deck{display:block!important}
+ body[data-page="chat"] .app-shell>#statusPanel,body[data-page="chat"] .app-shell>.control-deck{display:block!important}
+}
