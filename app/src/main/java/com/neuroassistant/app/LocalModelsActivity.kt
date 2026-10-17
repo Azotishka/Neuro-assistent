@@ -163,7 +163,7 @@ class LocalModelsActivity : ComponentActivity() {
         setContentView(FrameLayout(this).apply { addView(web, FrameLayout.LayoutParams(-1, -1)) })
         // Keep the POCO profile explicit: Android WebView often hides the exact model
         // from navigator.userAgent and navigator.deviceMemory.
-        web.loadUrl("https://appassets.androidplatform.net/assets/local/index.html?app=android&v=0.19.0#home")
+        web.loadUrl("https://appassets.androidplatform.net/assets/local/index.html?app=android&v=0.25.0#home")
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 web.evaluateJavascript("window.NeuroShell?.handleBack() === true") { consumed ->
