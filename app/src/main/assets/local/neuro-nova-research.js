@@ -58,7 +58,7 @@
       const urls=[...new Set(dlg.querySelector('#nnrUrl').value.split(/[\\n,;]+/).map(x=>x.trim()).filter(Boolean))];
       if(!urls.length){setStatus('Вставь хотя бы одну HTTPS-ссылку.');return}
       if(urls.length>10){setStatus('За один запуск можно импортировать не более 10 ссылок.');return}
-      if(urls.some(u=>!/^https:\\/\\//i.test(u))){setStatus('Каждая ссылка должна начинаться с https://');return}
+      if(urls.some(u=>!u.toLowerCase().startsWith('https://'))){setStatus('Каждая ссылка должна начинаться с https://');return}
       results.replaceChildren();bussy(true);let ok=0,failed=[];
       try{requireBridge();for(let i=0;i<urls.length;i++){
         setStatus('Индексирую источник '+(i+1)+' из '+urls.length+'…');
