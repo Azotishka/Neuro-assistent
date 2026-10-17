@@ -49,4 +49,6 @@ test("internet search supports Russian and English and blocks local targets", ()
   assert.match(studio, /listOf\("ru","en"\)/);
   assert.match(studio, /listOf\("en","ru"\)/);
   assert.match(studio, /isSiteLocalAddress/);
+  assert.match(studio, /maxChunks=360/);
+  assert.match(studio, /maxSources=40/);
 });
