@@ -20,6 +20,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Generate compatibility bundle and run release tests
+        working-directory: app/src/main/assets/local
+        run: npm run build
+
+      - name: Neuro Nova regression tests
+        working-directory: app/src/main/assets/local
+        run: node --test ./tests/neuro-nova-regression.test.mjs
+
       - name: JavaScript syntax audit
         run: |
           set -e
