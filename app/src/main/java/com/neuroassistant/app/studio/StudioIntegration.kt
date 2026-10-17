@@ -108,7 +108,7 @@ class StudioIntegration(context: Context) {
             } finally { connection.disconnect() }
         }
         if(out.length()<maxResults) {
-            val openAlexUrl=URL("https://api.openalex.org/works?search=$encoded&per-page=${maxResults-out.length()}")
+            val openAlexUrl=URL("https://api.openalex.org/works?search=$encoded&per-page=${maxResults-out.length()}&select=id,doi,title,publication_year,authorships,primary_location")
             val connection=(openAlexUrl.openConnection() as HttpURLConnection).apply {
                 connectTimeout=7000; readTimeout=9000; instanceFollowRedirects=true
                 requestMethod="GET"; setRequestProperty("User-Agent","NeuroNovaAILabXPlus/0.25 (Android; research assistant)")
