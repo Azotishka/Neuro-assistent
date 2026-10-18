@@ -6,6 +6,7 @@ const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 const html = read("../index.html");
 const css = read("../neuro-nova-shell.css");
 const hotfix = read("../neuro-nova-layout-hotfix.css");
+const layout027 = read("../neuro-nova-layout-v027.css");
 const app = read("../app.js");
 const snake = read("../neuro-nova-snake.js");
 const research = read("../neuro-nova-research.js");
@@ -84,4 +85,14 @@ test("research searches both encyclopedia and open scholarly metadata", () => {
   assert.match(studio, /Wikipedia RU\/EN \+ OpenAlex/);
   assert.match(research, /OpenAlex/);
   assert.match(research, /научными публикациями OpenAlex/);
+});
+
+test("0.27 layout override removes duplicate navigation and isolates each page on tablet widths", () => {
+  assert.match(html, /neuro-nova-layout-v027\\.css\\?v=0\\.27\\.0/);
+  assert.match(layout027, /@media \\(max-width: 900px\\)/);
+  assert.match(layout027, /\.app-shell > #desktopNav,[\\s\\S]*?display:none !important/);
+  assert.match(layout027, /#mobileNav \\{[\\s\\S]*?display:grid !important/);
+  assert.match(layout027, /@media \\(min-width: 901px\\)/);
+  assert.match(layout027, /body\\[data-page="chat"\\] \.app-shell > #statusPanel,[\\s\\S]*?display:none !important/);
+  assert.match(layout027, /env\\(safe-area-inset-bottom,0px\\)/);
 });
