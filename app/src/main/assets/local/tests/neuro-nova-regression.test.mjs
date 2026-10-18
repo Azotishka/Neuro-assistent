@@ -13,13 +13,13 @@ const research = read("../neuro-nova-research.js");
 const studio = read("../../../java/com/neuroassistant/app/studio/StudioIntegration.kt");
 
 test("app shell loads versioned styles and learning modules", () => {
-  assert.ok(html.includes("neuro-nova-shell.css?v=0.28.0"));
-  assert.ok(html.includes("neuro-nova-research.js?v=0.28.0"));
-  assert.ok(html.includes("neuro-nova-snake.js?v=0.28.0"));
+  assert.ok(html.includes("neuro-nova-shell.css?v=0.29.0"));
+  assert.ok(html.includes("neuro-nova-research.js?v=0.29.0"));
+  assert.ok(html.includes("neuro-nova-snake.js?v=0.29.0"));
 });
 
 test("tablet layout hotfix prevents vertical bottom navigation and restores styled page controls", () => {
-  assert.ok(html.includes("neuro-nova-layout-hotfix.css?v=0.28.0"));
+  assert.ok(html.includes("neuro-nova-layout-hotfix.css?v=0.29.0"));
   assert.match(hotfix, /#desktopNav\s*\{[^}]*display:\s*none\s*!important/s);
   assert.match(hotfix, /#mobileNav\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/s);
   assert.match(hotfix, /#mobileNav button\.active/);
@@ -86,7 +86,7 @@ test("research searches both encyclopedia and open scholarly metadata", () => {
   assert.match(research, /научными публикациями OpenAlex/);
 });
 
-test("0.28 final layout removes duplicate navigation and isolates content on tablets", () => {
+test("0.29 final layout removes duplicate navigation and isolates content on tablets", () => {
   assert.match(html, /neuro-nova-final-layout\.css\?v=0\.28\.0/);
   assert.doesNotMatch(html, /neuro-nova-layout-v027\.css/);
   assert.match(finalLayout, /@media \(max-width: 1100px\)/);
