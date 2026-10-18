@@ -13,13 +13,13 @@ const research = read("../neuro-nova-research.js");
 const studio = read("../../../java/com/neuroassistant/app/studio/StudioIntegration.kt");
 
 test("app shell loads versioned styles and learning modules", () => {
-  assert.ok(html.includes("neuro-nova-shell.css?v=0.29.0"));
-  assert.ok(html.includes("neuro-nova-research.js?v=0.29.0"));
-  assert.ok(html.includes("neuro-nova-snake.js?v=0.29.0"));
+  assert.ok(html.includes("neuro-nova-shell.css?v=0.31.0"));
+  assert.ok(html.includes("neuro-nova-research.js?v=0.31.0"));
+  assert.ok(html.includes("neuro-nova-snake.js?v=0.31.0"));
 });
 
 test("tablet layout hotfix prevents vertical bottom navigation and restores styled page controls", () => {
-  assert.ok(html.includes("neuro-nova-layout-hotfix.css?v=0.29.0"));
+  assert.ok(html.includes("neuro-nova-layout-hotfix.css?v=0.31.0"));
   assert.match(hotfix, /#desktopNav\s*\{[^}]*display:\s*none\s*!important/s);
   assert.match(hotfix, /#mobileNav\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/s);
   assert.match(hotfix, /#mobileNav button\.active/);
@@ -86,7 +86,7 @@ test("research searches both encyclopedia and open scholarly metadata", () => {
   assert.match(research, /научными публикациями OpenAlex/);
 });
 
-test("0.29 final layout removes duplicate navigation and isolates content on tablets", () => {
+test("0.31 layout regression guard removes duplicate navigation and isolates content on tablets", () => {
   assert.match(html, /neuro-nova-final-layout\.css\?v=0\.29\.0/);
   assert.doesNotMatch(html, /neuro-nova-layout-v027\.css/);
   assert.match(finalLayout, /@media \(max-width: 1100px\)/);
@@ -94,4 +94,18 @@ test("0.29 final layout removes duplicate navigation and isolates content on tab
   assert.match(finalLayout, /#mobileNav[\s\S]*?grid-template-columns:repeat\(5,minmax\(0,1fr\)\) !important/);
   assert.match(finalLayout, /body\[data-page="tools"\][\s\S]*?display:block !important/);
   assert.match(finalLayout, /env\(safe-area-inset-bottom, 0px\)/);
+});
+
+
+test("0.31 last-loaded UX stylesheet prevents duplicate nav and full-width collapse on tablets", () => {
+  assert.ok(html.indexOf("neuro-nova-ux-polish.css?v=0.31.0") > html.indexOf("neuro-nova-final-layout.css?v=0.31.0"));
+  const polish = read("../neuro-nova-ux-polish.css");
+  assert.match(polish, /0\.31\.0 regression repair/);
+  assert.match(polish, /#desktopNav[\s\S]{0,180}display:none!important/);
+  assert.match(polish, /grid-template-columns:repeat\(5,minmax\(0,1fr\)\)!important/);
+  assert.match(polish, /padding:calc\(24px \+ env\(safe-area-inset-top/);
+  assert.match(polish, /body\[data-page="tools"\][\s\S]{0,180}display:block!important/);
+  const shell = read("../neuro-nova-shell.js");
+  assert.match(shell, /#desktopNav \[data-route\],#mobileNav \[data-route\]/);
+  assert.match(shell, /aria-current/);
 });
