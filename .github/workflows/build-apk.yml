@@ -1,7 +1,7 @@
 name: Build Neuro Nova AI Lab X Plus Tablet APK
 
 concurrency:
-  group: neuroassistant-apk-${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  group: neuroassistant-apk-${{ github.workflow }}-${{ github.head_ref || github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 on:
