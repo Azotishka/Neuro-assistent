@@ -1,0 +1,121 @@
+/* Neuro Nova 0.28.0 — final tablet/phone layout containment layer.
+   Loaded last intentionally: neutralizes legacy grid/fixed-nav rules. */
+@media (max-width: 1100px) {
+  html, body { width:100%; max-width:100%; overflow-x:clip; }
+  body { margin:0; }
+  .app-shell {
+    display:flex !important; flex-direction:column !important; align-items:stretch !important;
+    width:100% !important; max-width:100% !important; min-width:0 !important;
+    min-height:100dvh !important; height:auto !important; gap:0 !important;
+    padding:0 0 calc(104px + env(safe-area-inset-bottom, 0px)) !important;
+    overflow:clip visible !important;
+  }
+  .app-shell > #desktopNav, .app-shell > #desktopChatRail,
+  .app-shell > #tabletToolRail { display:none !important; visibility:hidden !important; }
+  .app-shell > .topbar {
+    position:sticky !important; inset:0 0 auto !important; display:flex !important;
+    flex-wrap:nowrap !important; width:100% !important; max-width:100% !important;
+    min-width:0 !important; height:auto !important; min-height:64px !important;
+    padding:8px 12px !important; gap:8px !important; z-index:300 !important;
+  }
+  .app-shell > .topbar .brand { flex:1 1 auto !important; min-width:0 !important; }
+  .app-shell > .topbar .brand .eyebrow { display:none !important; }
+  .app-shell > .topbar .brand h1 { max-width:42vw !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
+  .app-shell > .topbar .top-actions { flex:0 1 auto !important; min-width:0 !important; gap:5px !important; }
+  .app-shell > .topbar .round-btn { flex:0 0 auto !important; width:36px !important; height:36px !important; }
+  .app-shell > .mobile-home-dashboard,
+  .app-shell > #mobileHomeDashboard,
+  .app-shell > .models-section,
+  .app-shell > #statusPanel,
+  .app-shell > .control-deck,
+  .app-shell > #chat,
+  .app-shell > #chatActions,
+  .app-shell > .composer-wrap,
+  .app-shell > #chatsPage,
+  .app-shell > #mobileLibraryPage,
+  .app-shell > #mobileToolsPage,
+  .app-shell > #mobileSettingsPage {
+    box-sizing:border-box !important; position:relative !important; inset:auto !important;
+    float:none !important; transform:none !important; flex:0 0 auto !important;
+    align-self:stretch !important; width:100% !important; max-width:100% !important;
+    min-width:0 !important; margin-left:0 !important; margin-right:0 !important;
+    grid-column:auto !important; grid-row:auto !important;
+  }
+  body[data-page="home"] .app-shell > #mobileHomeDashboard,
+  body[data-page="models"] .app-shell > .models-section,
+  body[data-page="chats"] .app-shell > #chatsPage,
+  body[data-page="data"] .app-shell > #mobileLibraryPage,
+  body[data-page="tools"] .app-shell > #mobileToolsPage,
+  body[data-page="settings"] .app-shell > #mobileSettingsPage { display:block !important; }
+  body[data-page="home"] .app-shell > .models-section,
+  body[data-page="home"] .app-shell > #statusPanel,
+  body[data-page="home"] .app-shell > .control-deck,
+  body[data-page="home"] .app-shell > #chat,
+  body[data-page="home"] .app-shell > .composer-wrap,
+  body[data-page="chats"] .app-shell > #mobileHomeDashboard,
+  body[data-page="chats"] .app-shell > .models-section,
+  body[data-page="chats"] .app-shell > #statusPanel,
+  body[data-page="chats"] .app-shell > .control-deck,
+  body[data-page="chats"] .app-shell > #chat,
+  body[data-page="chats"] .app-shell > .composer-wrap,
+  body[data-page="data"] .app-shell > #mobileHomeDashboard,
+  body[data-page="data"] .app-shell > .models-section,
+  body[data-page="data"] .app-shell > #statusPanel,
+  body[data-page="data"] .app-shell > .control-deck,
+  body[data-page="data"] .app-shell > #chat,
+  body[data-page="data"] .app-shell > .composer-wrap,
+  body[data-page="tools"] .app-shell > #mobileHomeDashboard,
+  body[data-page="tools"] .app-shell > .models-section,
+  body[data-page="tools"] .app-shell > #statusPanel,
+  body[data-page="tools"] .app-shell > .control-deck,
+  body[data-page="tools"] .app-shell > #chat,
+  body[data-page="tools"] .app-shell > .composer-wrap,
+  body[data-page="settings"] .app-shell > #mobileHomeDashboard,
+  body[data-page="settings"] .app-shell > .models-section,
+  body[data-page="settings"] .app-shell > #statusPanel,
+  body[data-page="settings"] .app-shell > .control-deck,
+  body[data-page="settings"] .app-shell > #chat,
+  body[data-page="settings"] .app-shell > .composer-wrap { display:none !important; }
+
+  #mobileNav {
+    display:grid !important; visibility:visible !important; position:fixed !important;
+    left:10px !important; right:10px !important; top:auto !important;
+    bottom:calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    width:auto !important; max-width:none !important; height:auto !important;
+    min-height:64px !important; max-height:82px !important;
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important; grid-auto-flow:row !important;
+    align-content:center !important; align-items:stretch !important;
+    padding:6px !important; gap:4px !important; margin:0 !important;
+    transform:none !important; z-index:500 !important;
+    border:1px solid var(--nn-line) !important; border-radius:20px !important;
+    background:color-mix(in srgb,var(--nn-panel) 96%,transparent) !important;
+    box-shadow:0 12px 36px rgba(0,0,0,.18) !important; backdrop-filter:blur(20px) !important;
+  }
+  #mobileNav button {
+    display:flex !important; position:static !important; width:100% !important; min-width:0 !important;
+    min-height:48px !important; max-height:64px !important; margin:0 !important; padding:4px 2px !important;
+    flex-direction:column !important; flex-wrap:nowrap !important; align-items:center !important;
+    justify-content:center !important; gap:3px !important; transform:none !important;
+    border:0 !important; border-radius:13px !important; background:transparent !important;
+    color:var(--nn-muted) !important; font-size:10px !important; line-height:1.1 !important;
+    white-space:normal !important; box-shadow:none !important;
+  }
+  #mobileNav button span { display:block !important; font-size:17px !important; line-height:1 !important; }
+  #mobileNav button b { display:block !important; font-size:10px !important; font-weight:650 !important; }
+  #mobileNav button.active, #mobileNav button[aria-current="page"] {
+    background:var(--nn-panel-2) !important; color:var(--nn-accent) !important;
+  }
+  .mobile-page-section, .mobile-home-dashboard, .models-section { padding:18px 14px 28px !important; }
+  .mobile-page-section > *, .mobile-home-dashboard > *, .models-section > * { min-width:0; max-width:100%; }
+  .composer-wrap { position:sticky !important; bottom:0 !important; z-index:100 !important; width:100% !important; }
+}
+@media (min-width: 1101px) {
+  #mobileNav { display:none !important; }
+  .app-shell { overflow-x:clip; }
+}
+@media (max-width: 520px) {
+  .app-shell > .topbar .brand-badge { width:34px !important; height:34px !important; }
+  .app-shell > .topbar .brand h1 { font-size:14px !important; max-width:32vw !important; }
+  .app-shell > .topbar .current-chat-title { max-width:32vw !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
+  .app-shell > .topbar .round-btn { width:32px !important; height:32px !important; }
+}
