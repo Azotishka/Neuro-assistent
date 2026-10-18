@@ -1,0 +1,272 @@
+/* Neuro Nova 0.27.0 — single source of responsive layout truth.
+   This file intentionally loads after all legacy/compatibility styles. */
+:root { --nn-page-gutter: clamp(14px, 2.2vw, 30px); --nn-nav-height: 72px; }
+html, body { width:100%; min-width:0; min-height:100%; }
+body { overflow-x:hidden; }
+button, input, textarea, select { box-sizing:border-box; max-width:100%; }
+button {
+  border:1px solid var(--nn-line);
+  border-radius:12px;
+  background:var(--nn-panel);
+  color:var(--nn-text);
+  padding:9px 13px;
+  min-height:40px;
+  line-height:1.25;
+  font-size:14px;
+  font-weight:550;
+  cursor:pointer;
+  transition:background-color .16s ease,border-color .16s ease,transform .16s ease;
+}
+button:disabled { opacity:.48; cursor:not-allowed; }
+button:not(:disabled):active { transform:translateY(1px); }
+input, textarea, select {
+  min-width:0;
+  border:1px solid var(--nn-line);
+  border-radius:12px;
+  background:var(--nn-panel);
+  color:var(--nn-text);
+  padding:10px 12px;
+  font-size:16px;
+}
+textarea { max-width:100%; resize:vertical; }
+.app-shell { min-width:0; width:100%; }
+.app-shell > * { min-width:0; }
+.app-shell .topbar { gap:12px; }
+.app-shell .top-actions { min-width:0; flex-wrap:nowrap; align-items:center; }
+.app-shell .top-actions button { flex:0 0 auto; }
+.app-shell .brand { min-width:0; }
+.app-shell .brand h1 { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.app-shell .models-section,
+.app-shell #mobileHomeDashboard,
+.app-shell #chatsPage,
+.app-shell #mobileLibraryPage,
+.app-shell #mobileToolsPage,
+.app-shell #mobileSettingsPage { min-width:0; }
+.app-shell .mobile-page-section,
+.app-shell .models-section,
+.app-shell #mobileHomeDashboard,
+.app-shell #chatsPage,
+.app-shell #mobileLibraryPage,
+.app-shell #mobileToolsPage,
+.app-shell #mobileSettingsPage { padding:var(--nn-page-gutter); }
+.app-shell .section-head,
+.app-shell .mobile-page-head { margin-bottom:18px; }
+.app-shell .section-head h3,
+.app-shell .mobile-page-head h2 { margin:6px 0 0; }
+.app-shell .quick-start-card,
+.app-shell .home-resume-card,
+.app-shell .home-status-row > button,
+.app-shell .home-mini-grid > button,
+.app-shell .model-quick-bar,
+.app-shell .poco-quick-card,
+.app-shell .stable-core-note,
+.app-shell #statusPanel,
+.app-shell .control-deck,
+.app-shell .page-chat-card,
+.app-shell .chat-manager-card,
+.app-shell .quick-tool-card {
+  min-width:0; max-width:100%; border:1px solid var(--nn-line);
+  border-radius:18px; background:var(--nn-panel); box-shadow:var(--nn-shadow-sm);
+}
+.app-shell .home-welcome-grid { grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:14px; }
+.app-shell .home-status-row { gap:12px; }
+.app-shell .home-mini-grid { gap:12px; }
+.app-shell .composer-wrap { min-width:0; }
+.app-shell .composer { min-width:0; }
+.app-shell #prompt { width:100%; min-width:0; }
+.app-shell .send-btn,
+.app-shell .load-btn,
+.app-shell .primary-page-btn,
+.app-shell .install-btn { background:var(--nn-accent); border-color:var(--nn-accent); color:#fff; }
+.app-shell .secondary-home-action,
+.app-shell .ghost-btn { background:var(--nn-panel-2); border-color:var(--nn-line); color:var(--nn-text); }
+.app-shell .tool-btn { flex:0 0 auto; }
+.app-shell .tool-list,
+.app-shell .tool-catalog,
+.app-shell .mobile-action-list { min-width:0; max-width:100%; }
+.app-shell .tool-list button,
+.app-shell .tool-catalog button,
+.app-shell .mobile-action-list button { white-space:normal; text-align:left; overflow-wrap:anywhere; }
+#mobileNav { display:none !important; }
+@media (max-width: 900px) {
+  .app-shell {
+    display:flex !important; flex-direction:column !important; gap:0 !important;
+    width:100% !important; min-height:100dvh !important; height:auto !important;
+    padding:0 0 calc(var(--nn-nav-height) + 22px + env(safe-area-inset-bottom,0px)) !important;
+    align-content:initial !important; grid-template-columns:none !important; grid-template-rows:none !important;
+  }
+  .app-shell > #desktopNav,
+  .app-shell > #tabletToolRail,
+  .app-shell > #desktopChatRail,
+  .app-shell > .intro,
+  .app-shell > template { display:none !important; }
+  .app-shell > .topbar {
+    position:sticky !important; inset:auto 0 auto 0 !important; top:0 !important;
+    display:flex !important; width:100% !important; min-height:64px !important;
+    padding:8px 12px !important; z-index:100 !important; flex:0 0 auto !important;
+    grid-column:auto !important; grid-row:auto !important;
+  }
+  .app-shell .brand-badge { width:38px; height:38px; flex:0 0 38px; }
+  .app-shell .brand h1 { font-size:clamp(14px,2.4vw,17px); }
+  .app-shell .brand .eyebrow { display:none; }
+  .app-shell .top-actions { gap:5px; }
+  .app-shell .round-btn { width:36px; height:36px; min-height:36px; padding:0; border-radius:12px; }
+  .app-shell > .models-section,
+  .app-shell > #mobileHomeDashboard,
+  .app-shell > #chatsPage,
+  .app-shell > #mobileLibraryPage,
+  .app-shell > #mobileToolsPage,
+  .app-shell > #mobileSettingsPage,
+  .app-shell > #statusPanel,
+  .app-shell > .control-deck,
+  .app-shell > #chat,
+  .app-shell > #chatActions,
+  .app-shell > .composer-wrap {
+    display:none !important; position:static !important; inset:auto !important;
+    width:100% !important; max-width:100% !important; min-width:0 !important;
+    height:auto !important; max-height:none !important; min-height:0 !important;
+    flex:0 0 auto !important; grid-column:auto !important; grid-row:auto !important;
+    margin:0 !important; transform:none !important; overflow:visible !important;
+    align-self:stretch !important; box-sizing:border-box !important;
+  }
+  body[data-page="home"] .app-shell > #mobileHomeDashboard,
+  body[data-page="models"] .app-shell > .models-section,
+  body[data-page="chats"] .app-shell > #chatsPage,
+  body[data-page="data"] .app-shell > #mobileLibraryPage,
+  body[data-page="tools"] .app-shell > #mobileToolsPage,
+  body[data-page="settings"] .app-shell > #mobileSettingsPage { display:block !important; }
+  body[data-page="models"] .app-shell > #statusPanel,
+  body[data-page="models"] .app-shell > .control-deck { display:block !important; }
+  body[data-page="chat"] .app-shell > #chat { display:flex !important; flex:1 1 auto !important; min-height:42vh !important; }
+  body[data-page="chat"] .app-shell > #chatActions:not(.hidden) { display:flex !important; }
+  body[data-page="chat"] .app-shell > .composer-wrap {
+    display:block !important; position:sticky !important; bottom:calc(var(--nn-nav-height) + 12px + env(safe-area-inset-bottom,0px)) !important;
+    z-index:70 !important; padding:10px 12px !important; background:var(--nn-bg) !important;
+  }
+  .app-shell .home-welcome-grid { grid-template-columns:minmax(0,1fr) !important; }
+  .app-shell .home-status-row { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+  .app-shell .home-mini-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  .app-shell #statusPanel, .app-shell .control-deck { margin:0 12px 12px !important; width:calc(100% - 24px) !important; }
+  .app-shell .models-section { padding-top:18px !important; }
+  #mobileNav {
+    display:grid !important; position:fixed !important; left:10px !important; right:10px !important;
+    bottom:calc(7px + env(safe-area-inset-bottom,0px)) !important; width:auto !important;
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important; gap:4px !important;
+    min-height:var(--nn-nav-height) !important; padding:6px !important; margin:0 !important;
+    z-index:250 !important; border:1px solid var(--nn-line) !important; border-radius:20px !important;
+    background:color-mix(in srgb,var(--nn-panel) 96%,transparent) !important;
+    box-shadow:0 10px 34px rgba(20,25,45,.16) !important; backdrop-filter:blur(22px) !important;
+  }
+  #mobileNav button {
+    display:flex !important; min-width:0 !important; min-height:52px !important; height:auto !important;
+    padding:5px 2px !important; margin:0 !important; flex-direction:column !important;
+    align-items:center !important; justify-content:center !important; gap:4px !important;
+    border:0 !important; border-radius:13px !important; background:transparent !important;
+    color:var(--nn-muted) !important; font-size:10px !important; line-height:1.05 !important;
+    box-shadow:none !important; white-space:normal !important;
+  }
+  #mobileNav button span { display:block !important; font-size:17px !important; line-height:1 !important; }
+  #mobileNav button b { display:block !important; font-size:10px !important; font-weight:650 !important; }
+  #mobileNav button.active,
+  #mobileNav button[aria-current="page"] { background:var(--nn-panel-2) !important; color:var(--nn-accent) !important; }
+  #mobileNav button.mobile-nav-chat { background:linear-gradient(135deg,var(--nn-accent),var(--nn-accent-2)) !important; color:#fff !important; }
+}
+@media (max-width: 560px) {
+  .app-shell > .topbar { padding:7px 9px !important; }
+  .app-shell .top-actions { gap:3px; }
+  .app-shell .top-actions .install-btn,
+  .app-shell .top-actions #hubBtn { display:none !important; }
+  .app-shell .round-btn { width:33px; height:33px; min-height:33px; }
+  .app-shell .home-status-row { grid-template-columns:minmax(0,1fr) !important; }
+  .app-shell .home-mini-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  .app-shell .chat-manager-toolbar { grid-template-columns:minmax(0,1fr) !important; }
+  .app-shell .composer-tools { overflow-x:auto; }
+  .app-shell .composer { display:flex; flex-wrap:wrap; }
+  .app-shell .send-btn { min-height:44px; }
+}
+@media (min-width: 901px) {
+  .app-shell { display:grid !important; grid-template-columns:232px minmax(0,1fr) 260px !important; grid-template-rows:72px minmax(0,1fr) !important; }
+  .app-shell > .topbar { grid-column:1/-1 !important; grid-row:1 !important; }
+  .app-shell > #desktopNav { display:flex !important; grid-column:1 !important; grid-row:2 !important; position:sticky; top:72px; align-self:start; height:calc(100dvh - 72px); overflow-y:auto; }
+  .app-shell > #tabletToolRail { display:flex !important; grid-column:3 !important; grid-row:2 !important; min-width:0; }
+  .app-shell > #desktopChatRail { display:none !important; }
+  .app-shell > .models-section,
+  .app-shell > #mobileHomeDashboard,
+  .app-shell > #chatsPage,
+  .app-shell > #mobileLibraryPage,
+  .app-shell > #mobileToolsPage,
+  .app-shell > #mobileSettingsPage,
+  .app-shell > #statusPanel,
+  .app-shell > .control-deck,
+  .app-shell > #chat,
+  .app-shell > #chatActions,
+  .app-shell > .composer-wrap { grid-column:2 !important; min-width:0; }
+  body[data-page="home"] .app-shell > #mobileHomeDashboard,
+  body[data-page="models"] .app-shell > .models-section,
+  body[data-page="chats"] .app-shell > #chatsPage,
+  body[data-page="data"] .app-shell > #mobileLibraryPage,
+  body[data-page="tools"] .app-shell > #mobileToolsPage,
+  body[data-page="settings"] .app-shell > #mobileSettingsPage { display:block !important; grid-row:2 !important; }
+  body[data-page="home"] .app-shell > .models-section,
+  body[data-page="home"] .app-shell > #statusPanel,
+  body[data-page="home"] .app-shell > .control-deck,
+  body[data-page="home"] .app-shell > #chat,
+  body[data-page="home"] .app-shell > #chatActions,
+  body[data-page="home"] .app-shell > .composer-wrap,
+  body[data-page="home"] .app-shell > #chatsPage,
+  body[data-page="home"] .app-shell > #mobileLibraryPage,
+  body[data-page="home"] .app-shell > #mobileToolsPage,
+  body[data-page="home"] .app-shell > #mobileSettingsPage { display:none !important; }
+  body[data-page="models"] .app-shell > #mobileHomeDashboard,
+  body[data-page="models"] .app-shell > #chatsPage,
+  body[data-page="models"] .app-shell > #mobileLibraryPage,
+  body[data-page="models"] .app-shell > #mobileToolsPage,
+  body[data-page="models"] .app-shell > #mobileSettingsPage,
+  body[data-page="models"] .app-shell > #chat,
+  body[data-page="models"] .app-shell > .composer-wrap { display:none !important; }
+  body[data-page="models"] .app-shell > #statusPanel { display:block !important; grid-row:3 !important; }
+  body[data-page="models"] .app-shell > .control-deck { display:block !important; grid-row:4 !important; }
+  body[data-page="chat"] .app-shell > #chat { display:flex !important; grid-row:2 !important; min-height:50vh; }
+  body[data-page="chat"] .app-shell > .composer-wrap { display:block !important; grid-row:3 !important; position:sticky; bottom:0; align-self:end; }
+  body[data-page="chat"] .app-shell > #chatActions:not(.hidden) { display:flex !important; grid-row:4 !important; }
+  body[data-page="chat"] .app-shell > #statusPanel,
+  body[data-page="chat"] .app-shell > .control-deck { display:none !important; }
+  body[data-page="chat"] .app-shell > #mobileHomeDashboard,
+  body[data-page="chat"] .app-shell > .models-section,
+  body[data-page="chat"] .app-shell > #chatsPage,
+  body[data-page="chat"] .app-shell > #mobileLibraryPage,
+  body[data-page="chat"] .app-shell > #mobileToolsPage,
+  body[data-page="chat"] .app-shell > #mobileSettingsPage { display:none !important; }
+  body[data-page="chats"] .app-shell > #mobileHomeDashboard,
+  body[data-page="chats"] .app-shell > .models-section,
+  body[data-page="chats"] .app-shell > #statusPanel,
+  body[data-page="chats"] .app-shell > .control-deck,
+  body[data-page="chats"] .app-shell > #chat,
+  body[data-page="chats"] .app-shell > .composer-wrap { display:none !important; }
+  body[data-page="data"] .app-shell > #mobileHomeDashboard,
+  body[data-page="data"] .app-shell > .models-section,
+  body[data-page="data"] .app-shell > #statusPanel,
+  body[data-page="data"] .app-shell > .control-deck,
+  body[data-page="data"] .app-shell > #chat,
+  body[data-page="data"] .app-shell > .composer-wrap { display:none !important; }
+  body[data-page="tools"] .app-shell > #mobileHomeDashboard,
+  body[data-page="tools"] .app-shell > .models-section,
+  body[data-page="tools"] .app-shell > #statusPanel,
+  body[data-page="tools"] .app-shell > .control-deck,
+  body[data-page="tools"] .app-shell > #chat,
+  body[data-page="tools"] .app-shell > .composer-wrap { display:none !important; }
+  body[data-page="settings"] .app-shell > #mobileHomeDashboard,
+  body[data-page="settings"] .app-shell > .models-section,
+  body[data-page="settings"] .app-shell > #statusPanel,
+  body[data-page="settings"] .app-shell > .control-deck,
+  body[data-page="settings"] .app-shell > #chat,
+  body[data-page="settings"] .app-shell > .composer-wrap { display:none !important; }
+}
+@media (orientation:landscape) and (max-height:520px) {
+  .app-shell > .topbar { min-height:56px !important; }
+  .app-shell .composer-wrap { padding-top:6px !important; padding-bottom:6px !important; }
+  #mobileNav { --nn-nav-height:60px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after { scroll-behavior:auto !important; transition:none !important; animation:none !important; }
+}
