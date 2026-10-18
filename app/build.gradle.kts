@@ -12,8 +12,8 @@ android {
         applicationId = "com.neuroassistant.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 29
-        versionName = "0.29.0"
+        versionCode = 30
+        versionName = "0.30.0"
     }
 
     buildFeatures { compose = true }
