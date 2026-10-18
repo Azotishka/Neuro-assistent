@@ -87,7 +87,7 @@ test("research searches both encyclopedia and open scholarly metadata", () => {
 });
 
 test("0.31 layout regression guard removes duplicate navigation and isolates content on tablets", () => {
-  assert.match(html, /neuro-nova-final-layout\.css\?v=0\.29\.0/);
+  assert.match(html, /neuro-nova-final-layout\.css\?v=0\.31\.0/);
   assert.doesNotMatch(html, /neuro-nova-layout-v027\.css/);
   assert.match(finalLayout, /@media \(max-width: 1100px\)/);
   assert.match(finalLayout, /#desktopNav,[\s\S]*?#tabletToolRail \{ display:none !important/);
