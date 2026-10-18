@@ -13,9 +13,9 @@ const research = read("../neuro-nova-research.js");
 const studio = read("../../../java/com/neuroassistant/app/studio/StudioIntegration.kt");
 
 test("app shell loads versioned styles and learning modules", () => {
-  assert.match(html, /neuro-nova-shell\.css\?v=0\.26\.0/);
-  assert.match(html, /neuro-nova-research\.js\?v=0\.26\.0/);
-  assert.match(html, /neuro-nova-snake\.js\?v=0\.26\.0/);
+  assert.match(html, /neuro-nova-shell\.css\?v=0\.27\.0/);
+  assert.match(html, /neuro-nova-research\.js\?v=0\.27\.0/);
+  assert.match(html, /neuro-nova-snake\.js\?v=0\.27\.0/);
 });
 
 
@@ -88,11 +88,11 @@ test("research searches both encyclopedia and open scholarly metadata", () => {
 });
 
 test("0.27 layout override removes duplicate navigation and isolates each page on tablet widths", () => {
-  assert.match(html, /neuro-nova-layout-v027\\.css\\?v=0\\.27\\.0/);
-  assert.match(layout027, /@media \\(max-width: 900px\\)/);
-  assert.match(layout027, /\.app-shell > #desktopNav,[\\s\\S]*?display:none !important/);
-  assert.match(layout027, /#mobileNav \\{[\\s\\S]*?display:grid !important/);
-  assert.match(layout027, /@media \\(min-width: 901px\\)/);
-  assert.match(layout027, /body\\[data-page="chat"\\] \.app-shell > #statusPanel,[\\s\\S]*?display:none !important/);
-  assert.match(layout027, /env\\(safe-area-inset-bottom,0px\\)/);
+  assert.match(html, /neuro-nova-layout-v027\.css\?v=0\.27\.0/);
+  assert.match(layout027, /@media \(max-width: 900px\)/);
+  assert.match(layout027, /\.app-shell > #desktopNav,[\s\S]*?display:none !important/);
+  assert.match(layout027, /#mobileNav \{[\s\S]*?display:grid !important/);
+  assert.match(layout027, /@media \(min-width: 901px\)/);
+  assert.match(layout027, /body\[data-page="chat"\] \.app-shell > #statusPanel,[\s\S]*?display:none !important/);
+  assert.match(layout027, /env\(safe-area-inset-bottom,0px\)/);
 });
