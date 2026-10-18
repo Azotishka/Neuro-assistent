@@ -89,5 +89,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: NeuroNovaAILabXPlusStable-v0.28-layout-containment-apk
+          name: NeuroNovaAILabXPlus-v0.29-ui-fix-apk
           path: app/build/outputs/apk/debug/app-debug.apk
