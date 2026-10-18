@@ -5,15 +5,25 @@ import { readFileSync } from "node:fs";
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 const html = read("../index.html");
 const css = read("../neuro-nova-shell.css");
+const hotfix = read("../neuro-nova-layout-hotfix.css");
 const app = read("../app.js");
 const snake = read("../neuro-nova-snake.js");
 const research = read("../neuro-nova-research.js");
 const studio = read("../../../java/com/neuroassistant/app/studio/StudioIntegration.kt");
 
 test("app shell loads versioned styles and learning modules", () => {
-  assert.match(html, /neuro-nova-shell\.css\?v=0\.25\.0/);
-  assert.match(html, /neuro-nova-research\.js\?v=0\.25\.0/);
-  assert.match(html, /neuro-nova-snake\.js\?v=0\.25\.0/);
+  assert.match(html, /neuro-nova-shell\\.css\\?v=0\\.26\\.0/);
+  assert.match(html, /neuro-nova-research\\.js\\?v=0\\.26\\.0/);
+  assert.match(html, /neuro-nova-snake\\.js\\?v=0\\.26\\.0/);
+});
+
+
+test("tablet layout hotfix prevents vertical bottom navigation and restores styled page controls", () => {
+  assert.match(html, /neuro-nova-layout-hotfix\.css\?v=0\.26\.0/);
+  assert.match(hotfix, /#desktopNav\s*\{[^}]*display:\s*none\s*!important/s);
+  assert.match(hotfix, /#mobileNav\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/s);
+  assert.match(hotfix, /#mobileNav button\.active/);
+  assert.match(hotfix, /\.chat-manager-filters button\.active/);
 });
 
 test("routes explicitly hide unrelated screens and adapt to compact widths", () => {
