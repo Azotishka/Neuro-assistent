@@ -64,7 +64,7 @@
     background:color-mix(in srgb,var(--nn-bg) 96%,transparent) !important;
     backdrop-filter:blur(16px) !important;
   }
-  body .app-shell > #mobileNav {
+  body > #mobileNav {
     display:grid !important; visibility:visible !important; position:fixed !important;
     left:12px !important; right:12px !important; bottom:calc(8px + env(safe-area-inset-bottom,0px)) !important;
     top:auto !important; inset-inline:12px !important; z-index:500 !important;
@@ -75,18 +75,18 @@
     box-shadow:0 12px 36px rgba(20,25,45,.16) !important; backdrop-filter:blur(22px) !important;
     transform:none !important; overflow:hidden !important;
   }
-  body .app-shell > #mobileNav button {
+  body > #mobileNav button {
     display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important;
     min-width:0 !important; min-height:48px !important; max-width:100% !important; padding:5px 2px !important;
     gap:3px !important; border:0 !important; border-radius:14px !important; background:transparent !important;
     color:var(--nn-muted) !important; font-size:10px !important; line-height:1.15 !important;
     white-space:normal !important; box-shadow:none !important; transform:none !important;
   }
-  body .app-shell > #mobileNav button span { font-size:17px !important; line-height:1 !important; }
-  body .app-shell > #mobileNav button b { font-size:10px !important; font-weight:650 !important; }
-  body .app-shell > #mobileNav button.active,
-  body .app-shell > #mobileNav button[aria-current="page"] { color:var(--nn-accent) !important; background:var(--nn-panel-2) !important; }
-  body .app-shell > #mobileNav button.mobile-nav-chat { background:linear-gradient(135deg,var(--nn-accent),var(--nn-accent-2)) !important; color:#fff !important; }
+  body > #mobileNav button span { font-size:17px !important; line-height:1 !important; }
+  body > #mobileNav button b { font-size:10px !important; font-weight:650 !important; }
+  body > #mobileNav button.active,
+  body > #mobileNav button[aria-current="page"] { color:var(--nn-accent) !important; background:var(--nn-panel-2) !important; }
+  body > #mobileNav button.mobile-nav-chat { background:linear-gradient(135deg,var(--nn-accent),var(--nn-accent-2)) !important; color:#fff !important; }
   body .app-shell .home-welcome-grid,
   body .app-shell .model-switcher { grid-template-columns:minmax(0,1fr) !important; }
   body .app-shell .home-status-row,
@@ -197,7 +197,7 @@
   body[data-page="data"] .app-shell > #mobileLibraryPage,
   body[data-page="tools"] .app-shell > #mobileToolsPage,
   body[data-page="settings"] .app-shell > #mobileSettingsPage { display:block!important; }
-  body .app-shell > #mobileNav {
+  body > #mobileNav {
     display:grid!important; visibility:visible!important; pointer-events:auto!important;
     position:fixed!important; inset:auto 10px calc(8px + env(safe-area-inset-bottom,0px)) 10px!important;
     width:auto!important; max-width:none!important; height:auto!important; min-height:66px!important; max-height:82px!important;
@@ -208,7 +208,7 @@
     background:color-mix(in srgb,var(--nn-panel) 97%,transparent)!important;
     box-shadow:0 10px 32px rgba(20,25,45,.16)!important; backdrop-filter:blur(20px)!important;
   }
-  body .app-shell > #mobileNav button {
+  body > #mobileNav button {
     display:flex!important; position:static!important; width:100%!important; min-width:0!important;
     min-height:50px!important; max-height:66px!important; margin:0!important; padding:4px 2px!important;
     flex-direction:column!important; align-items:center!important; justify-content:center!important; gap:3px!important;
@@ -216,11 +216,11 @@
     color:var(--nn-muted)!important; font-size:10px!important; line-height:1.1!important;
     white-space:normal!important; overflow-wrap:anywhere!important; box-shadow:none!important; transform:none!important;
   }
-  body .app-shell > #mobileNav button span { display:block!important; font-size:17px!important; line-height:1!important; }
-  body .app-shell > #mobileNav button b { display:block!important; font-size:10px!important; font-weight:650!important; }
-  body .app-shell > #mobileNav button.active,
-  body .app-shell > #mobileNav button[aria-current="page"] { color:var(--nn-accent)!important; background:var(--nn-panel-2)!important; }
-  body .app-shell > #mobileNav button.mobile-nav-chat { background:linear-gradient(135deg,var(--nn-accent),var(--nn-accent-2))!important; color:#fff!important; }
+  body > #mobileNav button span { display:block!important; font-size:17px!important; line-height:1!important; }
+  body > #mobileNav button b { display:block!important; font-size:10px!important; font-weight:650!important; }
+  body > #mobileNav button.active,
+  body > #mobileNav button[aria-current="page"] { color:var(--nn-accent)!important; background:var(--nn-panel-2)!important; }
+  body > #mobileNav button.mobile-nav-chat { background:linear-gradient(135deg,var(--nn-accent),var(--nn-accent-2))!important; color:#fff!important; }
   body .app-shell > .mobile-home-dashboard,
   body .app-shell > .models-section,
   body .app-shell > #chatsPage,
@@ -233,7 +233,7 @@
   body .app-shell .tool-row,body .app-shell .tool-item,body .app-shell .tools-page button { white-space:normal!important; overflow-wrap:anywhere!important; }
 }
 @media (min-width:1101px) {
-  body .app-shell > #mobileNav { display:none!important; }
+  body > #mobileNav { display:none!important; }
   body .app-shell > #desktopNav { display:flex!important; visibility:visible!important; pointer-events:auto!important; }
 }
 @media (prefers-reduced-motion:reduce) {
