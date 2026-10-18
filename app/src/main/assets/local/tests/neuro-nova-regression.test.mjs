@@ -6,21 +6,21 @@ const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 const html = read("../index.html");
 const css = read("../neuro-nova-shell.css");
 const hotfix = read("../neuro-nova-layout-hotfix.css");
-const layout027 = read("../neuro-nova-layout-v027.css");
+const finalLayout = read("../neuro-nova-final-layout.css");
 const app = read("../app.js");
 const snake = read("../neuro-nova-snake.js");
 const research = read("../neuro-nova-research.js");
 const studio = read("../../../java/com/neuroassistant/app/studio/StudioIntegration.kt");
 
 test("app shell loads versioned styles and learning modules", () => {
-  assert.match(html, /neuro-nova-shell\.css\?v=0\.27\.0/);
-  assert.match(html, /neuro-nova-research\.js\?v=0\.27\.0/);
-  assert.match(html, /neuro-nova-snake\.js\?v=0\.27\.0/);
+  assert.match(html, /neuro-nova-shell\\.css\\?v=0\\.28\\.0/);
+  assert.match(html, /neuro-nova-research\\.js\\?v=0\\.28\\.0/);
+  assert.match(html, /neuro-nova-snake\\.js\\?v=0\\.28\\.0/);
 });
 
 
 test("tablet layout hotfix prevents vertical bottom navigation and restores styled page controls", () => {
-  assert.match(html, /neuro-nova-layout-hotfix\.css\?v=0\.26\.0/);
+  assert.match(html, /neuro-nova-layout-hotfix\\.css\\?v=0\\.28\\.0/);
   assert.match(hotfix, /#desktopNav\s*\{[^}]*display:\s*none\s*!important/s);
   assert.match(hotfix, /#mobileNav\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/s);
   assert.match(hotfix, /#mobileNav button\.active/);
@@ -87,12 +87,12 @@ test("research searches both encyclopedia and open scholarly metadata", () => {
   assert.match(research, /научными публикациями OpenAlex/);
 });
 
-test("0.27 layout override removes duplicate navigation and isolates each page on tablet widths", () => {
-  assert.match(html, /neuro-nova-layout-v027\.css\?v=0\.27\.0/);
-  assert.match(layout027, /@media \(max-width: 900px\)/);
-  assert.match(layout027, /\.app-shell > #desktopNav,[\s\S]*?display:none !important/);
-  assert.match(layout027, /#mobileNav \{[\s\S]*?display:grid !important/);
-  assert.match(layout027, /@media \(min-width: 901px\)/);
-  assert.match(layout027, /body\[data-page="chat"\] \.app-shell > #statusPanel,[\s\S]*?display:none !important/);
-  assert.match(layout027, /env\(safe-area-inset-bottom,0px\)/);
+test("0.28 final layout removes duplicate navigation and isolates content on tablets", () => {
+  assert.match(html, /neuro-nova-final-layout\.css\?v=0\.28\.0/);
+  assert.doesNotMatch(html, /neuro-nova-layout-v027\.css/);
+  assert.match(finalLayout, /@media \(max-width: 1100px\)/);
+  assert.match(finalLayout, /#desktopNav,[\s\S]*?#tabletToolRail \{ display:none !important/);
+  assert.match(finalLayout, /#mobileNav[\s\S]*?grid-template-columns:repeat\(5,minmax\(0,1fr\)\) !important/);
+  assert.match(finalLayout, /body\[data-page="tools"\][\s\S]*?display:block !important/);
+  assert.match(finalLayout, /env\(safe-area-inset-bottom, 0px\)/);
 });
