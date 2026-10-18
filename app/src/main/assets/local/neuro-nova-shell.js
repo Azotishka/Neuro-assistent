@@ -1,1 +1,28 @@
-(()=>{const r=document.documentElement,k='qwen:themeMode',apply=m=>{const d=m==='dark'||(m==='system'&&matchMedia('(prefers-color-scheme:dark)').matches);r.dataset.theme=d?'dark':'light';document.getElementById('themeColor')?.setAttribute('content',d?'#0b0d12':'#f6f7fb')};apply(localStorage.getItem(k)||'system');document.addEventListener('DOMContentLoaded',()=>{const sync=()=>{const p=document.body.dataset.page||'home';document.querySelectorAll('#desktopNav [data-route]').forEach(x=>x.classList.toggle('active',x.dataset.route===p))};document.querySelectorAll('#desktopNav [data-route]').forEach(x=>x.addEventListener('click',()=>setTimeout(sync,0)));document.getElementById('themeBtn')?.addEventListener('click',()=>{const n=r.dataset.theme==='dark'?'light':'dark';localStorage.setItem(k,n);apply(n);document.getElementById('themeIcon')?.replaceChildren(document.createTextNode(n==='dark'?'☀':'◐'))});new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['data-page']});sync()})})();
+(()=> {
+  const root=document.documentElement, key='qwen:themeMode';
+  const apply=mode=>{
+    const dark=mode==='dark'||(mode==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches);
+    root.dataset.theme=dark?'dark':'light';
+    document.getElementById('themeColor')?.setAttribute('content',dark?'#0b0d12':'#f6f7fb');
+  };
+  try{apply(localStorage.getItem(key)||'system')}catch{apply('system')}
+  document.addEventListener('DOMContentLoaded',()=>{
+    const syncNavigation=()=>{
+      const page=document.body.dataset.page||'home';
+      document.querySelectorAll('#desktopNav [data-route],#mobileNav [data-route]').forEach(button=>{
+        const active=button.dataset.route===page;
+        button.classList.toggle('active',active);
+        if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
+      });
+    };
+    document.querySelectorAll('#desktopNav [data-route],#mobileNav [data-route]').forEach(button=>button.addEventListener('click',()=>requestAnimationFrame(syncNavigation)));
+    document.getElementById('themeBtn')?.addEventListener('click',()=>{
+      const next=root.dataset.theme==='dark'?'light':'dark';
+      try{localStorage.setItem(key,next)}catch{}
+      apply(next);
+      document.getElementById('themeIcon')?.replaceChildren(document.createTextNode(next==='dark'?'☀':'◐'));
+    });
+    new MutationObserver(syncNavigation).observe(document.body,{attributes:true,attributeFilter:['data-page']});
+    syncNavigation();
+  });
+})();
