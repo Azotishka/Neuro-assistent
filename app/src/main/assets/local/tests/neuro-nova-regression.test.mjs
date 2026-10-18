@@ -103,6 +103,7 @@ test("0.31 last-loaded UX stylesheet prevents duplicate nav and full-width colla
   assert.match(polish, /0\.31\.0 regression repair/);
   assert.match(polish, /#desktopNav[\s\S]{0,180}display:none!important/);
   assert.match(polish, /grid-template-columns:repeat\(5,minmax\(0,1fr\)\)!important/);
+  assert.match(polish, /body > #mobileNav/);
   assert.match(polish, /padding:calc\(24px \+ env\(safe-area-inset-top/);
   assert.match(polish, /body\[data-page="tools"\][\s\S]{0,180}display:block!important/);
   const shell = read("../neuro-nova-shell.js");
