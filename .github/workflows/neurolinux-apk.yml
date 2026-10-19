@@ -143,7 +143,7 @@ jobs:
               raise SystemExit("Could not locate DistroCard secondary action row")
           s = s.replace(action_anchor, '                    IconButton(onClick = onDesktop) {\n                        Text("🖥", style = MaterialTheme.typography.titleMedium)\n                    }\n' + action_anchor, 1)
           # Add a branded launcher/dashboard above the distribution manager.
-          anchor = '            item {\n                CustomImageInstallCard('
+          anchor = '                item {\n                    CustomImageInstallCard('
           replacement = '            item {\n                NeuroLinuxHomeCard(installedCount = distros.count { it.isInstalled })\n            }\n            item {\n                CustomImageInstallCard('
           if anchor not in s:
               raise SystemExit("Could not locate LazyColumn insertion point")
