@@ -273,6 +273,17 @@ if ! apt-get install -y xfce4 xfce4-terminal thunar mousepad firefox-esr git cur
   echo "$FAILED_MARKER"
   exit 0
 fi
+# NEUROLINUX_PERSISTENT_HISTORY: preserve and flush interactive Bash history.
+if ! grep -q 'NEUROLINUX_PERSISTENT_HISTORY' /etc/bash.bashrc 2>/dev/null; then
+  cat >> /etc/bash.bashrc <<'NEUROLINUX_PERSISTENT_HISTORY'
+# NEUROLINUX_PERSISTENT_HISTORY
+export HISTFILE="$HOME/.bash_history"
+export HISTSIZE=100000
+export HISTFILESIZE=200000
+shopt -s histappend
+export PROMPT_COMMAND="history -a; history -n"
+NEUROLINUX_PERSISTENT_HISTORY
+fi
 echo "[3/4] Настройка графического сеанса…"
 mkdir -p "${'$'}HOME/.vnc"
 cat > "${'$'}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
