@@ -328,7 +328,50 @@ fi
 if ! grep -q 'NEUROLINUX_PERSISTENT_HISTORY' /etc/bash.bashrc 2>/dev/null; then
   cat >> /etc/bash.bashrc <<'NEUROLINUX_PERSISTENT_HISTORY'
 # NEUROLINUX_PERSISTENT_HISTORY
-export HISTFILE="$HOME/.bash_history"
+export HISTFILE="${'
+export HISTSIZE=100000
+export HISTFILESIZE=200000
+shopt -s histappend
+export PROMPT_COMMAND="history -a; history -n"
+NEUROLINUX_PERSISTENT_HISTORY
+fi
+echo "[3/4] Настройка графического сеанса…"
+mkdir -p "${'$'}HOME/.vnc"
+cat > "${'$'}HOME/.vnc/xstartup" <<'NEUROLINUX_XSTARTUP'
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "${'$'}XDG_RUNTIME_DIR"
+chmod 700 "${'$'}XDG_RUNTIME_DIR"
+exec dbus-launch --exit-with-session startxfce4
+NEUROLINUX_XSTARTUP
+chmod 700 "${'$'}HOME/.vnc/xstartup"
+(vncserver -kill :1 >/dev/null 2>&1 || true)
+vncserver :1 -localhost yes -geometry 1280x800 -depth 24 -SecurityTypes None -xstartup "${'$'}HOME/.vnc/xstartup" >/tmp/neurolinux-vnc.log 2>&1
+if ! vncserver -list 2>&1 | grep -q ':1'; then
+  cat /tmp/neurolinux-vnc.log
+  echo "Не удалось запустить VNC-сервер."
+  echo "$FAILED_MARKER"
+  exit 0
+fi
+echo "[4/4] Запуск безопасного локального WebSocket-моста…"
+nohup websockify --web=/usr/share/novnc --host=127.0.0.1 6080 127.0.0.1:5901 >/tmp/neurolinux-websockify.log 2>&1 &
+WEB_PID=$!
+sleep 2
+if kill -0 "${'$'}WEB_PID" 2>/dev/null; then
+  echo "$READY_MARKER"
+else
+  cat /tmp/neurolinux-websockify.log
+  echo "Не удалось запустить noVNC."
+  echo "$FAILED_MARKER"
+fi
+NEUROLINUX_SCRIPT
+sh /tmp/neurolinux-start-desktop.sh
+""".trimIndent() + "\n"
+    }
+}
+}HOME/.bash_history"
 export HISTSIZE=100000
 export HISTFILESIZE=200000
 shopt -s histappend
