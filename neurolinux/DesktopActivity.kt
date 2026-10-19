@@ -125,10 +125,10 @@ class DesktopActivity : ComponentActivity() {
                 "!=" to " != ",
                 "&&" to " && ",
                 "||" to " || ",
-                "if { }" to "if () {\\n    \\n}",
-                "for { }" to "for () {\\n    \\n}",
-                "fun()" to "fun name() {\\n    \\n}",
-                "Python def" to "def name():\\n    pass",
+                "if { }" to "if () {\n    \n}",
+                "for { }" to "for () {\n    \n}",
+                "fun()" to "fun name() {\n    \n}",
+                "Python def" to "def name():\n    pass",
                 "HTML" to "<div></div>",
                 "print()" to "print()"
             )
