@@ -126,11 +126,9 @@ jobs:
           if call_anchor not in s:
               raise SystemExit("Could not locate DistroCard onRemove call site")
           desktop_call = """                        onDesktop = {
-                              if (loadingDistro == null) {
-                                  val intent = Intent(context, DesktopActivity::class.java)
-                                  intent.putExtra("distro", distro.alias)
-                                  context.startActivity(intent)
-                              }
+                              val intent = Intent(context, DesktopActivity::class.java)
+                              intent.putExtra("distro", distro.alias)
+                              context.startActivity(intent)
                           },
           """
           s = s.replace(call_anchor, desktop_call + call_anchor, 1)
