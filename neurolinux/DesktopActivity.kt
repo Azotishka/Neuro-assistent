@@ -328,7 +328,7 @@ fi
 if ! grep -q 'NEUROLINUX_PERSISTENT_HISTORY' /etc/bash.bashrc 2>/dev/null; then
   cat >> /etc/bash.bashrc <<'NEUROLINUX_PERSISTENT_HISTORY'
 # NEUROLINUX_PERSISTENT_HISTORY
-export HISTFILE="${'
+export HISTFILE="${'$'}HOME/.bash_history"
 export HISTSIZE=100000
 export HISTFILESIZE=200000
 shopt -s histappend
