@@ -222,9 +222,20 @@ jobs:
               if app_attr not in m:
                   raise SystemExit("Could not find Android application manifest attributes")
               m = m.replace(app_attr, app_attr_new, 1)
+          # Prevent Activity recreation during rotation, split-screen and resizable-window changes.
+          # Recreation was closing the direct PRoot desktop session and clearing its visible terminal.
+          if 'android:name=".TerminalActivity"' in m:
+              import re
+              m = re.sub(
+                  r'(<activity\\s+android:name=".TerminalActivity".*?android:configChanges=")([^"]*)(")',
+                  lambda x: x.group(1) + "|".join(sorted(set(x.group(2).split("|") + ["smallestScreenSize", "screenLayout", "density"])) ) + x.group(3),
+                  m, count=1, flags=re.S
+              )
           if 'android:name=".DesktopActivity"' not in m:
-              activity = '        <activity\n            android:name=".DesktopActivity"\n            android:exported="false"\n            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"\n            android:windowSoftInputMode="adjustResize" />\n'
+              activity = '        <activity\n            android:name=".DesktopActivity"\n            android:exported="false"\n            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|density"\n            android:windowSoftInputMode="adjustResize" />\n'
               m = m.replace('    </application>', activity + '    </application>', 1)
+          else:
+              m = m.replace('android:configChanges="orientation|screenSize|keyboard|keyboardHidden"', 'android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|density"')
           manifest.write_text(m)
           PY
 
