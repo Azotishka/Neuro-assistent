@@ -108,6 +108,57 @@ class DesktopActivity : ComponentActivity() {
             webViewClient = WebViewClient()
             webChromeClient = WebChromeClient()
         }
+        // Touch-friendly code snippets: tap a chip to copy, then long-press the editor and Paste.
+        val snippetBar = android.widget.HorizontalScrollView(this).apply {
+            isHorizontalScrollBarEnabled = false
+            setBackgroundColor(Color.rgb(17, 24, 39))
+            val chips = LinearLayout(this@DesktopActivity).apply {
+                orientation = LinearLayout.HORIZONTAL
+                setPadding(dp(8), dp(6), dp(8), dp(6))
+            }
+            val snippets = listOf(
+                "{}" to "{}",
+                "()" to "()",
+                "[]" to "[]",
+                "=>" to " => ",
+                "==" to " == ",
+                "!=" to " != ",
+                "&&" to " && ",
+                "||" to " || ",
+                "if { }" to "if () {\\n    \\n}",
+                "for { }" to "for () {\\n    \\n}",
+                "fun()" to "fun name() {\\n    \\n}",
+                "Python def" to "def name():\\n    pass",
+                "HTML" to "<div></div>",
+                "print()" to "print()"
+            )
+            snippets.forEach { (label, value) ->
+                val button = android.widget.Button(this@DesktopActivity).apply {
+                    text = label
+                    isAllCaps = false
+                    textSize = 13f
+                    minHeight = dp(42)
+                    setPadding(dp(10), 0, dp(10), 0)
+                    setOnClickListener {
+                        val clipboard = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                        clipboard.setPrimaryClip(android.content.ClipData.newPlainText("code snippet", value))
+                        android.widget.Toast.makeText(
+                            this@DesktopActivity,
+                            "Скопировано: $label. Удерживай место в редакторе и нажми «Вставить».",
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                chips.addView(button, LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, dp(44)
+                ).apply { marginEnd = dp(6) })
+            }
+            addView(chips)
+        }
+        root.addView(snippetBar, LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        ))
+
         root.addView(webView, LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f
         ))
