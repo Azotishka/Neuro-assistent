@@ -122,16 +122,18 @@ jobs:
           # Add a desktop launcher beside the normal terminal button.
           # Patch the current upstream Compose callback layout without whitespace-sensitive full snippets.
           import re
-          call_pattern = re.compile(
-              r'(                    onLogin = \{.*?\n                    \},\n)(                    onRemove = \{)',
-              re.S
-          )
-          s, n = call_pattern.subn(
-              lambda m: m.group(1) + '                    onDesktop = {\n                        if (loadingDistro == null) {\n                            val intent = Intent(context, DesktopActivity::class.java)\n                            intent.putExtra("distro", distro.alias)\n                            context.startActivity(intent)\n                        }\n                    },\n' + m.group(2),
-              s, count=1
-          )
-          if n != 1:
-              raise SystemExit("Could not safely insert desktop callback next to onLogin")
+          call_anchor = "                        onRemove = { app.operations.remove(distro.alias, distro.displayName) },"
+          if call_anchor not in s:
+              raise SystemExit("Could not locate DistroCard onRemove call site")
+          desktop_call = """                        onDesktop = {
+                              if (loadingDistro == null) {
+                                  val intent = Intent(context, DesktopActivity::class.java)
+                                  intent.putExtra("distro", distro.alias)
+                                  context.startActivity(intent)
+                              }
+                          },
+          """
+          s = s.replace(call_anchor, desktop_call + call_anchor, 1)
           sig_pattern = re.compile(r'(    onLogin: \(\) -> Unit,\n)(    onRemove: \(\) -> Unit,)')
           s, n = sig_pattern.subn(lambda m: m.group(1) + '    onDesktop: () -> Unit,\n' + m.group(2), s, count=1)
           if n != 1:
