@@ -21,7 +21,9 @@
 
     <application
         android:allowBackup="true"
-        android:label="NeuroAssistant"
+        android:label="@string/app_name"
+        android:icon="@drawable/neuro_nova_icon"
+        android:roundIcon="@drawable/neuro_nova_icon"
         android:supportsRtl="true"
         android:usesCleartextTraffic="false"
         android:theme="@style/Theme.NeuroAssistant"
